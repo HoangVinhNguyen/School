@@ -37,7 +37,7 @@ public class InClassroomDAO extends AbstractDAO<InClassroomModel> implements IIn
 	public InClassroomModel findOneByUser(String userEmail) {
 		Long id = userService.findByEmail(userEmail);
 		if (id != null) {
-			String sql = "SELECT * FROM in_classroom WHERE student_id = ? AND is_deleted = 0";
+			String sql = "SELECT * FROM in_classroom WHERE user_id = ? AND is_deleted = 0";
 			List<InClassroomModel> inClassroom = query(sql, new InClassroomMapper(), id);
 			return inClassroom.isEmpty() ? null : inClassroom.get(0);
 		}
@@ -67,12 +67,12 @@ public class InClassroomDAO extends AbstractDAO<InClassroomModel> implements IIn
 		if (inClassroomModel.getId() != null) {
 			inClassroomModelCheck = findOne(inClassroomModel.getId());
 			if (inClassroomModelCheck != null && inClassroomModelCheck.getId() != 0) {
-				String sql = "UPDATE in_classroom SET student_id=?, classroom_id=?, modified_by=?, modified_date=? WHERE id=?";
+				String sql = "UPDATE in_classroom SET user_id=?, classroom_id=?, modified_by=?, modified_date=? WHERE id=?";
 				return update(sql, inClassroomModel.getStudentId(), inClassroomModel.getClassroomId(),
 						inClassroomModel.getModifiedBy(), inClassroomModel.getModifiedDate(), inClassroomModel.getId());
 			}
 		}
-		String sql = "INSERT INTO in_classroom (student_id, classroom_id, created_by, created_date, modified_date) values (?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO in_classroom (user_id, classroom_id, created_by, created_date, modified_date) values (?, ?, ?, ?, ?)";
 		return insert(sql, inClassroomModel.getStudentId(), inClassroomModel.getClassroomId(), inClassroomModel.getCreatedBy(), inClassroomModel.getCreatedDate(), inClassroomModel.getModifiedDate());
 	}
 

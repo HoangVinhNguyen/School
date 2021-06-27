@@ -24,7 +24,7 @@
 			<div class="page-content">
 
 				<button id="btnGetListUser" type="button" class="btn btn-primary">Xem danh sách</button>
-				<button data-toggle="modal" data-target="#add-modal" id="btnAddUser" type="button" class="btn btn-success">Thêm môn học</button>
+				<button data-toggle="modal" data-target="#add-course-modal" id="btnAddUser" type="button" class="btn btn-success">Thêm môn học</button>
 				<div class="row">
 					<div class="col-xs-12">
 						<!-- modal button Add New -->

@@ -7,7 +7,7 @@
             <a href="#" class="navbar-brand">
                 <small id="headerName">
                     <i class="fa fa-leaf" ></i>
-                    Trang dành cho giáo viên
+                    Trang dành cho giáo viên môn
                 </small>
             </a>
         </div>

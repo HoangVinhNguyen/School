@@ -12,7 +12,7 @@ public class InClassroomMapper implements RowMapper<InClassroomModel>{
 		try {
 			InClassroomModel inClassroom = new InClassroomModel();
 			inClassroom.setId(rs.getLong("id"));
-			inClassroom.setStudentId(rs.getLong("student_id"));
+			inClassroom.setStudentId(rs.getLong("user_id"));
 			inClassroom.setClassroomId(rs.getLong("classroom_id"));
 			inClassroom.setCreatedBy(rs.getString("created_by"));
 			inClassroom.setCreatedDate(rs.getTimestamp("created_date"));

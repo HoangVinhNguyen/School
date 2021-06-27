@@ -52,7 +52,7 @@ public class TeacherClassroomAPI extends HttpServlet {
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
 		UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
-		if (model.getRole().getCode().equals(SystemConstant.STUDENT)) {
+		if (model != null && model.getRole().getCode().equals(SystemConstant.STUDENT)) {
 			List<TeacherClassroomModel> teacherClassroomModel = teacherClassroomService.findAllByStudentEmail(model.getEmail());
 			List<String> listClassName = new ArrayList<String>();
 			List<String> listCourseName = new ArrayList<String>();

@@ -43,7 +43,7 @@ public class HomeController extends HttpServlet{
 		}
 		else if (action != null && action.equals("logout")) {
 			SessionUtil.getInstance().removeValue(req, "USERMODEL");
-			resp.sendRedirect(req.getContextPath() + "/home");
+			resp.sendRedirect(req.getContextPath() + "/");
 		}
 		else {
 			RequestDispatcher rd = req.getRequestDispatcher("/views/teacher/home.jsp");
