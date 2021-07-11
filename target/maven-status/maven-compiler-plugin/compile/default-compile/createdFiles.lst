@@ -4,11 +4,14 @@ com\school\service\impl\InClassroomService.class
 com\school\controller\teacher\HomeController.class
 com\school\DAO\ICourseDAO.class
 com\school\model\CommentModel.class
+com\school\controller\admin\TeacherClassroomController.class
+com\school\controller\admin\api\InClassroomArrayAPI.class
 com\school\DAO\GenericDAO.class
 com\school\utils\FormUtil.class
 com\school\service\IInClassroomService.class
 com\school\controller\admin\api\PostStatusAPI.class
 com\school\controller\admin\HomeController.class
+com\school\controller\teacher\api\GetClassroomAPI.class
 com\school\model\InClassroomModel.class
 com\school\mapper\RoleMapper.class
 com\school\DAO\IRoleDAO.class
@@ -16,11 +19,13 @@ com\school\DAO\IUserDAO.class
 com\school\model\TeacherClassroomModel.class
 com\school\utils\MessageUtil.class
 com\school\controller\admin\api\CourseAPI.class
+com\school\controller\admin\api\TeacherClassroomArrayAPI.class
 com\school\service\impl\RoleService.class
 com\school\service\ITeacherClassroomService.class
 com\school\model\LiteratureCourseModel.class
 com\school\controller\admin\InClassroomController.class
 com\school\mapper\TeacherClassroomMapper.class
+com\school\controller\admin\api\TeacherClassroomAPI.class
 com\school\model\PostStatusModel.class
 com\school\mapper\RowMapper.class
 com\school\mapper\InClassroomMapper.class
@@ -80,5 +85,4 @@ com\school\controller\api\AuthenticationAPI.class
 com\school\service\ICourseService.class
 com\school\controller\admin\ClassroomController.class
 com\school\DAO\impl\RoleDAO.class
-com\school\controller\teacher\api\GetClassroomController.class
 com\school\model\CourseModel.class

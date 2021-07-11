@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Danh sách thành viên</title>
+<title>Danh sách học sinh</title>
 </head>
 <body>
 
@@ -16,7 +16,7 @@
 			<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 				<ul class="breadcrumb">
 					<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a></li>
-					<li class="active">Danh sách thành viên</li>
+					<li class="active">Danh sách học sinh</li>
 				</ul>
 				<!-- /.breadcrumb -->
 			</div>
@@ -25,6 +25,12 @@
 
 				<button id="btnGetInClassroom" type="button" class="btn btn-primary">Xem danh sách</button>
 				<button data-toggle="modal" data-target="#add-modal" id="btnAddInClassroom" type="button" class="btn btn-success">Thêm học sinh vào lớp học</button>
+				<br/>
+				<form id="dataInClass" method="post" enctype="multipart/form-data">
+					<label for="file">Thêm danh sách học sinh:</label>
+				    <input name="file" type="file" id="fileInClass"/>
+				    <button>Thêm</button>
+				</form>
 				<div class="row">
 					<div class="col-xs-12">
 						<!-- modal button Add New -->

@@ -44,7 +44,7 @@
             <b class="arrow"></b>
             <ul class="submenu">
                 <li>
-                    <a href="./teacher-literature" >
+                    <a href="./teacher-course" >
                         <i class="menu-icon fa fa-caret-right"></i>
                         Nhập điểm
                     </a>

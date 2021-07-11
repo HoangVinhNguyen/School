@@ -58,7 +58,7 @@
                     <b class="arrow"></b>
                 </li>
                 <li>
-                    <a href='<c:url value=""/>' >
+                    <a href='<c:url value="/admin-teacherclassroom"/>' >
                         <i class="menu-icon fa fa-caret-right"></i>
                         Phân công giáo viên
                     </a>

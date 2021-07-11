@@ -24,16 +24,15 @@
 			<div class="page-content">
 
 				<button id="btnGetListUser" type="button" class="btn btn-primary">Xem danh sách</button>
-				<button data-toggle="modal" data-target="#add-modal" id="btnAddUser" type="button" class="btn btn-success">Thêm lớp học</button>
+				<button data-toggle="modal" data-target="#add-user-modal" id="btnAddUser" type="button" class="btn btn-success">Thêm tài khoản</button>
 				<br/>
-				<form action='<c:url value="/api-admin-user-array"/>' method="post" enctype="multipart/form-data">
-				    <input type="text" name="description" />
-				    <input type="file" name="file" />
-				    <input type="submit" />
+				
+				<form id="data" method="post" enctype="multipart/form-data">
+					<label for="file">Thêm danh sách tài khoản:</label>
+				    <input name="file" type="file" id="file"/>
+				    <button>Submit</button>
 				</form>
-				<!-- <label for="btnAddUserFile">Thêm danh sách tài khoản:</label>
-				<input id="btnAddUserFile" type="file" >
-				<button id="btnAddUserFileAction" type="button" >Tiến hành thêm</button> -->
+				
 				<div class="row">
 					<div class="col-xs-12">
 						<!-- modal button Add New -->
