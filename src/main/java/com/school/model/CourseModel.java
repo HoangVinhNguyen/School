@@ -1,6 +1,8 @@
 package com.school.model;
 
-public class CourseModel extends AbstractModel<CourseModel>{
+import com.school.entity.CourseEntity;
+
+public class CourseModel extends AbstractModel {
 
 	private String name;
 	private String code;
@@ -17,4 +19,14 @@ public class CourseModel extends AbstractModel<CourseModel>{
 	public void setCode(String code) {
 		this.code = code;
 	}
+	
+	public void loadFromEntity(CourseEntity entity) {
+		this.code = entity.getCode();
+		this.name = entity.getName();
+		this.setCreatedBy(entity.getCreatedBy());
+		this.setCreatedDate(entity.getCreatedDate());
+		this.setModifiedBy(entity.getModifiedBy());
+		this.setModifiedDate(entity.getModifiedDate());
+	}
+	
 }

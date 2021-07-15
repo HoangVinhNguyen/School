@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.school.constant.SystemConstant;
-import com.school.model.UserModel;
+import com.school.entity.UserEntity;
 import com.school.utils.SessionUtil;
 
 
@@ -32,7 +32,7 @@ public class AuthorizationFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String url = request.getRequestURI();
         if (url.contains("/admin")) {
-            UserModel model = (UserModel) SessionUtil.getInstance().getValue(request, "USERMODEL");
+            UserEntity model = (UserEntity) SessionUtil.getInstance().getValue(request, "USERMODEL");
             if (model != null) {
                 if (model.getRole().getCode().equals(SystemConstant.ADMIN)) {
                     filterChain.doFilter(servletRequest, servletResponse);
@@ -44,7 +44,7 @@ public class AuthorizationFilter implements Filter {
             }
         } 
         else if (url.contains("/teacher")){
-        	UserModel model = (UserModel) SessionUtil.getInstance().getValue(request, "USERMODEL");
+        	UserEntity model = (UserEntity) SessionUtil.getInstance().getValue(request, "USERMODEL");
             if (model != null) {
                 if (model.getRole().getCode().equals(SystemConstant.TEACHER)) {
                     filterChain.doFilter(servletRequest, servletResponse);

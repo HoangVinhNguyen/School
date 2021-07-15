@@ -1,15 +1,26 @@
-package com.school.model;
+package com.school.entity;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
-public class AbstractModel {
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
+@MappedSuperclass
+public class AbstractEntity {
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
+	@Column(name="created_date")
 	private Timestamp createdDate;
+	@Column(name="modified_date")
 	private Timestamp modifiedDate;
+	@Column(name="created_by")
 	private String createdBy;
+	@Column(name="modified_by")
 	private String modifiedBy;
 	
 	public Long getId() {

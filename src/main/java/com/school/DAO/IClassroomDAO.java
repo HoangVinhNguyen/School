@@ -2,17 +2,15 @@ package com.school.DAO;
 
 import java.util.List;
 
-import com.school.model.ClassroomModel;
-import com.school.paging.Pageble;
+import com.school.entity.ClassroomEntity;
 
-public interface IClassroomDAO extends GenericDAO<ClassroomModel> {
+public interface IClassroomDAO {
 
-	public List<ClassroomModel> findAll(Pageble pageble);
-	public List<ClassroomModel> findAll();
-	public ClassroomModel findOne(long id);
-	public ClassroomModel findOneByCode(String code);
-	public ClassroomModel findOneByName(String name);
-	public Long save(ClassroomModel classroomModel);
-	public Long delete(ClassroomModel classroomModel);
+	public List<ClassroomEntity> findAll();
+	public ClassroomEntity findOne(long id);
+	public ClassroomEntity findOneByCode(String code);
+	public ClassroomEntity findOneByName(String name);
+	public Long save(ClassroomEntity classroomEntity);
+	public Long delete(ClassroomEntity classroomEntity);
 	public int getTotalItem();
 }

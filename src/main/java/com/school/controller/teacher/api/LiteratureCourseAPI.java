@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.school.constant.SystemConstant;
-import com.school.model.UserModel;
+import com.school.entity.UserEntity;
 import com.school.service.ILiteratureCourseService;
 import com.school.utils.SessionUtil;
 
@@ -29,7 +29,7 @@ public class LiteratureCourseAPI extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
-		UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
+		UserEntity model = (UserEntity) SessionUtil.getInstance().getValue(req, "USERMODEL");
 		if (model.getRole().getCode().equals(SystemConstant.TEACHER)) {
 			
 		}

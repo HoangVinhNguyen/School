@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.school.model.InClassroomModel;
-import com.school.model.UserModel;
+import com.school.entity.InClassroomEntity;
+import com.school.entity.UserEntity;
 import com.school.service.IInClassroomService;
 import com.school.utils.HttpUtil;
 import com.school.utils.SessionUtil;
@@ -32,7 +32,7 @@ public class InClassroomAPI extends HttpServlet{
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
-		List<InClassroomModel> inClassModel = inClassroomService.findAll();
+		List<InClassroomEntity> inClassModel = inClassroomService.findAll();
 		mapper.writeValue(resp.getOutputStream(), inClassModel);
 	}
 	
@@ -41,8 +41,8 @@ public class InClassroomAPI extends HttpServlet{
 		ObjectMapper mapper = new ObjectMapper();
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
-		InClassroomModel inClassModel =  HttpUtil.of(req.getReader()).toModel(InClassroomModel.class);
-		UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
+		InClassroomEntity inClassModel =  HttpUtil.of(req.getReader()).toModel(InClassroomEntity.class);
+		UserEntity model = (UserEntity) SessionUtil.getInstance().getValue(req, "USERMODEL");
 		if (model != null && model.getFullname() != null) {
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 			inClassModel.setCreatedBy(model.getFullname());
@@ -58,8 +58,8 @@ public class InClassroomAPI extends HttpServlet{
 		ObjectMapper mapper = new ObjectMapper();
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
-		InClassroomModel inClassModel =  HttpUtil.of(req.getReader()).toModel(InClassroomModel.class);
-		UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
+		InClassroomEntity inClassModel =  HttpUtil.of(req.getReader()).toModel(InClassroomEntity.class);
+		UserEntity model = (UserEntity) SessionUtil.getInstance().getValue(req, "USERMODEL");
 		if (model != null && model.getFullname() != null) {
 			inClassModel.setModifiedBy(model.getFullname());
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -74,8 +74,8 @@ public class InClassroomAPI extends HttpServlet{
 		ObjectMapper mapper = new ObjectMapper();
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
-		InClassroomModel inClassModel =  HttpUtil.of(req.getReader()).toModel(InClassroomModel.class);
-		UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
+		InClassroomEntity inClassModel =  HttpUtil.of(req.getReader()).toModel(InClassroomEntity.class);
+		UserEntity model = (UserEntity) SessionUtil.getInstance().getValue(req, "USERMODEL");
 		if (model != null && model.getFullname() != null) {
 			inClassModel.setModifiedBy(model.getFullname());
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());

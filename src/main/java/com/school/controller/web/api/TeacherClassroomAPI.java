@@ -17,10 +17,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.school.constant.SystemConstant;
-import com.school.model.ClassroomModel;
-import com.school.model.CourseModel;
-import com.school.model.TeacherClassroomModel;
-import com.school.model.UserModel;
+import com.school.entity.ClassroomEntity;
+import com.school.entity.CourseEntity;
+import com.school.entity.TeacherClassroomEntity;
+import com.school.entity.UserEntity;
 import com.school.service.IClassroomService;
 import com.school.service.ICourseService;
 import com.school.service.ITeacherClassroomService;
@@ -51,16 +51,16 @@ public class TeacherClassroomAPI extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
-		UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
+		UserEntity model = (UserEntity) SessionUtil.getInstance().getValue(req, "USERMODEL");
 		if (model != null && model.getRole().getCode().equals(SystemConstant.STUDENT)) {
-			List<TeacherClassroomModel> teacherClassroomModel = teacherClassroomService.findAllByStudentEmail(model.getEmail());
+			List<TeacherClassroomEntity> teacherClassroomEntity = teacherClassroomService.findAllByStudentEmail(model.getEmail());
 			List<String> listClassName = new ArrayList<String>();
 			List<String> listCourseName = new ArrayList<String>();
 			List<String> listCoursePoint = new ArrayList<String>();
-			for (TeacherClassroomModel tempModel : teacherClassroomModel) {
-				ClassroomModel classroomModel = classroomService.findOne(tempModel.getClassroomId());
-				listClassName.add(classroomModel.getName());
-				CourseModel course = courseService.findOne(tempModel.getCourseId());
+			for (TeacherClassroomEntity tempModel : teacherClassroomEntity) {
+				ClassroomEntity classroomEntity = classroomService.findOne(tempModel.getClassroomId());
+				listClassName.add(classroomEntity.getName());
+				CourseEntity course = courseService.findOne(tempModel.getCourseId());
 				listCourseName.add(course.getName());
 				listCoursePoint.add(tempModel.getPoint().toString());
 			}
@@ -78,13 +78,13 @@ public class TeacherClassroomAPI extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
-		UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
-		CourseModel courseModel =  HttpUtil.of(req.getReader()).toModel(CourseModel.class);
-		CourseModel course = courseService.findOneByName(courseModel.getName());
-		TeacherClassroomModel classOfStudent = new TeacherClassroomModel();
+		UserEntity model = (UserEntity) SessionUtil.getInstance().getValue(req, "USERMODEL");
+		CourseEntity courseEntity =  HttpUtil.of(req.getReader()).toModel(CourseEntity.class);
+		CourseEntity course = courseService.findOneByName(courseEntity.getName());
+		TeacherClassroomEntity classOfStudent = new TeacherClassroomEntity();
 		if (model.getRole().getCode().equals(SystemConstant.STUDENT)) {
-			List<TeacherClassroomModel> teacherClassroomModel = teacherClassroomService.findAllByStudentEmail(model.getEmail());
-			for (TeacherClassroomModel tempModel : teacherClassroomModel) {
+			List<TeacherClassroomEntity> teacherClassroomEntity = teacherClassroomService.findAllByStudentEmail(model.getEmail());
+			for (TeacherClassroomEntity tempModel : teacherClassroomEntity) {
 				if (course.getId().equals(tempModel.getCourseId())) {
 					classOfStudent = tempModel;
 				}

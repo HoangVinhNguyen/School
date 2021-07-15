@@ -2,70 +2,70 @@ package com.school.DAO.impl;
 
 import java.util.List;
 
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.school.DAO.IClassroomDAO;
-import com.school.mapper.ClassroomMapper;
-import com.school.model.ClassroomModel;
-import com.school.paging.Pageble;
+import com.school.entity.ClassroomEntity;
 
-public class ClassroomDAO extends AbstractDAO<ClassroomModel> implements IClassroomDAO{
+@Repository
+@Transactional
+public class ClassroomDAO implements IClassroomDAO{
 
+	@Autowired
+	SessionFactory sessionFactory;
+	
 	@Override
-	public List<ClassroomModel> findAll(Pageble pageble) {
-		String sql = "SELECT * FROM classroom";
-		return query(sql, new ClassroomMapper());
+	public ClassroomEntity findOne(long id) {
+		return (ClassroomEntity) sessionFactory.getCurrentSession().get(ClassroomEntity.class, id);
 	}
 
 	@Override
-	public ClassroomModel findOne(long id) {
-		String sql = "SELECT * FROM classroom WHERE id = ? AND is_deleted = 0";
-		List<ClassroomModel> classroom = query(sql, new ClassroomMapper(), id);
-		return classroom.isEmpty() ? null : classroom.get(0);
-	}
-
-	@Override
-	public ClassroomModel findOneByCode(String code) {
+	public ClassroomEntity findOneByCode(String code) {
 		String sql = "SELECT * FROM classroom WHERE code = ? AND is_deleted = 0";
-		List<ClassroomModel> classroom = query(sql, new ClassroomMapper(), code);
-		return classroom.isEmpty() ? null : classroom.get(0);
+		return (ClassroomEntity) sessionFactory.getCurrentSession().createQuery(sql).setParameter(0, code);
 	}
 	
 	@Override
-	public ClassroomModel findOneByName(String name) {
+	public ClassroomEntity findOneByName(String name) {
 		String sql = "SELECT * FROM classroom WHERE name = ? AND is_deleted = 0";
-		List<ClassroomModel> classroom = query(sql, new ClassroomMapper(), name);
-		return classroom.isEmpty() ? null : classroom.get(0);
+		return (ClassroomEntity) sessionFactory.getCurrentSession().createQuery(sql).setParameter(0, name);
 	}
 
 	@Override
 	public int getTotalItem() {
 		String sql = "SELECT count(*) FROM classroom WHERE is_deleted = 0";
-		return count(sql);
+		return (int) sessionFactory.getCurrentSession().createQuery(sql).uniqueResult();
 	}
 
 	@Override
-	public Long save(ClassroomModel classroomModel) {
-		ClassroomModel classroomModelCheck;
-		if (classroomModel.getId() != null) {
-			classroomModelCheck = findOne(classroomModel.getId());
+	public Long save(ClassroomEntity classroomEntity) {
+		ClassroomEntity classroomModelCheck;
+		if (classroomEntity.getId() != null) {
+			classroomModelCheck = findOne(classroomEntity.getId());
 			if (classroomModelCheck != null && classroomModelCheck.getId() != 0) {
-				String sql = "UPDATE classroom SET name=?, code=?, modified_by=?, modified_date=? WHERE id=?";
-				return update(sql, classroomModel.getName(), classroomModel.getCode(),
-						classroomModel.getModifiedBy(), classroomModel.getModifiedDate(), classroomModel.getId());
+				sessionFactory.getCurrentSession().merge(classroomEntity);
+				return classroomEntity.getId();
 			}
 		}
-		String sql = "INSERT INTO classroom (name, code, created_by, created_date, modified_date) values (?, ?, ?, ?, ?)";
-		return insert(sql, classroomModel.getName(), classroomModel.getCode(), classroomModel.getCreatedBy(), classroomModel.getCreatedDate(), classroomModel.getModifiedDate());
+		sessionFactory.getCurrentSession().save(classroomEntity);
+		return classroomEntity.getId();
 	}
 
 	@Override
-	public List<ClassroomModel> findAll() {
-		String sql = "SELECT * FROM classroom  WHERE is_deleted = 0";
-		return query(sql, new ClassroomMapper());
+	public List<ClassroomEntity> findAll() {
+		return (List<ClassroomEntity>) sessionFactory.getCurrentSession().createCriteria(ClassroomEntity.class);
 	}
 
 	@Override
-	public Long delete(ClassroomModel classroomModel) {
+	public Long delete(ClassroomEntity classroomEntity) {
 		String sql = "UPDATE classroom SET modified_by=?, modified_date=?, is_deleted = 1 WHERE id=?";
-		return update(sql, classroomModel.getModifiedBy(), classroomModel.getModifiedDate(), classroomModel.getId());
+		sessionFactory.getCurrentSession().createQuery(sql)
+		.setParameter(0, classroomEntity.getModifiedBy())
+		.setParameter(1, classroomEntity.getModifiedDate())
+		.setParameter(2, classroomEntity.getId());
+		return classroomEntity.getId();
 	}
 }

@@ -24,9 +24,9 @@ import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.school.model.ClassroomModel;
-import com.school.model.InClassroomModel;
-import com.school.model.UserModel;
+import com.school.entity.ClassroomEntity;
+import com.school.entity.InClassroomEntity;
+import com.school.entity.UserEntity;
 import com.school.service.IClassroomService;
 import com.school.service.IInClassroomService;
 import com.school.service.IUserService;
@@ -51,7 +51,7 @@ public class InClassroomArrayAPI extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		ObjectMapper mapper = new ObjectMapper();
 		resp.setContentType("application/json");
-		UserModel modelU = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
+		UserEntity modelU = (UserEntity) SessionUtil.getInstance().getValue(req, "USERMODEL");
 		try {
 			List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(req);
 			for (FileItem item : items) {
@@ -72,7 +72,7 @@ public class InClassroomArrayAPI extends HttpServlet {
 					FormulaEvaluator formulaEvaluator = wb.getCreationHelper().createFormulaEvaluator();
 					for (Row row : sheet) // iteration over row using for each loop
 					{
-						InClassroomModel model = new InClassroomModel();
+						InClassroomEntity model = new InClassroomEntity();
 						for (Cell cell : row) // iteration over cell using for each loop
 						{
 							/*
@@ -84,7 +84,7 @@ public class InClassroomArrayAPI extends HttpServlet {
 								model.setStudentId(idStudent);
 								break;
 							case 1:
-								ClassroomModel classroom = classroomService.findOneByCode(cell.getStringCellValue());
+								ClassroomEntity classroom = classroomService.findOneByCode(cell.getStringCellValue());
 								model.setClassroomId(classroom.getId());
 								break;
 							}

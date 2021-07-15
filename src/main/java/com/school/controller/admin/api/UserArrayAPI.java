@@ -25,7 +25,7 @@ import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.school.model.UserModel;
+import com.school.entity.UserEntity;
 import com.school.service.IUserService;
 import com.school.utils.SessionUtil;
 
@@ -42,7 +42,7 @@ public class UserArrayAPI extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		ObjectMapper mapper = new ObjectMapper();
 		resp.setContentType("application/json");
-		UserModel modelU = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
+		UserEntity modelU = (UserEntity) SessionUtil.getInstance().getValue(req, "USERMODEL");
 		try {
 			List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(req);
 			for (FileItem item : items) {
@@ -63,7 +63,7 @@ public class UserArrayAPI extends HttpServlet {
 					FormulaEvaluator formulaEvaluator = wb.getCreationHelper().createFormulaEvaluator();
 					for (Row row : sheet) // iteration over row using for each loop
 					{
-						UserModel model = new UserModel();
+						UserEntity model = new UserEntity();
 						for (Cell cell : row) // iteration over cell using for each loop
 						{
 							/*
@@ -109,8 +109,8 @@ public class UserArrayAPI extends HttpServlet {
 //		ObjectMapper mapper = new ObjectMapper();
 //		req.setCharacterEncoding("UTF-8");
 //		resp.setContentType("application/json");
-//		UserModel userModel =  HttpUtil.of(req.getReader()).toModel(UserModel.class);
-//		UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
+//		UserEntity userModel =  HttpUtil.of(req.getReader()).toModel(UserEntity.class);
+//		UserEntity model = (UserEntity) SessionUtil.getInstance().getValue(req, "USERMODEL");
 //		if (model != null && model.getFullname() != null) {
 //			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 //			userModel.setCreatedBy(model.getFullname());

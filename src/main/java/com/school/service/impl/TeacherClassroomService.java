@@ -1,57 +1,86 @@
 package com.school.service.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.school.DAO.ITeacherClassroomDAO;
+import com.school.entity.TeacherClassroomEntity;
 import com.school.model.TeacherClassroomModel;
-import com.school.paging.Pageble;
 import com.school.service.ITeacherClassroomService;
 
-public class TeacherClassroomService implements ITeacherClassroomService{
+public class TeacherClassroomService implements ITeacherClassroomService {
 
-	@Inject
+	@Autowired
 	private ITeacherClassroomDAO teacherClassroomDAO;
-	
-	@Override
-	public List<TeacherClassroomModel> findAll(Pageble pageble) {
-		return teacherClassroomDAO.findAll(pageble);
-	}
 
 	@Override
 	public List<TeacherClassroomModel> findAll() {
-		return teacherClassroomDAO.findAll();
+		List<TeacherClassroomModel> teacherClassroomModels = new ArrayList<TeacherClassroomModel>();
+		List<TeacherClassroomEntity> teacherClassroomEntities = teacherClassroomDAO.findAll();
+		Iterator<TeacherClassroomEntity> itr = teacherClassroomEntities.iterator();
+		while(itr.hasNext()) {
+			TeacherClassroomModel teacherClassroomModel = new TeacherClassroomModel();
+			teacherClassroomModel.loadFromEntity(itr.next());
+			teacherClassroomModels.add(teacherClassroomModel);
+		}
+		return teacherClassroomModels;
 	}
 
 	@Override
 	public TeacherClassroomModel findOne(long id) {
-		return teacherClassroomDAO.findOne(id);
+		TeacherClassroomModel teacherClassroomModel = new TeacherClassroomModel();
+		teacherClassroomModel.loadFromEntity(teacherClassroomDAO.findOne(id));
+		return teacherClassroomModel;
 	}
 
 	@Override
 	public TeacherClassroomModel findOneByClassroom(String classroomId) {
-		return teacherClassroomDAO.findOneByClassroom(classroomId);
+		TeacherClassroomModel teacherClassroomModel = new TeacherClassroomModel();
+		teacherClassroomModel.loadFromEntity(teacherClassroomDAO.findOneByClassroom(classroomId));
+		return teacherClassroomModel;
 	}
 
 	@Override
 	public List<TeacherClassroomModel> findAllByTeacherEmail(String userEmail) {
-		return teacherClassroomDAO.findAllByTeacherEmail(userEmail);
+		List<TeacherClassroomModel> teacherClassroomModels = new ArrayList<TeacherClassroomModel>();
+		List<TeacherClassroomEntity> teacherClassroomEntities = teacherClassroomDAO.findAllByTeacherEmail(userEmail);
+		Iterator<TeacherClassroomEntity> itr = teacherClassroomEntities.iterator();
+		while(itr.hasNext()) {
+			TeacherClassroomModel teacherClassroomModel = new TeacherClassroomModel();
+			teacherClassroomModel.loadFromEntity(itr.next());
+			teacherClassroomModels.add(teacherClassroomModel);
+		}
+		return teacherClassroomModels;
 	}
 	
 	@Override
 	public List<TeacherClassroomModel> findAllByStudentEmail(String userEmail) {
-		return teacherClassroomDAO.findAllByStudentEmail(userEmail);
+		List<TeacherClassroomModel> teacherClassroomModels = new ArrayList<TeacherClassroomModel>();
+		List<TeacherClassroomEntity> teacherClassroomEntities = teacherClassroomDAO.findAllByStudentEmail(userEmail);
+		Iterator<TeacherClassroomEntity> itr = teacherClassroomEntities.iterator();
+		while(itr.hasNext()) {
+			TeacherClassroomModel teacherClassroomModel = new TeacherClassroomModel();
+			teacherClassroomModel.loadFromEntity(itr.next());
+			teacherClassroomModels.add(teacherClassroomModel);
+		}
+		return teacherClassroomModels;
 	}
 
 	@Override
 	public Long save(TeacherClassroomModel teacherClassroomModel) {
-		return teacherClassroomDAO.save(teacherClassroomModel);
+		TeacherClassroomEntity teacherClassroomEntity = new TeacherClassroomEntity();
+		teacherClassroomEntity.loadFromDTO(teacherClassroomModel);
+		return teacherClassroomDAO.save(teacherClassroomEntity);
 	}
 
 	@Override
 	public Long delete(TeacherClassroomModel teacherClassroomModel) {
-		return teacherClassroomDAO.delete(teacherClassroomModel);
+		TeacherClassroomEntity teacherClassroomEntity = new TeacherClassroomEntity();
+		teacherClassroomEntity.loadFromDTO(teacherClassroomModel);
+		return teacherClassroomDAO.delete(teacherClassroomEntity);
 	}
 
 	@Override
@@ -61,11 +90,21 @@ public class TeacherClassroomService implements ITeacherClassroomService{
 
 	@Override
 	public Long savePoint(TeacherClassroomModel teacherClassroomModel) {
-		return teacherClassroomDAO.savePoint(teacherClassroomModel);
+		TeacherClassroomEntity teacherClassroomEntity = new TeacherClassroomEntity();
+		teacherClassroomEntity.loadFromDTO(teacherClassroomModel);
+		return teacherClassroomDAO.savePoint(teacherClassroomEntity);
 	}
 
 	@Override
 	public List<TeacherClassroomModel> findAllByClassroom(String className) {
-		return teacherClassroomDAO.findAllByClassroom(className);
+		List<TeacherClassroomModel> teacherClassroomModels = new ArrayList<TeacherClassroomModel>();
+		List<TeacherClassroomEntity> teacherClassroomEntities = teacherClassroomDAO.findAllByClassroom(className);
+		Iterator<TeacherClassroomEntity> itr = teacherClassroomEntities.iterator();
+		while(itr.hasNext()) {
+			TeacherClassroomModel teacherClassroomModel = new TeacherClassroomModel();
+			teacherClassroomModel.loadFromEntity(itr.next());
+			teacherClassroomModels.add(teacherClassroomModel);
+		}
+		return teacherClassroomModels;
 	}
 }

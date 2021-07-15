@@ -2,72 +2,71 @@ package com.school.DAO.impl;
 
 import java.util.List;
 
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.school.DAO.IRoleDAO;
-import com.school.mapper.ClassroomMapper;
-import com.school.mapper.RoleMapper;
-import com.school.model.ClassroomModel;
-import com.school.model.RoleModel;
-import com.school.paging.Pageble;
+import com.school.entity.RoleEntity;
 
-public class RoleDAO extends AbstractDAO<RoleModel> implements IRoleDAO{
+@Repository
+@Transactional
+public class RoleDAO implements IRoleDAO{
 
+	@Autowired
+	SessionFactory sessionFactory;
+	
 	@Override
-	public List<RoleModel> findAll(Pageble pageble) {
-		String sql = "SELECT * FROM role";
-		return query(sql, new RoleMapper());
+	public List<RoleEntity> findAll() {
+		return (List<RoleEntity>) sessionFactory.getCurrentSession().createCriteria(RoleEntity.class);
 	}
 
 	@Override
-	public RoleModel findOne(long id) {
+	public RoleEntity findOne(long id) {
 		String sql = "SELECT * FROM role WHERE id = ? AND is_deleted = 0";
-		List<RoleModel> roleModel = query(sql, new RoleMapper(), id);
-		return roleModel.isEmpty() ? null : roleModel.get(0);
+		return (RoleEntity) sessionFactory.getCurrentSession().createQuery(sql).setParameter(0, id);
 	}
 
 	@Override
-	public RoleModel findOneByCode(String code) {
+	public RoleEntity findOneByCode(String code) {
 		String sql = "SELECT * FROM role WHERE code = ? AND is_deleted = 0";
-		List<RoleModel> roleModel = query(sql, new RoleMapper(), code);
-		return roleModel.isEmpty() ? null : roleModel.get(0);
+		return (RoleEntity) sessionFactory.getCurrentSession().createQuery(sql).setParameter(0, code);
 	}
 	
 	@Override
-	public RoleModel findOneByName(String name) {
+	public RoleEntity findOneByName(String name) {
 		String sql = "SELECT * FROM role WHERE name = ? AND is_deleted = 0";
-		List<RoleModel> roleModel = query(sql, new RoleMapper(), name);
-		return roleModel.isEmpty() ? null : roleModel.get(0);
+		return (RoleEntity) sessionFactory.getCurrentSession().createQuery(sql).setParameter(0, name);
 	}
 
 	@Override
 	public int getTotalItem() {
 		String sql = "SELECT count(*) FROM role WHERE is_deleted = 0";
-		return count(sql);
+		return (int) sessionFactory.getCurrentSession().createQuery(sql).uniqueResult();
 	}
 
 	@Override
-	public Long save(RoleModel roleModel) {
-		RoleModel roleModelCheck;
-		if (roleModel.getId() != null) {
-			roleModelCheck = findOne(roleModel.getId());
+	public Long save(RoleEntity roleEntity) {
+		RoleEntity roleModelCheck;
+		if (roleEntity.getId() != null) {
+			roleModelCheck = findOne(roleEntity.getId());
 			if (roleModelCheck != null && roleModelCheck.getId() != 0) {
-				String sql = "UPDATE role SET name=?, code=?, modified_by=?, modified_date=? WHERE id=?";
-				return update(sql, roleModel.getName(), roleModel.getCode(),
-						roleModel.getModifiedBy(), roleModel.getModifiedDate(), roleModel.getId());
+				sessionFactory.getCurrentSession().merge(roleEntity);
+				return roleEntity.getId();
 			}
 		}
-		String sql = "INSERT INTO role (name, code, created_by, created_date, modified_date) values (?, ?, ?, ?, ?)";
-		return insert(sql, roleModel.getName(), roleModel.getCode(), roleModel.getCreatedBy(), roleModel.getCreatedDate(), roleModel.getModifiedDate());
+		sessionFactory.getCurrentSession().save(roleEntity);
+		return roleEntity.getId();
 	}
 
 	@Override
-	public List<RoleModel> findAll() {
-		String sql = "SELECT * FROM role  WHERE is_deleted = 0";
-		return query(sql, new RoleMapper());
-	}
-
-	@Override
-	public Long delete(RoleModel roleModel) {
+	public Long delete(RoleEntity roleEntity) {
 		String sql = "UPDATE role SET modified_by=?, modified_date=?, is_deleted = 1 WHERE id=?";
-		return update(sql, roleModel.getModifiedBy(), roleModel.getModifiedDate(), roleModel.getId());
+		sessionFactory.getCurrentSession().createQuery(sql)
+		.setParameter(0, roleEntity.getModifiedBy())
+		.setParameter(1, roleEntity.getModifiedDate())
+		.setParameter(2, roleEntity.getId());
+		return roleEntity.getId();
 	}
 }

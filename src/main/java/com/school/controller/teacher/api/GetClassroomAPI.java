@@ -19,10 +19,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.school.constant.SystemConstant;
-import com.school.model.ClassroomModel;
-import com.school.model.CourseModel;
-import com.school.model.TeacherClassroomModel;
-import com.school.model.UserModel;
+import com.school.entity.ClassroomEntity;
+import com.school.entity.CourseEntity;
+import com.school.entity.TeacherClassroomEntity;
+import com.school.entity.UserEntity;
 import com.school.service.IClassroomService;
 import com.school.service.ICourseService;
 import com.school.service.ITeacherClassroomService;
@@ -53,15 +53,15 @@ public class GetClassroomAPI extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
-		UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
+		UserEntity model = (UserEntity) SessionUtil.getInstance().getValue(req, "USERMODEL");
 		if (model.getRole().getCode().equals(SystemConstant.TEACHER)) {
-			List<TeacherClassroomModel> teacherClassroomModel = teacherClassroomService.findAllByTeacherEmail(model.getEmail());
+			List<TeacherClassroomEntity> teacherClassroomEntity = teacherClassroomService.findAllByTeacherEmail(model.getEmail());
 			Set<String> listClassName = new HashSet<String>();
 			Set<String> listCourseName = new HashSet<String>();
-			for (TeacherClassroomModel tempModel : teacherClassroomModel) {
-				ClassroomModel classroomModel = classroomService.findOne(tempModel.getClassroomId());
-				listClassName.add(classroomModel.getName());
-				CourseModel course = courseService.findOne(tempModel.getCourseId());
+			for (TeacherClassroomEntity tempModel : teacherClassroomEntity) {
+				ClassroomEntity classroomEntity = classroomService.findOne(tempModel.getClassroomId());
+				listClassName.add(classroomEntity.getName());
+				CourseEntity course = courseService.findOne(tempModel.getCourseId());
 				listCourseName.add(course.getName());
 			}
 			
@@ -77,10 +77,10 @@ public class GetClassroomAPI extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
-		UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
-		ClassroomModel classroomModel =  HttpUtil.of(req.getReader()).toModel(ClassroomModel.class);
+		UserEntity model = (UserEntity) SessionUtil.getInstance().getValue(req, "USERMODEL");
+		ClassroomEntity classroomEntity =  HttpUtil.of(req.getReader()).toModel(ClassroomEntity.class);
 		if (model.getRole().getCode().equals(SystemConstant.TEACHER)) {
-			List<TeacherClassroomModel> listClassOfStudent = teacherClassroomService.findAllByClassroom(classroomModel.getName());
+			List<TeacherClassroomEntity> listClassOfStudent = teacherClassroomService.findAllByClassroom(classroomEntity.getName());
 			
 			mapper.writeValue(resp.getOutputStream(), listClassOfStudent);
 		}
@@ -92,13 +92,13 @@ public class GetClassroomAPI extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
-		UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
-		TeacherClassroomModel teacherClassroomModel =  HttpUtil.of(req.getReader()).toModel(TeacherClassroomModel.class);
+		UserEntity model = (UserEntity) SessionUtil.getInstance().getValue(req, "USERMODEL");
+		TeacherClassroomEntity teacherClassroomEntity =  HttpUtil.of(req.getReader()).toModel(TeacherClassroomEntity.class);
 		if (model.getRole().getCode().equals(SystemConstant.TEACHER)) {
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-			teacherClassroomModel.setModifiedBy(model.getFullname());
-			teacherClassroomModel.setModifiedDate(timestamp);
-			Long id = teacherClassroomService.savePoint(teacherClassroomModel);
+			teacherClassroomEntity.setModifiedBy(model.getFullname());
+			teacherClassroomEntity.setModifiedDate(timestamp);
+			Long id = teacherClassroomService.savePoint(teacherClassroomEntity);
 			mapper.writeValue(resp.getOutputStream(), id);
 		}
 	}

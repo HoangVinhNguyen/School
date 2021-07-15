@@ -2,71 +2,71 @@ package com.school.DAO.impl;
 
 import java.util.List;
 
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.school.DAO.ICourseDAO;
-import com.school.mapper.ClassroomMapper;
-import com.school.mapper.CourseMapper;
-import com.school.model.CourseModel;
-import com.school.paging.Pageble;
+import com.school.entity.CourseEntity;
 
-public class CourseDAO extends AbstractDAO<CourseModel> implements ICourseDAO{
+@Repository
+@Transactional
+public class CourseDAO implements ICourseDAO{
+	
+	@Autowired
+	SessionFactory sessionFactory;
 
 	@Override
-	public List<CourseModel> findAll(Pageble pageble) {
-		String sql = "SELECT * FROM course";
-		return query(sql, new CourseMapper());
+	public List<CourseEntity> findAll() {
+		return (List<CourseEntity>) sessionFactory.getCurrentSession().createCriteria(CourseEntity.class);
 	}
 
 	@Override
-	public CourseModel findOne(long id) {
+	public CourseEntity findOne(long id) {
 		String sql = "SELECT * FROM course WHERE id = ? AND is_deleted = 0";
-		List<CourseModel> courseModel = query(sql, new CourseMapper(), id);
-		return courseModel.isEmpty() ? null : courseModel.get(0);
+		return (CourseEntity) sessionFactory.getCurrentSession().createQuery(sql).setParameter(0, id);
 	}
 
 	@Override
-	public CourseModel findOneByCode(String code) {
+	public CourseEntity findOneByCode(String code) {
 		String sql = "SELECT * FROM course WHERE code = ? AND is_deleted = 0";
-		List<CourseModel> courseModel = query(sql, new CourseMapper(), code);
-		return courseModel.isEmpty() ? null : courseModel.get(0);
+		return (CourseEntity) sessionFactory.getCurrentSession().createQuery(sql).setParameter(0, code);
 	}
 	
 	@Override
-	public CourseModel findOneByName(String name) {
+	public CourseEntity findOneByName(String name) {
 		String sql = "SELECT * FROM course WHERE name = ? AND is_deleted = 0";
-		List<CourseModel> courseModel = query(sql, new CourseMapper(), name);
-		return courseModel.isEmpty() ? null : courseModel.get(0);
+		return (CourseEntity) sessionFactory.getCurrentSession().createQuery(sql).setParameter(0, name);
 	}
 
 	@Override
 	public int getTotalItem() {
 		String sql = "SELECT count(*) FROM course WHERE is_deleted = 0";
-		return count(sql);
+		return (int) sessionFactory.getCurrentSession().createQuery(sql).uniqueResult();
 	}
 
 	@Override
-	public Long save(CourseModel courseModel) {
-		CourseModel courseModelCheck;
-		if (courseModel.getId() != null) {
-			courseModelCheck = findOne(courseModel.getId());
+	public Long save(CourseEntity courseEntity) {
+		CourseEntity courseModelCheck;
+		if (courseEntity.getId() != null) {
+			courseModelCheck = findOne(courseEntity.getId());
 			if (courseModelCheck != null && courseModelCheck.getId() != 0) {
-				String sql = "UPDATE course SET name=?, code=?, modified_by=?, modified_date=? WHERE id=?";
-				return update(sql, courseModel.getName(), courseModel.getCode(),
-						courseModel.getModifiedBy(), courseModel.getModifiedDate(), courseModel.getId());
+				sessionFactory.getCurrentSession().merge(courseEntity);
+				return courseEntity.getId();
 			}
 		}
-		String sql = "INSERT INTO course (name, code, created_by, created_date, modified_date) values (?, ?, ?, ?, ?)";
-		return insert(sql, courseModel.getName(), courseModel.getCode(), courseModel.getCreatedBy(), courseModel.getCreatedDate(), courseModel.getModifiedDate());
+		sessionFactory.getCurrentSession().save(courseEntity);
+		return courseEntity.getId();
 	}
 
 	@Override
-	public List<CourseModel> findAll() {
-		String sql = "SELECT * FROM course  WHERE is_deleted = 0";
-		return query(sql, new CourseMapper());
-	}
-
-	@Override
-	public Long delete(CourseModel courseModel) {
+	public Long delete(CourseEntity courseEntity) {
 		String sql = "UPDATE course SET modified_by=?, modified_date=?, is_deleted = 1 WHERE id=?";
-		return update(sql, courseModel.getModifiedBy(), courseModel.getModifiedDate(), courseModel.getId());
+		sessionFactory.getCurrentSession().createQuery(sql)
+		.setParameter(0, courseEntity.getModifiedBy())
+		.setParameter(1, courseEntity.getModifiedDate())
+		.setParameter(2, courseEntity.getId());
+		return courseEntity.getId();
 	}
 }

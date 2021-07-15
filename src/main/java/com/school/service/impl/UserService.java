@@ -1,21 +1,27 @@
 package com.school.service.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.school.DAO.IUserDAO;
+import com.school.entity.UserEntity;
 import com.school.model.UserModel;
 import com.school.service.IUserService;
 
-public class UserService implements IUserService{
+public class UserService implements IUserService {
 
-	@Inject
+	@Autowired
 	private IUserDAO userDAO;
 	
 	@Override
 	public UserModel findByEmailAndPasswordAndStatus(String email, String password, Integer status) {
-		return userDAO.findByEmailAndPasswordAndStatus(email, password, status);
+		UserEntity userEntity = userDAO.findByEmailAndPasswordAndStatus(email, password, status);
+		UserModel userModel = new UserModel();
+		userModel.loadFromEntity(userEntity);
+		return userModel;
 	}
 
 	@Override
@@ -25,22 +31,36 @@ public class UserService implements IUserService{
 
 	@Override
 	public List<UserModel> findAll() {
-		return userDAO.findAll();
+		List<UserModel> userModels = new ArrayList<>();
+		List<UserEntity> userEntities = userDAO.findAll();
+		Iterator<UserEntity> itr = userEntities.iterator();
+		while(itr.hasNext()) {
+			UserModel userModel = new UserModel();
+			userModel.loadFromEntity(itr.next());
+			userModels.add(userModel);
+		}
+		return userModels;
 	}
 
 	@Override
 	public UserModel findOne(long id) {
-		return userDAO.findOne(id);
+		UserModel userModel = new UserModel();
+		userModel.loadFromEntity(userDAO.findOne(id));
+		return userModel;
 	}
 
 	@Override
 	public Long save(UserModel userModel) {
-		return userDAO.save(userModel);
+		UserEntity userEntity = new UserEntity();
+		userEntity.loadFromDTO(userModel);
+		return userDAO.save(userEntity);
 	}
 
 	@Override
 	public Long delete(UserModel userModel) {
-		return userDAO.delete(userModel);
+		UserEntity userEntity = new UserEntity();
+		userEntity.loadFromDTO(userModel);
+		return userDAO.delete(userEntity);
 	}
 
 }

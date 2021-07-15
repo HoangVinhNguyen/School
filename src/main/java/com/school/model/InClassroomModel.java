@@ -1,6 +1,9 @@
 package com.school.model;
 
-public class InClassroomModel extends AbstractModel<InClassroomModel> {
+import com.school.entity.InClassroomEntity;
+import com.school.entity.RoleEntity;
+
+public class InClassroomModel extends AbstractModel {
 
 	private Long studentId;
 	private Long classroomId;
@@ -21,4 +24,13 @@ public class InClassroomModel extends AbstractModel<InClassroomModel> {
 		this.studentId = studentId;
 	}
 
+	public void loadFromEntity(InClassroomEntity entity) {
+		this.classroomId = entity.getClassroomId();
+		this.studentId = entity.getStudentId();
+		this.setCreatedBy(entity.getCreatedBy());
+		this.setCreatedDate(entity.getCreatedDate());
+		this.setModifiedBy(entity.getModifiedBy());
+		this.setModifiedDate(entity.getModifiedDate());
+	}
+	
 }

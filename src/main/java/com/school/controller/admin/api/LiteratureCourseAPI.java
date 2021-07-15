@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.school.model.InClassroomModel;
-import com.school.model.LiteratureCourseModel;
-import com.school.model.UserModel;
+import com.school.entity.InClassroomEntity;
+import com.school.entity.LiteratureCourseEntity;
+import com.school.entity.UserEntity;
 import com.school.service.ILiteratureCourseService;
 import com.school.utils.HttpUtil;
 import com.school.utils.SessionUtil;
@@ -33,8 +33,8 @@ public class LiteratureCourseAPI extends HttpServlet{
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
-		List<LiteratureCourseModel> literatureCourseModel = literatureCourseService.findAll();
-		mapper.writeValue(resp.getOutputStream(), literatureCourseModel);
+		List<LiteratureCourseEntity> literatureCourseEntity = literatureCourseService.findAll();
+		mapper.writeValue(resp.getOutputStream(), literatureCourseEntity);
 	}
 	
 	@Override
@@ -42,14 +42,14 @@ public class LiteratureCourseAPI extends HttpServlet{
 		ObjectMapper mapper = new ObjectMapper();
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
-		LiteratureCourseModel literatureCourseModel =  HttpUtil.of(req.getReader()).toModel(LiteratureCourseModel.class);
-		UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
+		LiteratureCourseEntity literatureCourseEntity =  HttpUtil.of(req.getReader()).toModel(LiteratureCourseEntity.class);
+		UserEntity model = (UserEntity) SessionUtil.getInstance().getValue(req, "USERMODEL");
 		if (model != null && model.getFullname() != null) {
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-			literatureCourseModel.setCreatedBy(model.getFullname());
-			literatureCourseModel.setCreatedDate(timestamp);
-			literatureCourseModel.setModifiedDate(timestamp);
-			Long id = literatureCourseService.save(literatureCourseModel);
+			literatureCourseEntity.setCreatedBy(model.getFullname());
+			literatureCourseEntity.setCreatedDate(timestamp);
+			literatureCourseEntity.setModifiedDate(timestamp);
+			Long id = literatureCourseService.save(literatureCourseEntity);
 			mapper.writeValue(resp.getOutputStream(), id);
 		}
 	}
@@ -59,13 +59,13 @@ public class LiteratureCourseAPI extends HttpServlet{
 		ObjectMapper mapper = new ObjectMapper();
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
-		LiteratureCourseModel literatureCourseModel =  HttpUtil.of(req.getReader()).toModel(LiteratureCourseModel.class);
-		UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
+		LiteratureCourseEntity literatureCourseEntity =  HttpUtil.of(req.getReader()).toModel(LiteratureCourseEntity.class);
+		UserEntity model = (UserEntity) SessionUtil.getInstance().getValue(req, "USERMODEL");
 		if (model != null && model.getFullname() != null) {
-			literatureCourseModel.setModifiedBy(model.getFullname());
+			literatureCourseEntity.setModifiedBy(model.getFullname());
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-			literatureCourseModel.setModifiedDate(timestamp);
-			Long id = literatureCourseService.save(literatureCourseModel);
+			literatureCourseEntity.setModifiedDate(timestamp);
+			Long id = literatureCourseService.save(literatureCourseEntity);
 			mapper.writeValue(resp.getOutputStream(), id);
 		}
 	}
@@ -75,13 +75,13 @@ public class LiteratureCourseAPI extends HttpServlet{
 		ObjectMapper mapper = new ObjectMapper();
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
-		LiteratureCourseModel literatureCourseModel =  HttpUtil.of(req.getReader()).toModel(LiteratureCourseModel.class);
-		UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
+		LiteratureCourseEntity literatureCourseEntity =  HttpUtil.of(req.getReader()).toModel(LiteratureCourseEntity.class);
+		UserEntity model = (UserEntity) SessionUtil.getInstance().getValue(req, "USERMODEL");
 		if (model != null && model.getFullname() != null) {
-			literatureCourseModel.setModifiedBy(model.getFullname());
+			literatureCourseEntity.setModifiedBy(model.getFullname());
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-			literatureCourseModel.setModifiedDate(timestamp);
-			Long id = literatureCourseService.delete(literatureCourseModel);
+			literatureCourseEntity.setModifiedDate(timestamp);
+			Long id = literatureCourseService.delete(literatureCourseEntity);
 			mapper.writeValue(resp.getOutputStream(), id);
 		}
 	}

@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.school.model.PostStatusModel;
-import com.school.model.UserModel;
+import com.school.entity.PostStatusModel;
+import com.school.entity.UserEntity;
 import com.school.service.IPostStatusService;
 import com.school.utils.HttpUtil;
 import com.school.utils.SessionUtil;
@@ -42,7 +42,7 @@ public class PostStatusAPI extends HttpServlet{
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
 		PostStatusModel postStatusModel =  HttpUtil.of(req.getReader()).toModel(PostStatusModel.class);
-		UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
+		UserEntity model = (UserEntity) SessionUtil.getInstance().getValue(req, "USERMODEL");
 		if (model != null && model.getFullname() != null) {
 			postStatusModel.setModifiedBy(model.getFullname());
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());

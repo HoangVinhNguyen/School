@@ -1,37 +1,40 @@
 package com.school.service.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.school.DAO.ICourseDAO;
+import com.school.entity.CourseEntity;
 import com.school.model.CourseModel;
-import com.school.paging.Pageble;
 import com.school.service.ICourseService;
 
 public class CourseService implements ICourseService {
 
-	@Inject
+	@Autowired
 	private ICourseDAO courseDAO;
 	
 	@Override
-	public List<CourseModel> findAll(Pageble pageble) {
-		return courseDAO.findAll(pageble);
-	}
-
-	@Override
 	public CourseModel findOne(long id) {
-		return courseDAO.findOne(id);
+		CourseModel courseModel = new CourseModel();
+		courseModel.loadFromEntity(courseDAO.findOne(id));
+		return courseModel;
 	}
 
 	@Override
 	public CourseModel findOneByCode(String code) {
-		return courseDAO.findOneByCode(code);
+		CourseModel courseModel = new CourseModel();
+		courseModel.loadFromEntity(courseDAO.findOneByCode(code));
+		return courseModel;
 	}
 	
 	@Override
 	public CourseModel findOneByName(String name) {
-		return courseDAO.findOneByName(name);
+		CourseModel courseModel = new CourseModel();
+		courseModel.loadFromEntity(courseDAO.findOneByName(name));
+		return courseModel;
 	}
 
 	@Override
@@ -40,18 +43,30 @@ public class CourseService implements ICourseService {
 	}
 
 	@Override
-	public Long save(CourseModel classroomModel) {
-		return courseDAO.save(classroomModel);
+	public Long save(CourseModel courseModel) {
+		CourseEntity courseEntity = new CourseEntity();
+		courseEntity.loadFromDTO(courseModel);
+		return courseDAO.save(courseEntity);
 	}
 
 	@Override
 	public List<CourseModel> findAll() {
-		return courseDAO.findAll();
+		List<CourseModel> courseModels = new ArrayList<CourseModel>();
+		List<CourseEntity> courseEntities = courseDAO.findAll();
+		Iterator<CourseEntity> itr = courseEntities.iterator();
+		while(itr.hasNext()) {
+			CourseModel courseModel = new CourseModel();
+			courseModel.loadFromEntity(itr.next());
+			courseModels.add(courseModel);
+		}
+		return courseModels;
 	}
 
 	@Override
-	public Long delete(CourseModel classroomModel) {
-		return courseDAO.delete(classroomModel);
+	public Long delete(CourseModel courseModel) {
+		CourseEntity courseEntity = new CourseEntity();
+		courseEntity.loadFromDTO(courseModel);
+		return courseDAO.delete(courseEntity);
 	}
 
 }

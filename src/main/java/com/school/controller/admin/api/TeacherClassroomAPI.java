@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.school.model.TeacherClassroomModel;
-import com.school.model.UserModel;
+import com.school.entity.TeacherClassroomEntity;
+import com.school.entity.UserEntity;
 import com.school.service.ITeacherClassroomService;
 import com.school.utils.HttpUtil;
 import com.school.utils.SessionUtil;
@@ -32,7 +32,7 @@ public class TeacherClassroomAPI extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
 		resp.setCharacterEncoding("UTF-8");
-		List<TeacherClassroomModel> classModel = teacherService.findAll();
+		List<TeacherClassroomEntity> classModel = teacherService.findAll();
 		mapper.writeValue(resp.getOutputStream(), classModel);
 	}
 	
@@ -41,15 +41,15 @@ public class TeacherClassroomAPI extends HttpServlet {
 		ObjectMapper mapper = new ObjectMapper();
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
-		TeacherClassroomModel teacherClassroomModel =  HttpUtil.of(req.getReader()).toModel(TeacherClassroomModel.class);
-		UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
+		TeacherClassroomEntity teacherClassroomEntity =  HttpUtil.of(req.getReader()).toModel(TeacherClassroomEntity.class);
+		UserEntity model = (UserEntity) SessionUtil.getInstance().getValue(req, "USERMODEL");
 		if (model != null && model.getFullname() != null) {
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-			teacherClassroomModel.setCreatedBy(model.getFullname());
-			teacherClassroomModel.setCreatedDate(timestamp);
-			teacherClassroomModel.setModifiedBy(model.getModifiedBy());
-			teacherClassroomModel.setModifiedDate(timestamp);
-			Long id = teacherService.save(teacherClassroomModel);
+			teacherClassroomEntity.setCreatedBy(model.getFullname());
+			teacherClassroomEntity.setCreatedDate(timestamp);
+			teacherClassroomEntity.setModifiedBy(model.getModifiedBy());
+			teacherClassroomEntity.setModifiedDate(timestamp);
+			Long id = teacherService.save(teacherClassroomEntity);
 			mapper.writeValue(resp.getOutputStream(), id);
 		}
 	}
@@ -59,13 +59,13 @@ public class TeacherClassroomAPI extends HttpServlet {
 		ObjectMapper mapper = new ObjectMapper();
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
-		TeacherClassroomModel teacherClassroomModel =  HttpUtil.of(req.getReader()).toModel(TeacherClassroomModel.class);
-		UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
+		TeacherClassroomEntity teacherClassroomEntity =  HttpUtil.of(req.getReader()).toModel(TeacherClassroomEntity.class);
+		UserEntity model = (UserEntity) SessionUtil.getInstance().getValue(req, "USERMODEL");
 		if (model != null && model.getFullname() != null) {
-			teacherClassroomModel.setModifiedBy(model.getFullname());
+			teacherClassroomEntity.setModifiedBy(model.getFullname());
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-			teacherClassroomModel.setModifiedDate(timestamp);
-			Long id = teacherService.save(teacherClassroomModel);
+			teacherClassroomEntity.setModifiedDate(timestamp);
+			Long id = teacherService.save(teacherClassroomEntity);
 			mapper.writeValue(resp.getOutputStream(), id);
 		}
 	}
@@ -75,13 +75,13 @@ public class TeacherClassroomAPI extends HttpServlet {
 		ObjectMapper mapper = new ObjectMapper();
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
-		TeacherClassroomModel teacherClassroomModel =  HttpUtil.of(req.getReader()).toModel(TeacherClassroomModel.class);
-		UserModel model = (UserModel) SessionUtil.getInstance().getValue(req, "USERMODEL");
+		TeacherClassroomEntity teacherClassroomEntity =  HttpUtil.of(req.getReader()).toModel(TeacherClassroomEntity.class);
+		UserEntity model = (UserEntity) SessionUtil.getInstance().getValue(req, "USERMODEL");
 		if (model != null && model.getFullname() != null) {
-			teacherClassroomModel.setModifiedBy(model.getFullname());
+			teacherClassroomEntity.setModifiedBy(model.getFullname());
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-			teacherClassroomModel.setModifiedDate(timestamp);
-			Long id = teacherService.delete(teacherClassroomModel);
+			teacherClassroomEntity.setModifiedDate(timestamp);
+			Long id = teacherService.delete(teacherClassroomEntity);
 			mapper.writeValue(resp.getOutputStream(), id);
 		}
 	}

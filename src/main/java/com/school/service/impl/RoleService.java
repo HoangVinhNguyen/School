@@ -1,52 +1,67 @@
 package com.school.service.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.school.DAO.IRoleDAO;
+import com.school.entity.RoleEntity;
 import com.school.model.RoleModel;
-import com.school.paging.Pageble;
 import com.school.service.IRoleService;
 
 public class RoleService implements IRoleService{
 
-	@Inject
+	@Autowired
 	private IRoleDAO roleDAO;
-	
-	@Override
-	public List<RoleModel> findAll(Pageble pageble) {
-		return roleDAO.findAll(pageble);
-	}
 
 	@Override
 	public List<RoleModel> findAll() {
-		return roleDAO.findAll();
+		List<RoleModel> roleModels = new ArrayList<RoleModel>();
+		List<RoleEntity> roleEntities = roleDAO.findAll();
+		Iterator<RoleEntity> itr = roleEntities.iterator();
+		while(itr.hasNext()) {
+			RoleModel roleModel = new RoleModel();
+			roleModel.loadFromEntity(itr.next());
+			roleModels.add(roleModel);
+		}
+		return roleModels;
 	}
 
 	@Override
 	public RoleModel findOne(long id) {
-		return roleDAO.findOne(id);
+		RoleModel roleModel = new RoleModel();
+		roleModel.loadFromEntity(roleDAO.findOne(id));
+		return roleModel;
 	}
 
 	@Override
 	public RoleModel findOneByCode(String code) {
-		return roleDAO.findOneByCode(code);
+		RoleModel roleModel = new RoleModel();
+		roleModel.loadFromEntity(roleDAO.findOneByCode(code));
+		return roleModel;
 	}
 
 	@Override
 	public RoleModel findOneByName(String name) {
-		return roleDAO.findOneByName(name);
+		RoleModel roleModel = new RoleModel();
+		roleModel.loadFromEntity(roleDAO.findOneByName(name));
+		return roleModel;
 	}
 
 	@Override
 	public Long save(RoleModel roleModel) {
-		return roleDAO.save(roleModel);
+		RoleEntity entity = new RoleEntity();
+		entity.loadFromDTO(roleModel);
+		return roleDAO.save(entity);
 	}
 
 	@Override
 	public Long delete(RoleModel roleModel) {
-		return roleDAO.delete(roleModel);
+		RoleEntity entity = new RoleEntity();
+		entity.loadFromDTO(roleModel);
+		return roleDAO.delete(entity);
 	}
 
 	@Override

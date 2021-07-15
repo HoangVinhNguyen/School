@@ -1,6 +1,8 @@
 package com.school.model;
 
-public class TeacherClassroomModel extends AbstractModel<TeacherClassroomModel>{
+import com.school.entity.TeacherClassroomEntity;
+
+public class TeacherClassroomModel extends AbstractModel {
 
 	private Long teacherId;
 	private Long studentId;
@@ -48,4 +50,18 @@ public class TeacherClassroomModel extends AbstractModel<TeacherClassroomModel>{
 	public void setPoint(Double point) {
 		this.point = point;
 	}
+	
+	public void loadFromEntity(TeacherClassroomEntity entity) {
+		this.classroomId = entity.getClassroomId();
+		this.courseId = entity.getCourseId();
+		this.studentId = entity.getStudentId();
+		this.teacherId = entity.getTeacherId();
+		this.point = entity.getPoint();
+		this.setId(entity.getId());
+		this.setCreatedBy(entity.getCreatedBy());
+		this.setCreatedDate(entity.getCreatedDate());
+		this.setModifiedBy(entity.getModifiedBy());
+		this.setModifiedDate(entity.getModifiedDate());
+	}
+	
 }

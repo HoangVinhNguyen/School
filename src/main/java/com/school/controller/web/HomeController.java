@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.school.model.UserModel;
+import com.school.entity.UserEntity;
 import com.school.service.IUserService;
 import com.school.utils.FormUtil;
 import com.school.utils.SessionUtil;
@@ -55,7 +55,7 @@ public class HomeController extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String action = req.getParameter("action");
 		if (action != null && action.equals("login")) {
-			UserModel model = FormUtil.toModel(UserModel.class, req);
+			UserEntity model = FormUtil.toModel(UserEntity.class, req);
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	        String pass = model.getPassword();
 			model = userService.findByEmailAndPasswordAndStatus(model.getEmail(), model.getPassword(), 0);
