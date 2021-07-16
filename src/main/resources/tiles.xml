@@ -6,7 +6,14 @@
 <tiles-definitions>
 
     <!-- Default Main Template -->
-    <definition name="base-definition" template="/WEB-INF/views/layouts/defaultLayout.jsp">
+    <definition name="base-definition" template="/WEB-INF/views/layouts/template-admin/defaultLayout.jsp">
+        <put-attribute name="header" value="/WEB-INF/views/layouts/template-admin/header.jsp" />
+        <put-attribute name="footer" value="/WEB-INF/views/layouts/template-admin/footer.jsp" />
+        <put-attribute name="menu" value="/WEB-INF/views/layouts/template-admin/menu.jsp" />
+        <put-attribute name="body" value="" />
+    </definition>
+    
+    <definition name="base-definition2" template="/WEB-INF/views/layouts/defaultLayout2.jsp">
         <put-attribute name="header" value="/WEB-INF/views/layouts/header.jsp" />
         <put-attribute name="footer" value="/WEB-INF/views/layouts/footer.jsp" />
         <put-attribute name="menu" value="/WEB-INF/views/layouts/menu.jsp" />
@@ -14,24 +21,11 @@
     </definition>
  
  	<!-- Home page -->
-    <definition name="xemds" extends="base-definition">
-        <put-attribute name="body" value="/WEB-INF/views/user/listUser.jsp" />
+ 	<definition name="home" extends="base-definition">
+        <put-attribute name="body" value="/WEB-INF/views/index.jsp" />
     </definition>
-    <definition name="addUser" extends="base-definition">
-        <put-attribute name="body" value="/WEB-INF/views/user/addUser.jsp" />
-    </definition>
-    <definition name="hello" extends="base-definition">
-        <put-attribute name="body" value="/WEB-INF/views/user/hello.jsp" />
-    </definition>
-    <definition name="404" extends="base-definition">
-        <put-attribute name="body" value="/WEB-INF/views/404.jsp" />
-    </definition>
-    <definition name="error" extends="base-definition">
-        <put-attribute name="body" value="/WEB-INF/views/error.jsp" />
-    </definition>
-    
-    <definition name="login" extends="base-definition">
-        <put-attribute name="body" value="/WEB-INF/views/user/login.jsp" />
+    <definition name="home2" extends="base-definition2">
+        <put-attribute name="body" value="/WEB-INF/views/index.jsp" />
     </definition>
     
 </tiles-definitions>

@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 
 import com.school.model.UserModel;
 
@@ -22,6 +23,7 @@ public class UserEntity extends AbstractEntity implements Serializable {
 	private Long roledId;
 	@Column(name="is_deleted")
 	private int isDeleted;
+	@Transient
 	private RoleEntity role = new RoleEntity();
 
 	public String getEmail() {

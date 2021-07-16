@@ -5,12 +5,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.school.DAO.IRoleDAO;
 import com.school.entity.RoleEntity;
 import com.school.model.RoleModel;
 import com.school.service.IRoleService;
 
+@Service
 public class RoleService implements IRoleService{
 
 	@Autowired

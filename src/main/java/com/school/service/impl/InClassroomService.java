@@ -5,12 +5,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.school.DAO.IInClassroomDAO;
 import com.school.entity.InClassroomEntity;
 import com.school.model.InClassroomModel;
 import com.school.service.IInClassroomService;
 
+@Service
 public class InClassroomService implements IInClassroomService {
 
 	@Autowired
