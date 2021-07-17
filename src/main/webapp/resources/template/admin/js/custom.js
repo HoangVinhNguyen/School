@@ -41,7 +41,7 @@ $('#dynamic-table tbody').on('click', 'tr', function() {
 
 function GetDataClassroom() {
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-classroom',
+		url: 'http://localhost:8080/school/admin/api-admin-classroom',
 		type: 'GET',
 		dataType: 'json',
 		contentType: 'application/json'
@@ -120,7 +120,7 @@ $('#btnUpdateModal').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-classroom',
+		url: 'http://localhost:8080/school/admin/api-admin-classroom',
 		type: 'PUT',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -154,7 +154,7 @@ $('#btnAddModal').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-classroom',
+		url: 'http://localhost:8080/school/admin/api-admin-classroom',
 		type: 'POST',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -187,7 +187,7 @@ $('#btnDeleteModal').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-classroom',
+		url: 'http://localhost:8080/school/admin/api-admin-classroom',
 		type: 'DELETE',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -253,7 +253,7 @@ $('#post-status-table tbody').on('click', 'tr', function() {
 
 function GetDataPostStatus() {
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-poststatus',
+		url: 'http://localhost:8080/school/admin/api-admin-poststatus',
 		type: 'GET',
 		dataType: 'json',
 		contentType: 'application/json'
@@ -328,7 +328,7 @@ $('#btnDeleteModalPostStatus').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-poststatus',
+		url: 'http://localhost:8080/school/admin/api-admin-poststatus',
 		type: 'DELETE',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -400,7 +400,7 @@ $('#inclassroom-table tbody').on('click', 'tr', function() {
 
 function GetDataInClassroom() {
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-inclassroom',
+		url: 'http://localhost:8080/school/admin/api-admin-inclassroom',
 		type: 'GET',
 		dataType: 'json',
 		contentType: 'application/json'
@@ -479,7 +479,7 @@ $('#btnAddInClassroomModal').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-inclassroom',
+		url: 'http://localhost:8080/school/admin/api-admin-inclassroom',
 		type: 'POST',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -514,7 +514,7 @@ $('#btnUpdateInClassroomModal').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-inclassroom',
+		url: 'http://localhost:8080/school/admin/api-admin-inclassroom',
 		type: 'PUT',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -547,7 +547,7 @@ $('#btnDeleteInClassroomModal').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-inclassroom',
+		url: 'http://localhost:8080/school/admin/api-admin-inclassroom',
 		type: 'DELETE',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -579,7 +579,7 @@ $("form#dataInClass").submit(function(e) {
     var formData = new FormData(this);
 
     $.ajax({
-        url: 'http://localhost:8080/school/api-admin-inclassroom-array',
+        url: 'http://localhost:8080/school/admin/api-admin-inclassroom-array',
         type: 'POST',
         data: formData,
         cache: false,
@@ -649,7 +649,7 @@ $('#literatureCourse-table tbody').on('click', 'tr', function() {
 
 function GetDataLiteratureCourse() {
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-literaturecourse',
+		url: 'http://localhost:8080/school/admin/api-admin-literaturecourse',
 		type: 'GET',
 		dataType: 'json',
 		contentType: 'application/json'
@@ -728,7 +728,7 @@ $('#btnAddLiteratureCourseModal').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-literaturecourse',
+		url: 'http://localhost:8080/school/admin/api-admin-literaturecourse',
 		type: 'POST',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -763,7 +763,7 @@ $('#btnUpdateLiteratureCourseModal').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-literaturecourse',
+		url: 'http://localhost:8080/school/admin/api-admin-literaturecourse',
 		type: 'PUT',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -796,7 +796,7 @@ $('#btnDeleteLiteratureCourseModal').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-literaturecourse',
+		url: 'http://localhost:8080/school/admin/api-admin-literaturecourse',
 		type: 'DELETE',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -869,7 +869,7 @@ $('#user-table tbody').on('click', 'tr', function() {
 
 function GetDataUser() {
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-user',
+		url: 'http://localhost:8080/school/admin/api-admin-user',
 		type: 'GET',
 		dataType: 'json',
 		contentType: 'application/json'
@@ -972,7 +972,7 @@ $('#btnUpdateUserModal').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-user',
+		url: 'http://localhost:8080/school/admin/api-admin-user',
 		type: 'PUT',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -1012,7 +1012,7 @@ $('#btnAddUserModal').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-user',
+		url: 'http://localhost:8080/school/admin/api-admin-user',
 		type: 'POST',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -1045,7 +1045,7 @@ $('#btnDeleteUserModal').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-user',
+		url: 'http://localhost:8080/school/admin/api-admin-user',
 		type: 'DELETE',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -1078,7 +1078,7 @@ $("form#data").submit(function(e) {
     var formData = new FormData(this);
 
     $.ajax({
-        url: 'http://localhost:8080/school/api-admin-user-array',
+        url: 'http://localhost:8080/school/admin/api-admin-user-array',
         type: 'POST',
         data: formData,
         cache: false,
@@ -1111,7 +1111,7 @@ $('#btnAddUserFileAction').on('click', function() {
 	var data = new FormData();
 	data.append('file', selectedFile);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-user-array',
+		url: 'http://localhost:8080/school/admin/api-admin-user-array',
 		type: 'POST',
 		contentType: 'multipart/form-data',
 		data: data
@@ -1168,7 +1168,7 @@ $('#btnAddUserFileAction').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-user',
+		url: 'http://localhost:8080/school/admin/api-admin-user',
 		type: 'POST',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -1239,7 +1239,7 @@ $('#course-table tbody').on('click', 'tr', function() {
 
 function GetDataCourse() {
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-course',
+		url: 'http://localhost:8080/school/admin/api-admin-course',
 		type: 'GET',
 		dataType: 'json',
 		contentType: 'application/json'
@@ -1320,7 +1320,7 @@ $('#btnUpdateCourseModal').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-course',
+		url: 'http://localhost:8080/school/admin/api-admin-course',
 		type: 'PUT',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -1356,7 +1356,7 @@ $('#btnAddCourseModal').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-course',
+		url: 'http://localhost:8080/school/admin/api-admin-course',
 		type: 'POST',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -1389,7 +1389,7 @@ $('#btnDeleteCourseModal').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-course',
+		url: 'http://localhost:8080/school/admin/api-admin-course',
 		type: 'DELETE',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -1461,7 +1461,7 @@ $('#teacherclassroom-table tbody').on('click', 'tr', function() {
 
 function GetDataTeacherClassroom() {
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-teacher',
+		url: 'http://localhost:8080/school/admin/api-admin-teacher',
 		type: 'GET',
 		dataType: 'json',
 		contentType: 'application/json'
@@ -1546,7 +1546,7 @@ $('#btnAddTeacherClassroom').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-teacher',
+		url: 'http://localhost:8080/school/admin/api-admin-teacher',
 		type: 'POST',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -1582,7 +1582,7 @@ $('#btnUpdateTeacherClassroomModal').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-teacher',
+		url: 'http://localhost:8080/school/admin/api-admin-teacher',
 		type: 'PUT',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -1615,7 +1615,7 @@ $('#btnDeleteTeacherClassroomModal').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/api-admin-teacher',
+		url: 'http://localhost:8080/school/admin/api-admin-teacher',
 		type: 'DELETE',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -1647,7 +1647,7 @@ $("form#dataTeacher").submit(function(e) {
     var formData = new FormData(this);
 
     $.ajax({
-        url: 'http://localhost:8080/school/api-admin-teacherclassroom-array',
+        url: 'http://localhost:8080/school/admin/api-admin-teacherclassroom-array',
         type: 'POST',
         data: formData,
         cache: false,

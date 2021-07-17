@@ -2,7 +2,13 @@ package com.school.DAO.impl;
 
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +62,19 @@ public class ClassroomDAO implements IClassroomDAO{
 
 	@Override
 	public List<ClassroomEntity> findAll() {
-		return (List<ClassroomEntity>) sessionFactory.getCurrentSession().createCriteria(ClassroomEntity.class);
+//		String sql = "SELECT cl FROM classroom cl  WHERE cl.is_deleted=0";
+//		List<ClassroomEntity> list = (List<ClassroomEntity>) sessionFactory.getCurrentSession().createQuery(sql).list();
+//		return list;
+//		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ClassroomEntity.class);
+//		return criteria.list();
+		//return (List<ClassroomEntity>) sessionFactory.getCurrentSession().createCriteria(ClassroomEntity.class);
+		CriteriaBuilder cb = sessionFactory.getCurrentSession().getCriteriaBuilder();
+		CriteriaQuery<ClassroomEntity> cr = cb.createQuery(ClassroomEntity.class);
+		Root<ClassroomEntity> root = cr.from(ClassroomEntity.class);
+		cr.select(root);
+
+		Query<ClassroomEntity> query = sessionFactory.getCurrentSession().createQuery(cr);
+		return query.getResultList();
 	}
 
 	@Override

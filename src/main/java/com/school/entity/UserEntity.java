@@ -21,8 +21,6 @@ public class UserEntity extends AbstractEntity implements Serializable {
 	private String address;
 	@Column(name="roled_id")
 	private Long roledId;
-	@Column(name="is_deleted")
-	private int isDeleted;
 	@Transient
 	private RoleEntity role = new RoleEntity();
 
@@ -64,14 +62,6 @@ public class UserEntity extends AbstractEntity implements Serializable {
 
 	public void setRoledId(Long roledId) {
 		this.roledId = roledId;
-	}
-
-	public int isDeleted() {
-		return isDeleted;
-	}
-
-	public void setDeleted(int isDeleted) {
-		this.isDeleted = isDeleted;
 	}
 
 	public RoleEntity getRole() {

@@ -22,6 +22,15 @@ public class AbstractEntity {
 	private String createdBy;
 	@Column(name="modified_by")
 	private String modifiedBy;
+	@Column(name="is_deleted")
+	private byte isDeleted; 
+	
+	public byte getIsDeleted() {
+		return isDeleted;
+	}
+	public void setIsDeleted(byte isDeleted) {
+		this.isDeleted = isDeleted;
+	}
 	
 	public Long getId() {
 		return id;
