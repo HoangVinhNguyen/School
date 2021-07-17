@@ -6,26 +6,42 @@
 <tiles-definitions>
 
     <!-- Default Main Template -->
-    <definition name="base-definition" template="/WEB-INF/views/layouts/template-admin/defaultLayout.jsp">
+    <definition name="admin-base-definition" template="/WEB-INF/views/layouts/template-admin/defaultLayout.jsp">
         <put-attribute name="header" value="/WEB-INF/views/layouts/template-admin/header.jsp" />
         <put-attribute name="footer" value="/WEB-INF/views/layouts/template-admin/footer.jsp" />
         <put-attribute name="menu" value="/WEB-INF/views/layouts/template-admin/menu.jsp" />
         <put-attribute name="body" value="" />
     </definition>
     
-    <definition name="base-definition2" template="/WEB-INF/views/layouts/defaultLayout2.jsp">
-        <put-attribute name="header" value="/WEB-INF/views/layouts/header.jsp" />
-        <put-attribute name="footer" value="/WEB-INF/views/layouts/footer.jsp" />
-        <put-attribute name="menu" value="/WEB-INF/views/layouts/menu.jsp" />
+    <definition name="base-definition" template="/WEB-INF/views/layouts/default/defaultLayout.jsp">
+        <put-attribute name="header" value="/WEB-INF/views/layouts/default/header.jsp" />
+        <put-attribute name="footer" value="/WEB-INF/views/layouts/default/footer.jsp" />
+        <put-attribute name="menu" value="/WEB-INF/views/layouts/default/menu.jsp" />
         <put-attribute name="body" value="" />
     </definition>
  
- 	<!-- Home page -->
- 	<definition name="home" extends="base-definition">
-        <put-attribute name="body" value="/WEB-INF/views/index.jsp" />
+ 	<!-- Admin Pages -->
+ 	<definition name="home" extends="admin-base-definition">
+        <put-attribute name="body" value="/WEB-INF/views/admin/index.jsp" />
     </definition>
-    <definition name="home2" extends="base-definition2">
-        <put-attribute name="body" value="/WEB-INF/views/index.jsp" />
+    <definition name="user-administration" extends="admin-base-definition">
+        <put-attribute name="body" value="/WEB-INF/views/admin/user/list.jsp" />
+    </definition>
+    <definition name="teacher-classroom-administration" extends="admin-base-definition">
+        <put-attribute name="body" value="/WEB-INF/views/admin/teacher_classroom/list.jsp" />
+    </definition>
+    <definition name="in-classroom-administration" extends="admin-base-definition">
+        <put-attribute name="body" value="/WEB-INF/views/admin/in_classroom/list.jsp" />
+    </definition>
+    <definition name="course-administration" extends="admin-base-definition">
+        <put-attribute name="body" value="/WEB-INF/views/admin/course/list.jsp" />
+    </definition>
+    <definition name="classroom-administration" extends="admin-base-definition">
+        <put-attribute name="body" value="/WEB-INF/views/admin/classroom/list.jsp" />
+    </definition>
+    <!-- Pages -->
+    <definition name="login" extends="base-definition">
+        <put-attribute name="body" value="/WEB-INF/views/login.jsp" />
     </definition>
     
 </tiles-definitions>
