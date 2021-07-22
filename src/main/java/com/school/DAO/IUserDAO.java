@@ -8,6 +8,7 @@ public interface IUserDAO {
 
 	public UserEntity findByEmailAndPasswordAndStatus(String email, String password, Integer status);
 	public Long findByEmail(String email);
+	public UserEntity findByUserName(String username);
 	public List<UserEntity> findAll();
 	public UserEntity findOne(long id);
 	public Long save(UserEntity userEntity);

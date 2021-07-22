@@ -15,7 +15,7 @@ import com.school.entity.RoleEntity;
 public class RoleDAO implements IRoleDAO{
 
 	@Autowired
-	SessionFactory sessionFactory;
+	private SessionFactory sessionFactory;
 	
 	@Override
 	public List<RoleEntity> findAll() {
@@ -24,25 +24,27 @@ public class RoleDAO implements IRoleDAO{
 
 	@Override
 	public RoleEntity findOne(long id) {
-		String sql = "SELECT * FROM role WHERE id = ? AND is_deleted = 0";
-		return (RoleEntity) sessionFactory.getCurrentSession().createQuery(sql).setParameter(0, id);
+		String sql = "SELECT r FROM RoleEntity r WHERE r.id=?0 AND r.isDeleted=0";
+		RoleEntity roleEntity = (RoleEntity) sessionFactory.getCurrentSession().createQuery(sql).setParameter(0, id).getSingleResult();
+		return roleEntity;
 	}
 
 	@Override
 	public RoleEntity findOneByCode(String code) {
-		String sql = "SELECT * FROM role WHERE code = ? AND is_deleted = 0";
-		return (RoleEntity) sessionFactory.getCurrentSession().createQuery(sql).setParameter(0, code);
+		String sql = "SELECT r FROM RoleEntity r WHERE r.code=?0 AND r.isDeleted=0";
+		RoleEntity roleEntity = (RoleEntity) sessionFactory.getCurrentSession().createQuery(sql).setParameter(0, code).list().get(0);
+		return roleEntity;
 	}
 	
 	@Override
 	public RoleEntity findOneByName(String name) {
-		String sql = "SELECT * FROM role WHERE name = ? AND is_deleted = 0";
+		String sql = "SELECT * FROM RoleEntity WHERE name = ? AND r.isDeleted = 0";
 		return (RoleEntity) sessionFactory.getCurrentSession().createQuery(sql).setParameter(0, name);
 	}
 
 	@Override
 	public int getTotalItem() {
-		String sql = "SELECT count(*) FROM role WHERE is_deleted = 0";
+		String sql = "SELECT count(*) FROM RoleEntity WHERE r.isDeleted = 0";
 		return (int) sessionFactory.getCurrentSession().createQuery(sql).uniqueResult();
 	}
 
@@ -62,7 +64,7 @@ public class RoleDAO implements IRoleDAO{
 
 	@Override
 	public Long delete(RoleEntity roleEntity) {
-		String sql = "UPDATE role SET modified_by=?, modified_date=?, is_deleted = 1 WHERE id=?";
+		String sql = "UPDATE RoleEntity r SET modified_by=?, modified_date=?, r.isDeleted = 1 WHERE id=?";
 		sessionFactory.getCurrentSession().createQuery(sql)
 		.setParameter(0, roleEntity.getModifiedBy())
 		.setParameter(1, roleEntity.getModifiedDate())

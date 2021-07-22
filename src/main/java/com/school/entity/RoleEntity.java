@@ -1,11 +1,13 @@
 package com.school.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import com.school.model.RoleModel;
 
-@Entity(name="role")
-public class RoleEntity extends AbstractEntity {
+@Entity
+@Table(name="role")
+public class RoleEntity extends BaseEntity {
 
 	private String name;
 	private String code;
@@ -24,6 +26,7 @@ public class RoleEntity extends AbstractEntity {
 	}
 	
 	public void loadFromDTO(RoleModel model) {
+		this.setId(model.getId());
 		this.code = model.getCode();
 		this.name = model.getName();
 		this.setCreatedBy(model.getCreatedBy());

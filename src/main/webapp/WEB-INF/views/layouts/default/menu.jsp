@@ -6,7 +6,7 @@
 <security:authorize access="isAuthenticated()">
 	<security:authentication property="principal" var="user" />
 	Welcome, ${user.username }
-	<a href="<c:url value='/dang-xuat'/>">Thoat</a>
+	<a href="<c:url value='/logout-check'/>">Thoat</a>
 </security:authorize>
 
 <p>Menu</p>

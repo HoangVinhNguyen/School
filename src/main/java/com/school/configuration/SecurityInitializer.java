@@ -3,8 +3,8 @@ package com.school.configuration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 
-//@Configuration
-//public class SecurityInitializer extends AbstractSecurityWebApplicationInitializer {
-//	
-//	
-//}
+@Configuration
+public class SecurityInitializer extends AbstractSecurityWebApplicationInitializer {
+	
+	
+}

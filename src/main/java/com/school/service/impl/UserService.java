@@ -65,4 +65,11 @@ public class UserService implements IUserService {
 		return userDAO.delete(userEntity);
 	}
 
+	@Override
+	public UserModel findByUserName(String email) {
+		UserModel userModel = new UserModel();
+		userModel.loadFromEntity(userDAO.findByUserName(email));
+		return userModel;
+	}
+
 }

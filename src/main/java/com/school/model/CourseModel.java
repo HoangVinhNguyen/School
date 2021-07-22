@@ -21,6 +21,7 @@ public class CourseModel extends AbstractModel {
 	}
 	
 	public void loadFromEntity(CourseEntity entity) {
+		this.setId(entity.getId());
 		this.code = entity.getCode();
 		this.name = entity.getName();
 		this.setCreatedBy(entity.getCreatedBy());

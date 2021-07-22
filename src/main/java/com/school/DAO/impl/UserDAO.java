@@ -3,6 +3,8 @@ package com.school.DAO.impl;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -16,12 +18,12 @@ import com.school.entity.UserEntity;
 public class UserDAO implements IUserDAO{
 
 	@Autowired
-	SessionFactory sessionFactory;
+	private SessionFactory sessionFactory;
 	
 	@Override
 	public UserEntity findByEmailAndPasswordAndStatus(String email, String password, Integer status) {
-		StringBuilder sql = new StringBuilder("SELECT * FROM user as u ");
-		sql.append(" INNER JOIN role as r on r.id=u.role_id");
+		StringBuilder sql = new StringBuilder("SELECT * FROM UserEntity as u ");
+		sql.append(" INNER JOIN RoleEntity as r on r.id=u.role_id");
 		sql.append(" where u.email=? and u.is_deleted=?");
 		UserEntity user = (UserEntity) sessionFactory.getCurrentSession().createQuery(sql.toString())
 				.setParameter(0, email).setParameter(1, password).list().get(0);
@@ -30,8 +32,8 @@ public class UserDAO implements IUserDAO{
 
 	@Override
 	public Long findByEmail(String email) {
-		StringBuilder sql = new StringBuilder("SELECT * FROM user as u ");
-		sql.append(" INNER JOIN role as r on r.id=u.role_id");
+		StringBuilder sql = new StringBuilder("SELECT * FROM UserEntity as u ");
+		sql.append(" INNER JOIN RoleEntity as r on r.id=u.role_id");
 		sql.append(" where u.email=? and u.is_deleted=0");
 		UserEntity user = (UserEntity) sessionFactory.getCurrentSession().createQuery(sql.toString())
 				.setParameter(0, email).list().get(0);
@@ -40,8 +42,8 @@ public class UserDAO implements IUserDAO{
 
 	@Override
 	public List<UserEntity> findAll() {
-		StringBuilder sql = new StringBuilder("SELECT * FROM user as u ");
-		sql.append(" INNER JOIN role as r on r.id=u.role_id");
+		StringBuilder sql = new StringBuilder("SELECT * FROM UserEntity as u ");
+		sql.append(" INNER JOIN RoleEntity as r on r.id=u.role_id");
 		sql.append(" WHERE u.is_deleted=0");
 		List<UserEntity> users = sessionFactory.getCurrentSession().createQuery(sql.toString()).list();
 		return users.isEmpty() ? null : users;
@@ -64,8 +66,8 @@ public class UserDAO implements IUserDAO{
 
 	@Override
 	public UserEntity findOne(long id) {
-		StringBuilder sql = new StringBuilder("SELECT * FROM user as u ");
-		sql.append(" INNER JOIN role as r on r.id=u.role_id");
+		StringBuilder sql = new StringBuilder("SELECT u FROM UserEntity as u ");
+		sql.append(" INNER JOIN RoleEntity as r on r.id=u.role_id");
 		sql.append(" WHERE u.is_deleted=0 and u.id=?");
 		return (UserEntity) sessionFactory.getCurrentSession().createQuery(sql.toString())
 				.setParameter(0, id);
@@ -79,6 +81,20 @@ public class UserDAO implements IUserDAO{
 		.setParameter(1, userEntity.getModifiedDate())
 		.setParameter(2, userEntity.getId());
 		return userEntity.getId();
+	}
+
+	@Override
+	public UserEntity findByUserName(String username) {
+		UserEntity user;
+		try {
+			String sql = "SELECT u FROM UserEntity u WHERE u.email=:email AND u.isDeleted=0";
+			user= (UserEntity) sessionFactory.getCurrentSession().createQuery(sql)
+				.setParameter("email", username).getSingleResult();
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return user;
 	}
 	
 }

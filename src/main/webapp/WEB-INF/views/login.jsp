@@ -2,8 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@include file="../../../../common/taglib.jsp" %>
 
-<c:url value="/login" var="url"></c:url>
-<form method="post" action="${url}">
+<c:url value="/login-check" var="url"></c:url>
+<form method="POST" action="${url}">
 	<p>Ten</p>
 	<input type="text" name="username" />
 	<p>Mat khau</p>

@@ -52,6 +52,7 @@ public class TeacherClassroomModel extends AbstractModel {
 	}
 	
 	public void loadFromEntity(TeacherClassroomEntity entity) {
+		this.setId(entity.getId());
 		this.classroomId = entity.getClassroomId();
 		this.courseId = entity.getCourseId();
 		this.studentId = entity.getStudentId();

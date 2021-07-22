@@ -47,7 +47,7 @@ public class UserModel extends AbstractModel {
 		this.address = address;
 	}
 
-	public Long isRoledId() {
+	public Long getRoledId() {
 		return roledId;
 	}
 
@@ -79,17 +79,19 @@ public class UserModel extends AbstractModel {
 		this.fullname = fullname;
 	}
 	
-	public void loadFromEntity(UserEntity userEntity) {
-		this.setId(userEntity.getId());
-		this.setCreatedBy(userEntity.getCreatedBy());
-		this.setCreatedDate(userEntity.getCreatedDate());
-		this.setModifiedBy(userEntity.getModifiedBy());
-		this.setModifiedDate(userEntity.getModifiedDate());
-		this.address = userEntity.getAddress();
-		this.dob = userEntity.getDob();
-		this.email = userEntity.getEmail();
-		this.fullname = userEntity.getFullname();
-		this.role.loadFromEntity(userEntity.getRole());
+	public void loadFromEntity(UserEntity entity) {
+		this.setId(entity.getId());
+		this.setCreatedBy(entity.getCreatedBy());
+		this.setCreatedDate(entity.getCreatedDate());
+		this.setModifiedBy(entity.getModifiedBy());
+		this.setModifiedDate(entity.getModifiedDate());
+		this.address = entity.getAddress();
+		this.dob = entity.getDob();
+		this.email = entity.getEmail();
+		this.fullname = entity.getFullname();
+		this.roledId = entity.getRoledId();
+		this.password = entity.getPassword();
+		this.role.loadFromEntity(entity.getRole());
 	}
 
 }

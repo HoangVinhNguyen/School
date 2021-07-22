@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import com.school.model.CourseModel;
 
 @Entity(name="course")
-public class CourseEntity extends AbstractEntity {
+public class CourseEntity extends BaseEntity {
 
 	private String name;
 	private String code;
@@ -24,6 +24,7 @@ public class CourseEntity extends AbstractEntity {
 	}
 	
 	public void loadFromDTO(CourseModel model) {
+		this.setId(model.getId());
 		this.code = model.getCode();
 		this.name = model.getName();
 		this.setCreatedBy(model.getCreatedBy());

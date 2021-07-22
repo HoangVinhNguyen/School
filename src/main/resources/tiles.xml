@@ -19,9 +19,16 @@
         <put-attribute name="menu" value="/WEB-INF/views/layouts/default/menu.jsp" />
         <put-attribute name="body" value="" />
     </definition>
+    
+    <definition name="error-base-definition" template="/WEB-INF/views/layouts/error/defaultLayout.jsp">
+        <put-attribute name="header" value="/WEB-INF/views/layouts/error/header.jsp" />
+        <put-attribute name="footer" value="/WEB-INF/views/layouts/error/footer.jsp" />
+        <put-attribute name="menu" value="/WEB-INF/views/layouts/error/menu.jsp" />
+        <put-attribute name="body" value="" />
+    </definition>
  
  	<!-- Admin Pages -->
- 	<definition name="home" extends="admin-base-definition">
+ 	<definition name="adminHome" extends="admin-base-definition">
         <put-attribute name="body" value="/WEB-INF/views/admin/index.jsp" />
     </definition>
     <definition name="user-administration" extends="admin-base-definition">
@@ -42,6 +49,13 @@
     <!-- Pages -->
     <definition name="login" extends="base-definition">
         <put-attribute name="body" value="/WEB-INF/views/login.jsp" />
+    </definition>
+    <definition name="home" extends="base-definition">
+        <put-attribute name="body" value="/WEB-INF/views/index.jsp" />
+    </definition>
+    <!-- Error pages -->
+    <definition name="403" extends="error-base-definition">
+        <put-attribute name="body" value="/WEB-INF/views/error/403.jsp" />
     </definition>
     
 </tiles-definitions>

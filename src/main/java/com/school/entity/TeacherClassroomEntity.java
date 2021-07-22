@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import com.school.model.TeacherClassroomModel;
 
 @Entity(name="teacher_classroom")
-public class TeacherClassroomEntity extends AbstractEntity {
+public class TeacherClassroomEntity extends BaseEntity {
 
 	@Column(name="teacher_id")
 	private Long teacherId;

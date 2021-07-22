@@ -24,7 +24,7 @@ public class InClassroomDAO implements IInClassroomDAO{
 	private IClassroomService classroomService;
 	
 	@Autowired
-	SessionFactory sessionFactory;
+	private SessionFactory sessionFactory;
 	
 	@Override
 	public List<InClassroomEntity> findAll() {

@@ -48,7 +48,8 @@ public class ClassroomService implements IClassroomService {
 	public Long save(ClassroomModel classroomModel) {
 		ClassroomEntity classroomEntity = new ClassroomEntity();
 		classroomEntity.loadFromDTO(classroomModel);
-		return classroomDAO.save(classroomEntity);
+		Long result = classroomDAO.save(classroomEntity);
+		return result;
 	}
 
 	@Override

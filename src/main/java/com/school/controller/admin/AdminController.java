@@ -12,8 +12,7 @@ public class AdminController {
 
 	@RequestMapping(value= {"/", "/home"}, method = RequestMethod.GET)
 	public String getHome(HttpServletRequest request) {
-		System.out.println("hihi");
-		return "home";
+		return "adminHome";
 	}
 	
 	@RequestMapping(value= {"/user"}, method = RequestMethod.GET)

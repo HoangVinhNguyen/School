@@ -24,7 +24,7 @@ public class TeacherClassroomDAO implements ITeacherClassroomDAO{
 	private IClassroomService classroomService;
 	
 	@Autowired
-	SessionFactory sessionFactory;
+	private SessionFactory sessionFactory;
 	
 	@Override
 	public List<TeacherClassroomEntity> findAll() {

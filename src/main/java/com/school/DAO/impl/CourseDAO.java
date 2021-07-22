@@ -15,7 +15,7 @@ import com.school.entity.CourseEntity;
 public class CourseDAO implements ICourseDAO{
 	
 	@Autowired
-	SessionFactory sessionFactory;
+	private SessionFactory sessionFactory;
 
 	@Override
 	public List<CourseEntity> findAll() {

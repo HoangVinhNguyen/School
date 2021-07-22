@@ -25,6 +25,7 @@ public class InClassroomModel extends AbstractModel {
 	}
 
 	public void loadFromEntity(InClassroomEntity entity) {
+		this.setId(entity.getId());
 		this.classroomId = entity.getClassroomId();
 		this.studentId = entity.getStudentId();
 		this.setCreatedBy(entity.getCreatedBy());

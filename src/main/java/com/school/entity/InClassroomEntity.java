@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import com.school.model.InClassroomModel;
 
 @Entity(name="in_classroom")
-public class InClassroomEntity extends AbstractEntity {
+public class InClassroomEntity extends BaseEntity {
 
 	@Column(name="student_id")
 	private Long studentId;
@@ -30,6 +30,7 @@ public class InClassroomEntity extends AbstractEntity {
 	}
 
 	public void loadFromDTO(InClassroomModel model) {
+		this.setId(model.getId());
 		this.studentId = model.getStudentId();
 		this.classroomId = model.getClassroomId();
 		this.setCreatedBy(model.getCreatedBy());
