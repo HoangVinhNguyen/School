@@ -10,7 +10,7 @@ public interface ICourseService {
 	public CourseModel findOne(long id);
 	public CourseModel findOneByCode(String code);
 	public CourseModel findOneByName(String name);
-	public Long save(CourseModel courseModel);
+	public Long save(CourseModel courseModel, String method);
 	public Long delete(CourseModel courseModel);
 	public int getTotalItem();
 }

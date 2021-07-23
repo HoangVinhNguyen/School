@@ -99,7 +99,7 @@
 						<!-- modal button Update -->
 
 						<!-- modal button Delete -->
-						<div id="delete-Course-modal" class="modal fade" tabindex="-1">
+						<div id="delete-course-modal" class="modal fade" tabindex="-1">
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">

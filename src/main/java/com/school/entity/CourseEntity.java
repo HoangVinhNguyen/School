@@ -1,10 +1,12 @@
 package com.school.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import com.school.model.CourseModel;
 
-@Entity(name="course")
+@Entity
+@Table(name="course")
 public class CourseEntity extends BaseEntity {
 
 	private String name;

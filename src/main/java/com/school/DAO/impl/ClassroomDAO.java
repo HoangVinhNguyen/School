@@ -25,13 +25,13 @@ public class ClassroomDAO implements IClassroomDAO{
 	@Override
 	public ClassroomEntity findOneByCode(String code) {
 		String hql = "SELECT c FROM ClassroomEntity c WHERE c.code = ?0 AND c.isDeleted = 0";
-		return (ClassroomEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, code);
+		return (ClassroomEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, code).list().get(0);
 	}
 	
 	@Override
 	public ClassroomEntity findOneByName(String name) {
 		String hql = "SELECT c FROM ClassroomEntity c WHERE c.name = ?0 AND c.isDeleted = 0";
-		return (ClassroomEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, name);
+		return (ClassroomEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, name).list().get(0);
 	}
 
 	@Override
