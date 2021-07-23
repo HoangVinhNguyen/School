@@ -1,15 +1,8 @@
 package com.school.DAO.impl;
 
-import java.sql.Timestamp;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
-import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,41 +24,47 @@ public class ClassroomDAO implements IClassroomDAO{
 
 	@Override
 	public ClassroomEntity findOneByCode(String code) {
-		String sql = "SELECT * FROM ClassroomEntity WHERE code = ? AND is_deleted = 0";
-		return (ClassroomEntity) sessionFactory.getCurrentSession().createQuery(sql).setParameter(0, code);
+		String hql = "SELECT c FROM ClassroomEntity c WHERE c.code = ?0 AND c.isDeleted = 0";
+		return (ClassroomEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, code);
 	}
 	
 	@Override
 	public ClassroomEntity findOneByName(String name) {
-		String sql = "SELECT * FROM ClassroomEntity WHERE name = ? AND is_deleted = 0";
-		return (ClassroomEntity) sessionFactory.getCurrentSession().createQuery(sql).setParameter(0, name);
+		String hql = "SELECT c FROM ClassroomEntity c WHERE c.name = ?0 AND c.isDeleted = 0";
+		return (ClassroomEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, name);
 	}
 
 	@Override
 	public int getTotalItem() {
-		String sql = "SELECT count(*) FROM ClassroomEntity WHERE is_deleted = 0";
-		return (int) sessionFactory.getCurrentSession().createQuery(sql).uniqueResult();
+		String hql = "SELECT c FROM ClassroomEntity c WHERE c.isDeleted = 0";
+		return (int) sessionFactory.getCurrentSession().createQuery(hql).uniqueResult();
 	}
 
 	@Override
-	public Long save(ClassroomEntity classroomEntity) {
+	public Long save(ClassroomEntity entity) {
 		ClassroomEntity classroomModelCheck;
-		if (classroomEntity.getId() != null) {
-			classroomModelCheck = findOne(classroomEntity.getId());
+		if (entity.getId() != null) {
+			classroomModelCheck = findOne(entity.getId());
 			if (classroomModelCheck != null && classroomModelCheck.getId() != 0) {
-				sessionFactory.getCurrentSession().merge(classroomEntity);
-				return classroomEntity.getId();
+				String hql = "UPDATE ClassroomEntity SET name=?0, code=?1, modifiedBy=?2, modifiedDate=?3 WHERE id=?4";
+				sessionFactory.getCurrentSession().createQuery(hql)
+				.setParameter(0, entity.getName())
+				.setParameter(1, entity.getCode())
+				.setParameter(2, entity.getModifiedBy())
+				.setParameter(3, entity.getModifiedDate())
+				.setParameter(4, entity.getId()).executeUpdate();
+				return entity.getId();
 			}
 		}
-		sessionFactory.getCurrentSession().save(classroomEntity);
-		return classroomEntity.getId();
+		sessionFactory.getCurrentSession().save(entity);
+		return entity.getId();
 	}
 
 	@Override
 	public List<ClassroomEntity> findAll() {
-		String sql = "SELECT cr FROM ClassroomEntity cr WHERE cr.isDeleted=0";
+		String hql = "SELECT cr FROM ClassroomEntity cr WHERE cr.isDeleted=0";
 		@SuppressWarnings("unchecked")
-		List<ClassroomEntity> list = sessionFactory.getCurrentSession().createQuery(sql).list();
+		List<ClassroomEntity> list = sessionFactory.getCurrentSession().createQuery(hql).list();
 		return list;
 //		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ClassroomEntity.class);
 //		return criteria.list();
@@ -79,12 +78,12 @@ public class ClassroomDAO implements IClassroomDAO{
 	}
 
 	@Override
-	public Long delete(ClassroomEntity classroomEntity) {
-		String sql = "UPDATE ClassroomEntity SET modifiedBy=?0, modifiedDate=?1, isDeleted=1 WHERE id=?2";
-		sessionFactory.getCurrentSession().createQuery(sql)
-		.setParameter(0, classroomEntity.getModifiedBy())
-		.setParameter(1, classroomEntity.getModifiedDate())
-		.setParameter(2, classroomEntity.getId());
-		return classroomEntity.getId();
+	public Long delete(ClassroomEntity entity) {
+		String hql = "UPDATE ClassroomEntity SET modifiedBy=?0, modifiedDate=?1, isDeleted=1 WHERE id=?2";
+		sessionFactory.getCurrentSession().createQuery(hql)
+		.setParameter(0, entity.getModifiedBy())
+		.setParameter(1, entity.getModifiedDate())
+		.setParameter(2, entity.getId()).executeUpdate();
+		return entity.getId();
 	}
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.school.constant.SystemConstant;
 import com.school.model.ClassroomModel;
 import com.school.service.IClassroomService;
 
@@ -27,12 +28,12 @@ public class RestClassroomController {
 	
 	@RequestMapping(value={"/api-admin-classroom"}, method=RequestMethod.POST)
 	public Long getCreateClassroom(HttpServletRequest request, @RequestBody ClassroomModel classroom) {
-		return classroomService.save(classroom);
+		return classroomService.save(classroom, SystemConstant.INSERT);
 	}
 	
 	@RequestMapping(value={"/api-admin-classroom"}, method=RequestMethod.PUT)
 	public Long getUpdateClassroom(HttpServletRequest request, @RequestBody ClassroomModel classroom) {
-		return classroomService.save(classroom);
+		return classroomService.save(classroom, SystemConstant.MODIFY);
 	}
 	
 	@RequestMapping(value={"/api-admin-classroom"}, method= RequestMethod.DELETE)

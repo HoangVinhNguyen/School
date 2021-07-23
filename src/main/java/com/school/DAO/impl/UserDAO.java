@@ -23,8 +23,8 @@ public class UserDAO implements IUserDAO{
 	@Override
 	public UserEntity findByEmailAndPasswordAndStatus(String email, String password, Integer status) {
 		StringBuilder sql = new StringBuilder("SELECT * FROM UserEntity as u ");
-		sql.append(" INNER JOIN RoleEntity as r on r.id=u.role_id");
-		sql.append(" where u.email=? and u.isDeleted=?");
+		//sql.append(" INNER JOIN RoleEntity as r on r.id=u.role_id");
+		sql.append(" WHERE u.email=? and u.isDeleted=?0 and u.password=?1");
 		UserEntity user = (UserEntity) sessionFactory.getCurrentSession().createQuery(sql.toString())
 				.setParameter(0, email).setParameter(1, password).list().get(0);
 		return user;
@@ -34,7 +34,7 @@ public class UserDAO implements IUserDAO{
 	public Long findByEmail(String email) {
 		StringBuilder sql = new StringBuilder("SELECT u FROM UserEntity as u ");
 		//sql.append(" INNER JOIN RoleEntity as r on r.id=u.role_id");
-		sql.append(" where u.email=? and u.isDeleted=0");
+		sql.append(" WHERE u.email=?0 and u.isDeleted=0");
 		UserEntity user = (UserEntity) sessionFactory.getCurrentSession().createQuery(sql.toString())
 				.setParameter(0, email).list().get(0);
 		return user.getId();
@@ -51,10 +51,9 @@ public class UserDAO implements IUserDAO{
 	
 	@Override
 	public Long save(UserEntity entity) {
-		UserEntity userModelCheck;
 		if (entity.getId() != null) {
-			userModelCheck = findOne(entity.getId());
-			if (userModelCheck != null && userModelCheck.getId() != 0) {
+			Long id = findByEmail(entity.getEmail());
+			if (id != 0) {
 				String hql = "UPDATE UserEntity SET email=?0, fullname=?1, dob=?2, address=?3, "
 						+ "role=?4, modifiedBy=?5, modifiedDate=?6 WHERE id=?7";
 				sessionFactory.getCurrentSession().createQuery(hql)

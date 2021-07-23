@@ -11,6 +11,6 @@ public interface IClassroomService {
 	public ClassroomModel findOneByCode(String code);
 	public ClassroomModel findOneByName(String name);
 	public int getTotalItem();
-	public Long save(ClassroomModel classroomModel);
+	public Long save(ClassroomModel classroomModel, String method);
 	public Long delete(ClassroomModel classroomModel);
 }
