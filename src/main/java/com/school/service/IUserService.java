@@ -11,6 +11,6 @@ public interface IUserService {
 	public UserModel findByUserName(String email);
 	public List<UserModel> findAll();
 	public UserModel findOne(long id);
-	public Long save(UserModel userModel);
+	public Long save(UserModel userModel, String method);
 	public Long delete(UserModel userModel);
 }

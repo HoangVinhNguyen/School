@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.rememberme.JdbcTokenRepos
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import com.school.constant.SystemConstant;
+import com.school.controller.LoginSuccessHandler;
 import com.school.service.impl.UserDetailsServiceImpl;
 
 @Configuration
@@ -24,6 +25,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
 	@Autowired
 	private DataSource dataSource;
+	
+	@Autowired
+	private LoginSuccessHandler loginSuccessHandler;
 	
 	@Autowired
 	private UserDetailsServiceImpl userDetailsServiceImpl;
@@ -36,21 +40,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//		auth.jdbcAuthentication().dataSource(dataSource)
-//		.usersByUsernameQuery("SELECT USERNAME, PASSWORD, ENABLED FROM USER WHERE USERNAME=?")
-//		.authoritiesByUsernameQuery("SELECT USERNAME, ROLE FROM USER WHERE USERNAME=?");
 		auth.userDetailsService(userDetailsServiceImpl).passwordEncoder(passwordEncoder());
 	}
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-//		http.csrf().disable().authorizeRequests().antMatchers("/admin/**").hasRole(SystemConstant.ADMIN)
-//		.and().authorizeRequests().antMatchers("/student/**").hasRole(SystemConstant.STUDENT)
-//		.and().authorizeRequests().antMatchers("/principal/**").hasRole(SystemConstant.PRINCIPAL)
-//		.anyRequest().permitAll().and().formLogin().loginPage("/login").loginProcessingUrl("/login-check")
-//		.usernameParameter("username").passwordParameter("password")
-//		.defaultSuccessUrl("/home")
-//		.failureUrl("/login?error=failed").and().exceptionHandling().accessDeniedPage("/login?error=deny");
 		
 		http.csrf().disable();
         http.authorizeRequests().antMatchers("/", "/login", "/logout").permitAll();
@@ -64,7 +58,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .loginProcessingUrl("/login-check")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/home")
+                //.defaultSuccessUrl("/home")
+                .successHandler(loginSuccessHandler)
                 .failureUrl("/login?error=true")
                 .and().logout().logoutUrl("/logout-check").logoutSuccessUrl("/logout");
  

@@ -968,7 +968,7 @@ $('#btnUpdateUserModal').on('click', function() {
 		fullname: $('#txtFullnameUpdate').val(),
 		dob: datum,
 		address: $("#txtAddressUpdate").val(),
-		roledId: $("#txtRoleUpdate").val() === "ADMIN" ? 1 : $("#txtRoleUpdate").val() === "STUDENT" ? 2 : 3
+		roleId: $("#txtRoleUpdate").val() === "ADMIN" ? 1 : $("#txtRoleUpdate").val() === "STUDENT" ? 2 : 3
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
@@ -1008,7 +1008,7 @@ $('#btnAddUserModal').on('click', function() {
 		fullname: $('#txtFullnameAdd').val(),
 		dob: datum,
 		address: $("#txtAddressAdd").val(),
-		roledId: $("#txtRoleAdd").val() === "ADMIN" ? 1 : $("#txtRoleAdd").val() === "STUDENT" ? 2 : 3
+		roleId: $("#txtRoleAdd").val() === "ADMIN" ? 1 : $("#txtRoleAdd").val() === "STUDENT" ? 2 : 3
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({

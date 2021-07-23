@@ -12,9 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.school.model.RoleModel;
 import com.school.model.UserModel;
-import com.school.service.IRoleService;
 import com.school.service.IUserService;
 
 @Service
@@ -23,9 +21,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Autowired
 	private IUserService userService;
 
-	@Autowired
-	private IRoleService roleService;
-
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		UserModel user = userService.findByUserName(username);
@@ -33,13 +28,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			System.out.println("User not found! " + username);
 			throw new UsernameNotFoundException("User " + username + " was not found in the database");
 		}
-		// [ROLE_USER, ROLE_ADMIN,..]
-        RoleModel roleModel = roleService.findOne(user.getRoledId());
         List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
-        if (roleModel != null) {
-	        GrantedAuthority authority = new SimpleGrantedAuthority(roleModel.getCode());
-	        grantList.add(authority);
-        }
+        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getCode());
+        grantList.add(authority);
         UserDetails userDetails = (UserDetails) new User(user.getEmail(), user.getPassword(), grantList);
 		return userDetails;
 	}

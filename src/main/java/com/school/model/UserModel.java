@@ -11,7 +11,7 @@ public class UserModel extends AbstractModel {
 	private String fullname;
 	private Timestamp dob;
 	private String address;
-	private Long roledId;
+	private Long roleId;
 	private int isDeleted;
 	private RoleModel role = new RoleModel();
 
@@ -47,12 +47,12 @@ public class UserModel extends AbstractModel {
 		this.address = address;
 	}
 
-	public Long getRoledId() {
-		return roledId;
+	public Long getRoleId() {
+		return roleId;
 	}
 
-	public void setRoledId(Long roledId) {
-		this.roledId = roledId;
+	public void setRoleId(Long roleId) {
+		this.roleId = roleId;
 	}
 
 	public int isDeleted() {
@@ -89,7 +89,8 @@ public class UserModel extends AbstractModel {
 		this.dob = entity.getDob();
 		this.email = entity.getEmail();
 		this.fullname = entity.getFullname();
-		this.roledId = entity.getRoledId();
+		//this.roleId = entity.getRoleId();
+		this.role.loadFromEntity(entity.getRole());;
 		this.password = entity.getPassword();
 		this.role.loadFromEntity(entity.getRole());
 	}

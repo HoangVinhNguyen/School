@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@include file="../../../../common/taglib.jsp" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <div id="navbar" class="navbar navbar-default          ace-save-state">
@@ -15,10 +17,13 @@
             <ul class="nav ace-nav">
                 <li class="light-blue dropdown-modal">
                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                        Xin chào, ${USERMODEL.fullname }
+                    <security:authorize access="isAuthenticated()">
+						<security:authentication property="principal" var="user" />
+						Xin chào ${user.username }
+					</security:authorize>
                     </a>
                     <li class="light-blue dropdown-modal">
-                        <a href='<c:url value="/logout?action=logout"/>'>
+                        <a href='<c:url value="/logout-check"/>'>
                             <i class="ace-icon fa fa-power-off"></i>
                             Đăng xuất
                         </a>

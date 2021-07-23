@@ -5,9 +5,12 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.school.model.RoleModel;
 import com.school.model.UserModel;
 
 @Entity
@@ -23,9 +26,10 @@ public class UserEntity extends BaseEntity implements Serializable {
 	private String address;
 	@Column(name="refresh_token")
 	private String refreshToken;
-	@Column(name="role_id")
-	private Long roledId;
-	@Transient
+//	@Column(name="role_id")
+//	private Long roleId;
+	@OneToOne
+	@JoinColumn(name = "role_id", nullable = false)
 	private RoleEntity role = new RoleEntity();
 
 	
@@ -89,14 +93,14 @@ public class UserEntity extends BaseEntity implements Serializable {
 	}
 
 
-	public Long getRoledId() {
-		return roledId;
-	}
-
-
-	public void setRoledId(Long roledId) {
-		this.roledId = roledId;
-	}
+//	public Long getRoleId() {
+//		return roleId;
+//	}
+//
+//
+//	public void setRoleId(Long roleId) {
+//		this.roleId = roleId;
+//	}
 
 
 	public RoleEntity getRole() {
@@ -119,8 +123,11 @@ public class UserEntity extends BaseEntity implements Serializable {
 		this.dob = model.getDob();
 		this.email = model.getEmail();
 		this.fullname = model.getFullname();
-		this.roledId = model.getRoledId();
-		this.role.loadFromDTO(model.getRole());
+		this.password = model.getPassword();
+		//this.roleId = model.getRoleId();
+		RoleModel role = new RoleModel();
+		role.setId(model.getRoleId());
+		this.role.loadFromDTO(role);
 	}
 
 }
