@@ -10,7 +10,7 @@ public interface IRoleService {
 	public RoleModel findOne(long id);
 	public RoleModel findOneByCode(String code);
 	public RoleModel findOneByName(String name);
-	public Long save(RoleModel roleModel);
+	public Long save(RoleModel roleModel, String method);
 	public Long delete(RoleModel roleModel);
 	public int getTotalItem();
 }

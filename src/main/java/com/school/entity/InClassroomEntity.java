@@ -2,10 +2,12 @@ package com.school.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import com.school.model.InClassroomModel;
 
-@Entity(name="in_classroom")
+@Entity
+@Table(name="in_classroom")
 public class InClassroomEntity extends BaseEntity {
 
 	@Column(name="student_id")

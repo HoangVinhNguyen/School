@@ -17,13 +17,8 @@
 
 				<button id="btnGetListUser" type="button" class="btn btn-primary">Xem danh sách</button>
 				<button data-toggle="modal" data-target="#add-user-modal" id="btnAddUser" type="button" class="btn btn-success">Thêm tài khoản</button>
+				<button data-toggle="modal" data-target="#add-user-file" id="btnAddUserFile" type="button" class="btn btn-success">Thêm danh sách tài khoản</button>
 				<br/>
-				
-				<form id="data" method="post" enctype="multipart/form-data">
-					<label for="file">Thêm danh sách tài khoản:</label>
-				    <input name="file" type="file" id="file"/>
-				    <button>Submit</button>
-				</form>
 				
 				<div class="row">
 					<div class="col-xs-12">
@@ -45,23 +40,27 @@
 													id="txtEmailUserAdd">
 											</div>
 											<div class="form-group">
-												<label for="txtPasswordAdd" class="col-form-label">Mật khẩu:</label>
-												<input class="form-control" id="txtPasswordAdd">
+												<label for="txtPasswordAdd" class="col-form-label">Mật khẩu</label>
+												<input class="form-control" id="txtPasswordAdd" type="password">
 											</div>
 											<div class="form-group">
-												<label for="txtFullnameAdd" class="col-form-label">Họ tên:</label>
+												<label for="txtFullnameAdd" class="col-form-label">Họ tên</label>
 												<input class="form-control" id="txtFullnameAdd">
 											</div>
 											<div class="form-group">
-												<label for="txtDobAdd" class="col-form-label">Ngày sinh:</label>
+												<label for="txtDobAdd" class="col-form-label">Ngày sinh</label>
 												<input class="form-control" id="txtDobAdd">
 											</div>
 											<div class="form-group">
-												<label for="txtAddressAdd" class="col-form-label">Địa chỉ:</label>
+												<label for="txtAddressAdd" class="col-form-label">Địa chỉ</label>
 												<input class="form-control" id="txtAddressAdd">
 											</div>
 											<div class="form-group">
-												<label for="txtRoleAdd" class="col-form-label">Quyền tài khoản:</label>
+												<label for="txtPhoneAdd" class="col-form-label">Số điện thoại</label>
+												<input class="form-control" id="txtPhoneAdd">
+											</div>
+											<div class="form-group">
+												<label for="txtRoleAdd" class="col-form-label">Quyền tài khoản</label>
 												<input class="form-control" id="txtRoleAdd">
 											</div>
 										</form>
@@ -98,24 +97,28 @@
 													disabled>
 											</div>
 											<div class="form-group">
-												<label for="txtEmailUserUpdate" class="col-form-label">Email:</label>
+												<label for="txtEmailUserUpdate" class="col-form-label">Email</label>
 													<input type="text" class="form-control"
 													id="txtEmailUserUpdate">
 											</div>
 											<div class="form-group">
-												<label for="txtFullnameUpdate" class="col-form-label">Họ tên:</label>
+												<label for="txtFullnameUpdate" class="col-form-label">Họ tên</label>
 												<input class="form-control" id="txtFullnameUpdate">
 											</div>
 											<div class="form-group">
-												<label for="txtDobUpdate" class="col-form-label">Ngày sinh:</label>
+												<label for="txtDobUpdate" class="col-form-label">Ngày sinh</label>
 												<input class="form-control" id="txtDobUpdate">
 											</div>
 											<div class="form-group">
-												<label for="txtAddressUpdate" class="col-form-label">Địa chỉ:</label>
+												<label for="txtPhoneUpdate" class="col-form-label">Số điện thoại</label>
+												<input class="form-control" id="txtPhoneUpdate">
+											</div>
+											<div class="form-group">
+												<label for="txtAddressUpdate" class="col-form-label">Địa chỉ</label>
 												<input class="form-control" id="txtAddressUpdate">
 											</div>
 											<div class="form-group">
-												<label for="txtRoleUpdate" class="col-form-label">Quyền tài khoản:</label>
+												<label for="txtRoleUpdate" class="col-form-label">Quyền tài khoản</label>
 												<input class="form-control" id="txtRoleUpdate">
 											</div>
 										</form>
@@ -152,24 +155,28 @@
 													disabled>
 											</div>
 											<div class="form-group">
-												<label for="txtEmailUserDelete" class="col-form-label">Email:</label>
+												<label for="txtEmailUserDelete" class="col-form-label">Email</label>
 													<input type="text" class="form-control"
 													id="txtEmailUserDelete" disabled>
 											</div>
 											<div class="form-group">
-												<label for="txtFullnameDelete" class="col-form-label">Họ tên:</label>
+												<label for="txtFullnameDelete" class="col-form-label">Họ tên</label>
 												<input class="form-control" id="txtFullnameDelete" disabled>
 											</div>
 											<div class="form-group">
-												<label for="txtDobDelete" class="col-form-label">Ngày sinh:</label>
+												<label for="txtDobDelete" class="col-form-label">Ngày sinh</label>
 												<input class="form-control" id="txtDobDelete" disabled>
 											</div>
 											<div class="form-group">
-												<label for="txtAddressDelete" class="col-form-label">Địa chỉ:</label>
+												<label for="txtPhoneDelete" class="col-form-label">Số điện thoại</label>
+												<input class="form-control" id="txtPhoneDelete" disabled>
+											</div>
+											<div class="form-group">
+												<label for="txtAddressDelete" class="col-form-label">Địa chỉ</label>
 												<input class="form-control" id="txtAddressDelete" disabled>
 											</div>
 											<div class="form-group">
-												<label for="txtRoleDelete" class="col-form-label">Quyền tài khoản:</label>
+												<label for="txtRoleDelete" class="col-form-label">Quyền tài khoản</label>
 												<input class="form-control" id="txtRoleDelete" disabled>
 											</div>
 										</form>
@@ -187,11 +194,57 @@
 							<!-- /.modal-dialog -->
 						</div>
 						<!-- modal button Delete -->
+						
+						<!-- modal button Add New with File -->
+						<div id="add-user-file" class="modal fade" tabindex="-1">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal"
+											aria-hidden="true">&times;</button>
+										<h3 class="smaller lighter blue no-margin">Thêm danh sách tài khoản giáo viên</h3>
+									</div>
+
+									<div class="modal-body">
+										<form id="data" method="post" enctype="multipart/form-data">
+											<button id="openSendFile" type="button" class="btn btn-primary">
+											Chọn tập tin</button>
+										    <input name="file" type="file" id="file" style="display:none;" />
+										</form>
+										<div class="form-group">
+											<label for="fileName" class="col-form-label">Tập tin đã chọn</label>
+											<input class="form-control" id="fileName" placeholder="*.xls, *xlsx" disabled>
+										</div>
+										<div class="radio">
+											<label for="rdTeacher">
+												<input type="radio" name="rd" id="rdTeacher" value="teacher">
+												Đây là danh sách giáo viên
+											</label>
+											<label for="rdStudent">
+												<input type="radio" name="rd" id="rdStudent" value="student">
+												Đây là danh sách học sinh
+											</label>
+										</div>
+									</div>
+
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary"
+											data-dismiss="modal">Đóng</button>
+										<button id="btnAddUserList" type="button"
+											class="btn btn-success">Thêm</button>
+									</div>
+								</div>
+								<!-- /.modal-content -->
+							</div>
+							<!-- /.modal-dialog -->
+						</div>
+						<!-- modal button Add New with File -->
 
 
 						<div class="row">
 							<div class="col-xs-12">
 								<div class="card-body">
+								<h1>BẢNG DANH SÁCH TÀI KHOẢN</h1>
 									<table id="user-table"
 										class="table table-striped table-bordered table-hover">
 										<thead>
@@ -200,6 +253,7 @@
 												<th scope="col">Email</th>
 												<th scope="col">Họ tên</th>
 												<th scope="col">Ngày sinh</th>
+												<th scope="col">Số điện thoại</th>
 												<th scope="col">Địa chỉ</th>
 												<th scope="col">Quyền tài khoản</th>
 												<th scope="col">Người tạo</th>

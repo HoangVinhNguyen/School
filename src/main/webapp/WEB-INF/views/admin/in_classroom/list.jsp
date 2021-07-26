@@ -81,7 +81,7 @@
 											</div>
 											<div class="form-group">
 												<label for="txtIDStudentInClassroomUpdate" class="col-form-label">Mã học sinh:</label> <input type="text" class="form-control"
-													id="txtIDStudentInClassroomUpdate">
+													id="txtIDStudentInClassroomUpdate" disabled>
 											</div>
 											<div class="form-group">
 												<label for="txtIDClassroomInClassroomUpdate" class="col-form-label">Mã lớp:</label> <input class="form-control" id="txtIDClassroomInClassroomUpdate">

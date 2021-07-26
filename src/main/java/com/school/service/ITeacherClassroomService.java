@@ -12,7 +12,7 @@ public interface ITeacherClassroomService {
 	public List<TeacherClassroomModel> findAllByClassroom(String className);
 	public List<TeacherClassroomModel> findAllByTeacherEmail(String userEmail);
 	public List<TeacherClassroomModel> findAllByStudentEmail(String userEmail);
-	public Long save(TeacherClassroomModel teacherClassroomModel);
+	public Long save(TeacherClassroomModel teacherClassroomModel, String method);
 	public Long savePoint(TeacherClassroomModel teacherClassroomModel);
 	public Long delete(TeacherClassroomModel teacherClassroomModel);
 	public int getTotalItem();

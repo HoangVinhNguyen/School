@@ -28,19 +28,19 @@ public class CourseDAO implements ICourseDAO{
 	@Override
 	public CourseEntity findOne(long id) {
 		String hql = "SELECT c FROM CourseEntity c WHERE c.id=?0 AND c.isDeleted=0";
-		return (CourseEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, id).list().get(0);
+		return (CourseEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, id).getSingleResult();
 	}
 
 	@Override
 	public CourseEntity findOneByCode(String code) {
 		String hql = "SELECT c FROM CourseEntity c WHERE c.code=?0 AND c.isDeleted=0";
-		return (CourseEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, code).list().get(0);
+		return (CourseEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, code).getSingleResult();
 	}
 	
 	@Override
 	public CourseEntity findOneByName(String name) {
 		String hql = "SELECT c FROM CourseEntity c WHERE c.name=?0 AND c.isDeleted=0";
-		return (CourseEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, name).list().get(0);
+		return (CourseEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, name).getSingleResult();
 	}
 
 	@Override

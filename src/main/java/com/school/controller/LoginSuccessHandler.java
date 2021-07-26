@@ -29,6 +29,8 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
             redirectURL = "admin/";
         } else if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority(SystemConstant.STUDENT))) {
             redirectURL = "home";
+        } else if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority(SystemConstant.PRINCIPAL))) {
+        	redirectURL = "principal/";
         }
         response.sendRedirect(redirectURL);
     }

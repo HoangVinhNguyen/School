@@ -509,8 +509,8 @@ $('#btnAddInClassroomModal').on('click', function() {
 $('#btnUpdateInClassroomModal').on('click', function() {
 	const dataToPost = {
 		id: +$('#txtIDUpdateInClassroom').val(),
-		studentId: $('#txtIDStudentInClassroomUpdate').val(),
-		classroomId: $('#txtIDClassroomInClassroomUpdate').val()
+		studentId: +$('#txtIDStudentInClassroomUpdate').val(),
+		classroomId: +$('#txtIDClassroomInClassroomUpdate').val()
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
@@ -575,17 +575,17 @@ $('#btnDeleteInClassroomModal').on('click', function() {
 });
 
 $("form#dataInClass").submit(function(e) {
-    e.preventDefault();    
-    var formData = new FormData(this);
+	e.preventDefault();
+	var formData = new FormData(this);
 
-    $.ajax({
-        url: 'http://localhost:8080/school/admin/api-admin-inclassroom-array',
-        type: 'POST',
-        data: formData,
-        cache: false,
-        contentType: false,
-        processData: false
-    }).done(function(data) {
+	$.ajax({
+		url: 'http://localhost:8080/school/admin/api-admin-inclassroom-array',
+		type: 'POST',
+		data: formData,
+		cache: false,
+		contentType: false,
+		processData: false
+	}).done(function(data) {
 		GetDataInClassroom();
 		Swal.fire({
 			title: 'Thêm mới thành công',
@@ -917,7 +917,7 @@ function GetDataUser() {
 				dateTime = null;
 			}
 			tableUser.row.add(
-				[user.id, user.email, user.fullname, dateTimeD, user.address, user.role.name, user.createdBy, dateTimeC, user.modifiedBy, dateTime]
+				[user.id, user.email, user.fullname, dateTimeD, user.phone, user.address, user.role.name, user.createdBy, dateTimeC, user.modifiedBy, dateTime]
 			).draw(false);
 		}
 		Swal.fire({
@@ -946,8 +946,9 @@ $("#update-user-modal").on('shown.bs.modal', function() {
 	$("#txtEmailUserUpdate").val(dataTableRowUser[1]);
 	$("#txtFullnameUpdate").val(dataTableRowUser[2]);
 	$("#txtDobUpdate").val(dataTableRowUser[3]);
-	$("#txtAddressUpdate").val(dataTableRowUser[4]);
-	$("#txtRoleUpdate").val(dataTableRowUser[5]);
+	$('#txtPhoneUpdate').val(dataTableRowUser[4]);
+	$("#txtAddressUpdate").val(dataTableRowUser[5]);
+	$("#txtRoleUpdate").val(dataTableRowUser[6]);
 });
 
 // add content for modal delete.
@@ -956,8 +957,9 @@ $("#delete-user-modal").on('shown.bs.modal', function() {
 	$("#txtEmailUserDelete").val(dataTableRowUser[1]);
 	$("#txtFullnameDelete").val(dataTableRowUser[2]);
 	$("#txtDobDelete").val(dataTableRowUser[3]);
-	$("#txtAddressDelete").val(dataTableRowUser[4]);
-	$("#txtRoleDelete").val(dataTableRowUser[5]);
+	$('#txtPhoneDelete').val(dataTableRowUser[4]);
+	$("#txtAddressDelete").val(dataTableRowUser[5]);
+	$("#txtRoleDelete").val(dataTableRowUser[6]);
 });
 // gọi api cập nhật lớp học.
 $('#btnUpdateUserModal').on('click', function() {
@@ -967,6 +969,7 @@ $('#btnUpdateUserModal').on('click', function() {
 		email: $('#txtEmailUserUpdate').val(),
 		fullname: $('#txtFullnameUpdate').val(),
 		dob: datum,
+		phone: $('#txtPhoneUpdate').val(),
 		address: $("#txtAddressUpdate").val(),
 		roleId: $("#txtRoleUpdate").val() === "ADMIN" ? 1 : $("#txtRoleUpdate").val() === "STUDENT" ? 2 : 3
 	}
@@ -1007,6 +1010,7 @@ $('#btnAddUserModal').on('click', function() {
 		password: $('#txtPasswordAdd').val(),
 		fullname: $('#txtFullnameAdd').val(),
 		dob: datum,
+		phone: $('#txtPhoneAdd').val(),
 		address: $("#txtAddressAdd").val(),
 		roleId: $("#txtRoleAdd").val() === "ADMIN" ? 1 : $("#txtRoleAdd").val() === "STUDENT" ? 2 : 3
 	}
@@ -1072,19 +1076,27 @@ $('#btnDeleteUserModal').on('click', function() {
 	});
 });
 
-
-$("form#data").submit(function(e) {
-    e.preventDefault();    
-    var formData = new FormData(this);
-
-    $.ajax({
-        url: 'http://localhost:8080/school/admin/api-admin-user-array',
-        type: 'POST',
-        data: formData,
-        cache: false,
-        contentType: false,
-        processData: false
-    }).done(function(data) {
+$('#btnAddUserList').on('click', function(e) {
+	e.preventDefault();
+	let url;
+	if ($('#rdTeacher:checked').val() === 'teacher') {
+		url = 'http://localhost:8080/school/admin/api-admin-user-file-teacher';
+	}
+	else if ($('#rdStudent:checked').val() === 'student') {
+		url = 'http://localhost:8080/school/admin/api-admin-user-file-student';
+	}
+	console.log(url);
+	let formData = new FormData($('#data')[0]);
+	/*let data = $('#data').serialize();
+	formData.append("form", data);*/
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: formData,
+		cache: false,
+		contentType: false,
+		processData: false
+	}).done(function(data) {
 		GetDataUser();
 		Swal.fire({
 			title: 'Thêm mới thành công',
@@ -1103,6 +1115,10 @@ $("form#data").submit(function(e) {
 		console.error(textStatus);
 		console.error(err);
 	});
+	/*$("form#data").submit(function(e) {
+		e.preventDefault();
+
+	});*/
 });
 
 
@@ -1192,6 +1208,14 @@ $('#btnAddUserFileAction').on('click', function() {
 		console.error(textStatus);
 		console.error(err);
 	});*/
+});
+
+$('#openSendFile').on('click', function() {
+	$('#file').click();
+});
+$('#file').change(function() {
+	let name = $('#file').val().split('\\');
+	$('#fileName').val(name[name.length - 1]);
 });
 
 /*====================================================================*/
@@ -1643,17 +1667,17 @@ $('#btnDeleteTeacherClassroomModal').on('click', function() {
 });
 
 $("form#dataTeacher").submit(function(e) {
-    e.preventDefault();    
-    var formData = new FormData(this);
+	e.preventDefault();
+	var formData = new FormData(this);
 
-    $.ajax({
-        url: 'http://localhost:8080/school/admin/api-admin-teacherclassroom-array',
-        type: 'POST',
-        data: formData,
-        cache: false,
-        contentType: false,
-        processData: false
-    }).done(function(data) {
+	$.ajax({
+		url: 'http://localhost:8080/school/admin/api-admin-teacherclassroom-array',
+		type: 'POST',
+		data: formData,
+		cache: false,
+		contentType: false,
+		processData: false
+	}).done(function(data) {
 		GetDataTeacherClassroom();
 		Swal.fire({
 			title: 'Thêm mới thành công',

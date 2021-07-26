@@ -1,27 +1,42 @@
 package com.school.service.impl;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.school.DAO.IRoleDAO;
 import com.school.DAO.IUserDAO;
 import com.school.constant.SystemConstant;
+import com.school.entity.RoleEntity;
 import com.school.entity.UserEntity;
+import com.school.model.RoleModel;
 import com.school.model.UserModel;
 import com.school.service.IUserService;
+import com.school.utils.StringUtils;
 
 @Service
 public class UserService implements IUserService {
 
 	@Autowired
 	private IUserDAO userDAO;
+	
+	@Autowired
+	private IRoleDAO roleDAO;
 	
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
@@ -97,8 +112,108 @@ public class UserService implements IUserService {
 			model.setModifiedDate(timestamp);
 			model.setModifiedBy(authentication.getName());
 			break;
+		case SystemConstant.INSERT_FILE:
+			model.setPassword(passwordEncoder.encode(SystemConstant.ADMIN.toLowerCase()));
+			model.setModifiedDate(timestamp);
+			model.setCreatedBy(authentication.getName());
+			model.setCreatedDate(timestamp);
+			break;
 		}
 		return model;
+	}
+
+	@Override
+	public Long saveList(MultipartFile file, String role) {
+		try {
+			InputStream fileInputStream = file.getInputStream();
+			HSSFWorkbook wb = new HSSFWorkbook(fileInputStream);
+			HSSFSheet sheet = wb.getSheetAt(0);
+			for (Row row : sheet) // iteration over row using for each loop
+			{
+				if (row.getRowNum() != 0) {
+					UserModel model = new UserModel();
+					for (Cell cell : row) // iteration over cell using for each loop
+					{
+						/*
+						 * _NONE(-1), NUMERIC(0), STRING(1), FORMULA(2), BLANK(3), BOOLEAN(4), ERROR(5);
+						 */
+						switch (cell.getColumnIndex()) {
+						case 0:
+							String email = generateEmailFromNameTeacher(cell.getStringCellValue());
+							model.setEmail(email);
+							model.setFullname(cell.getStringCellValue());
+							break;
+						case 1:
+							Date tt = cell.getDateCellValue();
+							Timestamp t = new Timestamp(tt.getYear(), tt.getMonth(), tt.getDay(), tt.getHours(),
+									tt.getMinutes(), tt.getSeconds(), 0);
+							model.setDob(t);
+							break;
+						case 2:
+							Long phone = (long) cell.getNumericCellValue();
+							model.setPhone(phone.toString());
+							break;
+						case 3:
+							model.setAddress(cell.getStringCellValue());
+							break;
+//							String roleidS = String.valueOf(cell.getNumericCellValue());
+//							String[] roleidStr = roleidS.split("\\.");
+//							RoleModel roleModel = new RoleModel();
+//							roleModel.setId(role);
+//							model.setRole(roleModel);
+//							model.setRoleId(role);
+						}
+					}
+					RoleEntity roleEntity = roleDAO.findOneByName(role);
+					if (roleEntity == null) {
+						return 0L;
+					}
+					model.setRoleId(roleEntity.getId());
+					model = getModifiedField(model, SystemConstant.INSERT_FILE);
+					UserEntity userEntity = new UserEntity();
+					userEntity.loadFromDTO(model);
+					userDAO.save(userEntity);
+				}
+			}
+			return 1L;
+		} catch (IOException e) {
+			System.out.println("save list users");
+			e.printStackTrace();
+			return 0L;
+		}
+	}
+	
+	private String generateEmailFromNameTeacher(String name) {
+		Long checkID;
+		int uq = 1;
+		if (name != null) {
+			name = name.toLowerCase();
+			name = StringUtils.removeAccent(name);
+			String[] nameList = name.split(" ");
+			StringBuilder mail = new StringBuilder();
+			final String nameMail;
+			for (int i = 0; i < nameList.length; i++) {
+				if (i == nameList.length-1) {
+					mail.append(nameList[i]);
+					break;
+				}
+				mail.append(nameList[i].charAt(0));
+			}
+			nameMail = mail.toString();
+			mail.append(SystemConstant.DOMAINNAME);
+			while(true) {
+				checkID = findByEmail(mail.toString());
+				if (checkID == 0) {
+					return mail.toString();
+				}
+				else {
+					mail = mail.replace(nameMail.length(), mail.length(), "");
+					mail.append(uq++);
+					mail.append(SystemConstant.DOMAINNAME);
+				}
+			}
+		}
+		return null;
 	}
 
 }

@@ -23,6 +23,7 @@ public class UserEntity extends BaseEntity implements Serializable {
 	private String password;
 	private String fullname;
 	private Timestamp dob;
+	private String phone;
 	private String address;
 	@Column(name="refresh_token")
 	private String refreshToken;
@@ -73,6 +74,16 @@ public class UserEntity extends BaseEntity implements Serializable {
 	}
 
 
+	public String getPhone() {
+		return phone;
+	}
+
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+
 	public String getAddress() {
 		return address;
 	}
@@ -119,6 +130,7 @@ public class UserEntity extends BaseEntity implements Serializable {
 		this.setCreatedDate(model.getCreatedDate());
 		this.setModifiedBy(model.getModifiedBy());
 		this.setModifiedDate(model.getModifiedDate());
+		this.phone = model.getPhone();
 		this.address = model.getAddress();
 		this.dob = model.getDob();
 		this.email = model.getEmail();

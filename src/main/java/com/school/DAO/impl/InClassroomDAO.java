@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.school.DAO.IInClassroomDAO;
 import com.school.entity.ClassroomEntity;
 import com.school.entity.InClassroomEntity;
+import com.school.model.UserModel;
 import com.school.service.IClassroomService;
 import com.school.service.IUserService;
 
@@ -28,21 +29,44 @@ public class InClassroomDAO implements IInClassroomDAO{
 	
 	@Override
 	public List<InClassroomEntity> findAll() {
-		return (List<InClassroomEntity>) sessionFactory.getCurrentSession().createCriteria(InClassroomEntity.class);
+		String hql = "SELECT c FROM InClassroomEntity c WHERE c.isDeleted=0";
+		@SuppressWarnings("unchecked")
+		List<InClassroomEntity> list = sessionFactory.getCurrentSession().createQuery(hql).list();
+		return list;
 	}
 
 	@Override
 	public InClassroomEntity findOne(long id) {
-		String sql = "SELECT * FROM in_classroom WHERE id = ? AND is_deleted = 0";
-		return (InClassroomEntity) sessionFactory.getCurrentSession().createQuery(sql).setParameter(0, id);
+		if (id != 0) {
+			String hql = "SELECT c FROM InClassroomEntity c WHERE c.id=?0 AND c.isDeleted=0";
+			List results = sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, id).getResultList();
+			if (!results.isEmpty()) {
+				return (InClassroomEntity) results.get(0);
+			}
+		}
+		return null;
 	}
 
 	@Override
 	public InClassroomEntity findOneByUser(String userEmail) {
 		Long id = userService.findByEmail(userEmail);
 		if (id != null) {
-			String sql = "SELECT * FROM in_classroom WHERE user_id = ? AND is_deleted = 0";
-			return (InClassroomEntity) sessionFactory.getCurrentSession().createQuery(sql).setParameter(0, id);
+			String hql = "SELECT c FROM InClassroomEntity c WHERE c.studentId=?0 AND c.isDeleted=0";
+			return (InClassroomEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, id).getSingleResult();
+		}
+		return null;
+	}
+	
+	@Override
+	public InClassroomEntity findOneByUserId(Long id) {
+		UserModel user = userService.findOne(id);
+		if (user != null) {
+			String hql = "SELECT c FROM InClassroomEntity c WHERE c.studentId=?0 AND c.isDeleted=0";
+			List results = sessionFactory.getCurrentSession().createQuery(hql)
+					.setParameter(0, user.getId()).getResultList();
+			if (!results.isEmpty()) {
+				return (InClassroomEntity) results.get(0);
+			}
 		}
 		return null;
 	}
@@ -52,40 +76,48 @@ public class InClassroomDAO implements IInClassroomDAO{
 		ClassroomEntity classroom = new ClassroomEntity();
 		classroom.loadFromDTO(classroomService.findOneByName(className));
 		if (classroom != null) {
-			String sql = "SELECT * FROM in_classroom WHERE classroom_id = ? AND is_deleted = 0";
-			return (List<InClassroomEntity>) sessionFactory.getCurrentSession().createQuery(sql).setParameter(0, classroom.getId());
+			String hql = "SELECT c FROM InClassroomEntity WHERE c.classroomId=?0 AND c.isDeleted=0";
+			return (List<InClassroomEntity>) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, classroom.getId()).list();
 		}
 		return null;
 	}
 
 	@Override
 	public int getTotalItem() {
-		String sql = "SELECT count(*) FROM in_classroom WHERE is_deleted = 0";
-		return (int) sessionFactory.getCurrentSession().createQuery(sql).uniqueResult();
+		String hql = "SELECT c FROM InClassroomEntity c WHERE c.isDeleted=0";
+		return (int) sessionFactory.getCurrentSession().createQuery(hql).uniqueResult();
 	}
 
 	@Override
-	public Long save(InClassroomEntity inClassroomEntity) {
-		InClassroomEntity inClassroomModelCheck;
-		if (inClassroomEntity.getId() != null) {
-			inClassroomModelCheck = findOne(inClassroomEntity.getId());
-			if (inClassroomModelCheck != null && inClassroomModelCheck.getId() != 0) {
-				sessionFactory.getCurrentSession().merge(inClassroomEntity);
-				return inClassroomEntity.getId();
+	public Long save(InClassroomEntity entity) {
+		if (entity.getId() != null) {
+			InClassroomEntity inClassroomModelCheck =  findOne(entity.getId());
+			if ((inClassroomModelCheck != null && inClassroomModelCheck.getId() != 0)) {
+				String hql = "UPDATE InClassroomEntity SET classroomId=?0, modifiedBy=?1, modifiedDate=?2 WHERE id=?3";
+				sessionFactory.getCurrentSession().createQuery(hql)
+				.setParameter(0, entity.getClassroomId())
+				.setParameter(1, entity.getModifiedBy())
+				.setParameter(2, entity.getModifiedDate())
+				.setParameter(3, entity.getId()).executeUpdate();
+				return entity.getId();
 			}
 		}
-		sessionFactory.getCurrentSession().save(inClassroomEntity);
-		return inClassroomEntity.getId();
+		InClassroomEntity inClassroomModelCheck2 = findOneByUserId(entity.getStudentId());
+		if (inClassroomModelCheck2 == null || inClassroomModelCheck2.getId() == 0) {
+			sessionFactory.getCurrentSession().save(entity);
+			return entity.getId();
+		}
+		return 0L;
 	}
 
 	@Override
-	public Long delete(InClassroomEntity inClassroomEntity) {
-		String sql = "UPDATE in_classroom SET modified_by=?, modified_date=?, is_deleted = 1 WHERE id=?";
-		sessionFactory.getCurrentSession().createQuery(sql)
-		.setParameter(0, inClassroomEntity.getModifiedBy())
-		.setParameter(1, inClassroomEntity.getModifiedDate())
-		.setParameter(2, inClassroomEntity.getId());
-		return inClassroomEntity.getId();
+	public Long delete(InClassroomEntity entity) {
+		String hql = "UPDATE InClassroomEntity SET modifiedBy=?0, modifiedDate=?1, isDeleted=1 WHERE id=?2";
+		sessionFactory.getCurrentSession().createQuery(hql)
+		.setParameter(0, entity.getModifiedBy())
+		.setParameter(1, entity.getModifiedDate())
+		.setParameter(2, entity.getId()).executeUpdate();
+		return entity.getId();
 	}
 
 }

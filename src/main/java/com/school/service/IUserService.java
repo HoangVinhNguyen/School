@@ -2,6 +2,8 @@ package com.school.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.school.model.UserModel;
 
 public interface IUserService {
@@ -13,4 +15,6 @@ public interface IUserService {
 	public UserModel findOne(long id);
 	public Long save(UserModel userModel, String method);
 	public Long delete(UserModel userModel);
+	
+	public Long saveList(MultipartFile file, String role);
 }

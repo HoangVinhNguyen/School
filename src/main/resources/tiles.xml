@@ -46,6 +46,7 @@
     <definition name="classroom-administration" extends="admin-base-definition">
         <put-attribute name="body" value="/WEB-INF/views/admin/classroom/list.jsp" />
     </definition>
+
     <!-- Pages -->
     <definition name="login" extends="base-definition">
         <put-attribute name="body" value="/WEB-INF/views/login.jsp" />

@@ -10,7 +10,7 @@ public interface IInClassroomService {
 	public InClassroomModel findOne(long id);
 	public InClassroomModel findOneByUser(String userEmail);
 	public List<InClassroomModel> findOneByClass(String className);
-	public Long save(InClassroomModel inClassroomModel);
+	public Long save(InClassroomModel inClassroomModel, String method);
 	public Long delete(InClassroomModel inClassroomModel);
 	public int getTotalItem();
 }
