@@ -3,35 +3,36 @@ package com.school.model;
 import com.school.entity.InClassroomEntity;
 import com.school.entity.RoleEntity;
 
-public class InClassroomModel extends AbstractModel {
+public class InClassroomModel extends BaseModel {
 
-	private Long studentId;
-	private Long classroomId;
+	private UserModel studentModel;
+	private ClassroomModel classroomModel;
 
-	public Long getClassroomId() {
-		return classroomId;
+	public UserModel getStudentModel() {
+		return studentModel;
 	}
 
-	public void setClassroomId(Long classroomId) {
-		this.classroomId = classroomId;
+	public void setStudentModel(UserModel studentModel) {
+		this.studentModel = studentModel;
 	}
 
-	public Long getStudentId() {
-		return studentId;
+	public ClassroomModel getClassroomModel() {
+		return classroomModel;
 	}
 
-	public void setStudentId(Long studentId) {
-		this.studentId = studentId;
+	public void setClassroomModel(ClassroomModel classroomModel) {
+		this.classroomModel = classroomModel;
 	}
 
 	public void loadFromEntity(InClassroomEntity entity) {
-		this.setId(entity.getId());
-		this.classroomId = entity.getClassroomId();
-		this.studentId = entity.getStudentId();
-		this.setCreatedBy(entity.getCreatedBy());
-		this.setCreatedDate(entity.getCreatedDate());
-		this.setModifiedBy(entity.getModifiedBy());
-		this.setModifiedDate(entity.getModifiedDate());
+		if (entity != null) {
+			this.setId(entity.getId());
+			this.studentModel.loadFromEntity(entity.getStudent());
+			this.classroomModel.loadFromEntity(entity.getClassroom());
+			this.setCreatedBy(entity.getCreatedBy());
+			this.setCreatedDate(entity.getCreatedDate());
+			this.setModifiedBy(entity.getModifiedBy());
+			this.setModifiedDate(entity.getModifiedDate());
+		}
 	}
-	
 }

@@ -11,6 +11,8 @@
         <put-attribute name="footer" value="/WEB-INF/views/layouts/template-admin/footer.jsp" />
         <put-attribute name="menu" value="/WEB-INF/views/layouts/template-admin/menu.jsp" />
         <put-attribute name="body" value="" />
+        <put-list-attribute name="javascripts"></put-list-attribute>
+	    <put-list-attribute name="stylesheets"></put-list-attribute>
     </definition>
     
     <definition name="base-definition" template="/WEB-INF/views/layouts/default/defaultLayout.jsp">
@@ -33,18 +35,45 @@
     </definition>
     <definition name="user-administration" extends="admin-base-definition">
         <put-attribute name="body" value="/WEB-INF/views/admin/user/list.jsp" />
+        <put-list-attribute name="javascripts">
+	        <add-attribute value="/resource/template/admin/js-data-table/user-data-table.js" />
+	    </put-list-attribute>
     </definition>
     <definition name="teacher-classroom-administration" extends="admin-base-definition">
         <put-attribute name="body" value="/WEB-INF/views/admin/teacher_classroom/list.jsp" />
+        <put-list-attribute name="javascripts">
+	        <add-attribute value="/resource/template/admin/js-data-table/teacher-classroom-data-table.js" />
+	    </put-list-attribute>
     </definition>
     <definition name="in-classroom-administration" extends="admin-base-definition">
         <put-attribute name="body" value="/WEB-INF/views/admin/in_classroom/list.jsp" />
+        <put-list-attribute name="javascripts">
+	        <add-attribute value="/resource/template/admin/js-data-table/in-classroom-data-table.js" />
+	    </put-list-attribute>
     </definition>
     <definition name="course-administration" extends="admin-base-definition">
         <put-attribute name="body" value="/WEB-INF/views/admin/course/list.jsp" />
+        <put-list-attribute name="javascripts">
+	        <add-attribute value="/resource/template/admin/js-data-table/course-data-table.js" />
+	    </put-list-attribute>
     </definition>
     <definition name="classroom-administration" extends="admin-base-definition">
         <put-attribute name="body" value="/WEB-INF/views/admin/classroom/list.jsp" />
+        <put-list-attribute name="javascripts">
+	        <add-attribute value="/resource/template/admin/js-data-table/classroom-data-table.js" />
+	    </put-list-attribute>
+    </definition>
+    <definition name="grade-administration" extends="admin-base-definition">
+        <put-attribute name="body" value="/WEB-INF/views/admin/grade/list.jsp" />
+        <put-list-attribute name="javascripts">
+	        <add-attribute value="/resource/template/admin/js-data-table/grade-data-table.js" />
+	    </put-list-attribute>
+    </definition>
+    <definition name="level-grade-administration" extends="admin-base-definition">
+        <put-attribute name="body" value="/WEB-INF/views/admin/level-grade/list.jsp" />
+        <put-list-attribute name="javascripts">
+	        <add-attribute value="/resource/template/admin/js-data-table/level-grade-data-table.js" />
+	    </put-list-attribute>
     </definition>
 
     <!-- Pages -->

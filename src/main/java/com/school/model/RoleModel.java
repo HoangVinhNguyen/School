@@ -2,7 +2,7 @@ package com.school.model;
 
 import com.school.entity.RoleEntity;
 
-public class RoleModel extends AbstractModel {
+public class RoleModel extends BaseModel {
 
 	private String name;
 	private String code;
@@ -21,12 +21,14 @@ public class RoleModel extends AbstractModel {
 	}
 	
 	public void loadFromEntity(RoleEntity entity) {
-		this.setId(entity.getId());
-		this.code = entity.getCode();
-		this.name = entity.getName();
-		this.setCreatedBy(entity.getCreatedBy());
-		this.setCreatedDate(entity.getCreatedDate());
-		this.setModifiedBy(entity.getModifiedBy());
-		this.setModifiedDate(entity.getModifiedDate());
+		if (entity != null) {
+			this.setId(entity.getId());
+			this.code = entity.getCode();
+			this.name = entity.getName();
+			this.setCreatedBy(entity.getCreatedBy());
+			this.setCreatedDate(entity.getCreatedDate());
+			this.setModifiedBy(entity.getModifiedBy());
+			this.setModifiedDate(entity.getModifiedDate());
+		}
 	}
 }

@@ -61,7 +61,7 @@ public class UserService implements IUserService {
 		Iterator<UserEntity> itr = userEntities.iterator();
 		while(itr.hasNext()) {
 			UserModel model = new UserModel();
-			model.loadFromEntity(itr.next());
+			model.loadFromEntityNotPassword(itr.next());
 			userModels.add(model);
 		}
 		return userModels;
@@ -70,7 +70,7 @@ public class UserService implements IUserService {
 	@Override
 	public UserModel findOne(long id) {
 		UserModel model = new UserModel();
-		model.loadFromEntity(userDAO.findOne(id));
+		model.loadFromEntityNotPassword(userDAO.findOne(id));
 		return model;
 	}
 

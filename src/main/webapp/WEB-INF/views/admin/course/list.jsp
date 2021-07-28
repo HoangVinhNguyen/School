@@ -17,6 +17,8 @@
 
 				<button id="btnGetListUser" type="button" class="btn btn-primary">Xem danh sách</button>
 				<button data-toggle="modal" data-target="#add-course-modal" id="btnAddUser" type="button" class="btn btn-success">Thêm môn học</button>
+				<button data-toggle="modal" data-target="#add-course-file" id="btnAddCourseFile" type="button" class="btn btn-success">Thêm danh sách môn học</button>
+				
 				<div class="row">
 					<div class="col-xs-12">
 						<!-- modal button Add New -->
@@ -139,11 +141,46 @@
 							<!-- /.modal-dialog -->
 						</div>
 						<!-- modal button Delete -->
+						
+						<!-- modal button Add New with File -->
+						<div id="add-course-file" class="modal fade" tabindex="-1">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal"
+											aria-hidden="true">&times;</button>
+										<h3 class="smaller lighter blue no-margin">Thêm danh sách môn học</h3>
+									</div>
 
+									<div class="modal-body">
+										<form id="dataCourse" method="post" enctype="multipart/form-data">
+											<button id="openSendFileCourse" type="button" class="btn btn-primary">
+											Chọn tập tin</button>
+										    <input name="file" type="file" id="fileCourse" style="display:none;" />
+										</form>
+										<div class="form-group">
+											<label for="fileNameCourse" class="col-form-label">Tập tin đã chọn</label>
+											<input class="form-control" id="fileNameCourse" placeholder="*.xls, *xlsx" disabled>
+										</div>
+									</div>
+
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary"
+											data-dismiss="modal">Đóng</button>
+										<button id="btnAddCourseList" type="button"
+											class="btn btn-success">Thêm</button>
+									</div>
+								</div>
+								<!-- /.modal-content -->
+							</div>
+							<!-- /.modal-dialog -->
+						</div>
+						<!-- modal button Add New with File -->
 
 						<div class="row">
 							<div class="col-xs-12">
 								<div class="card-body">
+								<h1>BẢNG DANH SÁCH MÔN HỌC</h1>
 									<table id="course-table"
 										class="table table-striped table-bordered table-hover">
 										<thead>

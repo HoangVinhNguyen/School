@@ -95,14 +95,14 @@ public class InClassroomDAO implements IInClassroomDAO{
 			if ((inClassroomModelCheck != null && inClassroomModelCheck.getId() != 0)) {
 				String hql = "UPDATE InClassroomEntity SET classroomId=?0, modifiedBy=?1, modifiedDate=?2 WHERE id=?3";
 				sessionFactory.getCurrentSession().createQuery(hql)
-				.setParameter(0, entity.getClassroomId())
+				.setParameter(0, entity.getClassroom().getId())
 				.setParameter(1, entity.getModifiedBy())
 				.setParameter(2, entity.getModifiedDate())
 				.setParameter(3, entity.getId()).executeUpdate();
 				return entity.getId();
 			}
 		}
-		InClassroomEntity inClassroomModelCheck2 = findOneByUserId(entity.getStudentId());
+		InClassroomEntity inClassroomModelCheck2 = findOneByUserId(entity.getStudent().getId());
 		if (inClassroomModelCheck2 == null || inClassroomModelCheck2.getId() == 0) {
 			sessionFactory.getCurrentSession().save(entity);
 			return entity.getId();

@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.school.constant.SystemConstant;
 import com.school.model.ClassroomModel;
@@ -39,5 +41,10 @@ public class RestClassroomController {
 	@RequestMapping(value={"/api-admin-classroom"}, method= RequestMethod.DELETE)
 	public Long getDeleteClassroom(HttpServletRequest request, @RequestBody ClassroomModel classroom) {
 		return classroomService.delete(classroom);
+	}
+	
+	@RequestMapping(value={"/api-admin-classroom-file"}, method= RequestMethod.POST)
+	public Long sendFileClassroom(@RequestParam(name="file") MultipartFile file) {
+		return classroomService.saveList(file);
 	}
 }

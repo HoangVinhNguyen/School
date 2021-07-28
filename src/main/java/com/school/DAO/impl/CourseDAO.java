@@ -28,19 +28,31 @@ public class CourseDAO implements ICourseDAO{
 	@Override
 	public CourseEntity findOne(long id) {
 		String hql = "SELECT c FROM CourseEntity c WHERE c.id=?0 AND c.isDeleted=0";
-		return (CourseEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, id).getSingleResult();
+		List list = sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, id).getResultList();
+		if (!list.isEmpty()) {
+			return (CourseEntity) list.get(0);
+		}
+		return null;
 	}
 
 	@Override
 	public CourseEntity findOneByCode(String code) {
 		String hql = "SELECT c FROM CourseEntity c WHERE c.code=?0 AND c.isDeleted=0";
-		return (CourseEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, code).getSingleResult();
+		List list = sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, code).getResultList();
+		if (!list.isEmpty()) {
+			return (CourseEntity) list.get(0);
+		}
+		return null;
 	}
 	
 	@Override
 	public CourseEntity findOneByName(String name) {
 		String hql = "SELECT c FROM CourseEntity c WHERE c.name=?0 AND c.isDeleted=0";
-		return (CourseEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, name).getSingleResult();
+		List list = sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, name).getResultList();
+		if (!list.isEmpty()) {
+			return (CourseEntity) list.get(0);
+		}
+		return null;
 	}
 
 	@Override
@@ -51,22 +63,31 @@ public class CourseDAO implements ICourseDAO{
 
 	@Override
 	public Long save(CourseEntity entity) {
-		CourseEntity courseModelCheck;
-		if (entity.getId() != null) {
-			courseModelCheck = findOne(entity.getId());
-			if (courseModelCheck != null && courseModelCheck.getId() != 0) {
-				String hql = "UPDATE CourseEntity SET name=?0, code=?1, modifiedBy=?2, modifiedDate=?3 WHERE id=?4";
-				sessionFactory.getCurrentSession().createQuery(hql)
-				.setParameter(0, entity.getName())
-				.setParameter(1, entity.getCode())
-				.setParameter(2, entity.getModifiedBy())
-				.setParameter(3, entity.getModifiedDate())
-				.setParameter(4, entity.getId()).executeUpdate();
+		if (entity != null) {
+			CourseEntity courseModelCheck;
+			if (entity.getId() != null) {
+				courseModelCheck = findOne(entity.getId());
+				if (courseModelCheck != null && courseModelCheck.getId() != 0) {
+					String hql = "UPDATE CourseEntity SET name=?0, code=?1, modifiedBy=?2, modifiedDate=?3 WHERE id=?4";
+					sessionFactory.getCurrentSession().createQuery(hql)
+					.setParameter(0, entity.getName())
+					.setParameter(1, entity.getCode())
+					.setParameter(2, entity.getModifiedBy())
+					.setParameter(3, entity.getModifiedDate())
+					.setParameter(4, entity.getId()).executeUpdate();
+					return entity.getId();
+				}
+			}
+			if (findOneByCode(entity.getCode()) == null) {
+				sessionFactory.getCurrentSession().save(entity);
 				return entity.getId();
 			}
+			else {
+				sessionFactory.getCurrentSession().beginTransaction().rollback();
+				return 0L;
+			}
 		}
-		sessionFactory.getCurrentSession().save(entity);
-		return entity.getId();
+		return 0L;
 	}
 
 	@Override

@@ -10,112 +10,112 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.school.DAO.ITeacherClassroomDAO;
+import com.school.DAO.IPointDAO;
 import com.school.constant.SystemConstant;
-import com.school.entity.TeacherClassroomEntity;
-import com.school.model.TeacherClassroomModel;
+import com.school.entity.PointEntity;
+import com.school.model.PointModel;
 import com.school.service.ITeacherClassroomService;
 
 @Service
 public class TeacherClassroomService implements ITeacherClassroomService {
 
 	@Autowired
-	private ITeacherClassroomDAO teacherClassroomDAO;
+	private IPointDAO pointDAO;
 
 	@Override
-	public List<TeacherClassroomModel> findAll() {
-		List<TeacherClassroomModel> teacherClassroomModels = new ArrayList<TeacherClassroomModel>();
-		List<TeacherClassroomEntity> teacherClassroomEntities = teacherClassroomDAO.findAll();
-		Iterator<TeacherClassroomEntity> itr = teacherClassroomEntities.iterator();
+	public List<PointModel> findAll() {
+		List<PointModel> pointModels = new ArrayList<PointModel>();
+		List<PointEntity> pointEntities = pointDAO.findAll();
+		Iterator<PointEntity> itr = pointEntities.iterator();
 		while(itr.hasNext()) {
-			TeacherClassroomModel model = new TeacherClassroomModel();
+			PointModel model = new PointModel();
 			model.loadFromEntity(itr.next());
-			teacherClassroomModels.add(model);
+			pointModels.add(model);
 		}
-		return teacherClassroomModels;
+		return pointModels;
 	}
 
 	@Override
-	public TeacherClassroomModel findOne(long id) {
-		TeacherClassroomModel model = new TeacherClassroomModel();
-		model.loadFromEntity(teacherClassroomDAO.findOne(id));
+	public PointModel findOne(long id) {
+		PointModel model = new PointModel();
+		model.loadFromEntity(pointDAO.findOne(id));
 		return model;
 	}
 
 	@Override
-	public TeacherClassroomModel findOneByClassroom(String classroomId) {
-		TeacherClassroomModel model = new TeacherClassroomModel();
-		model.loadFromEntity(teacherClassroomDAO.findOneByClassroom(classroomId));
+	public PointModel findOneByClassroom(String classroomId) {
+		PointModel model = new PointModel();
+		model.loadFromEntity(pointDAO.findOneByClassroom(classroomId));
 		return model;
 	}
 
 	@Override
-	public List<TeacherClassroomModel> findAllByTeacherEmail(String userEmail) {
-		List<TeacherClassroomModel> teacherClassroomModels = new ArrayList<TeacherClassroomModel>();
-		List<TeacherClassroomEntity> teacherClassroomEntities = teacherClassroomDAO.findAllByTeacherEmail(userEmail);
-		Iterator<TeacherClassroomEntity> itr = teacherClassroomEntities.iterator();
+	public List<PointModel> findAllByTeacherEmail(String userEmail) {
+		List<PointModel> pointModels = new ArrayList<PointModel>();
+		List<PointEntity> pointEntities = pointDAO.findAllByTeacherEmail(userEmail);
+		Iterator<PointEntity> itr = pointEntities.iterator();
 		while(itr.hasNext()) {
-			TeacherClassroomModel model = new TeacherClassroomModel();
+			PointModel model = new PointModel();
 			model.loadFromEntity(itr.next());
-			teacherClassroomModels.add(model);
+			pointModels.add(model);
 		}
-		return teacherClassroomModels;
+		return pointModels;
 	}
 	
 	@Override
-	public List<TeacherClassroomModel> findAllByStudentEmail(String userEmail) {
-		List<TeacherClassroomModel> teacherClassroomModels = new ArrayList<TeacherClassroomModel>();
-		List<TeacherClassroomEntity> teacherClassroomEntities = teacherClassroomDAO.findAllByStudentEmail(userEmail);
-		Iterator<TeacherClassroomEntity> itr = teacherClassroomEntities.iterator();
+	public List<PointModel> findAllByStudentEmail(String userEmail) {
+		List<PointModel> pointModels = new ArrayList<PointModel>();
+		List<PointEntity> pointEntities = pointDAO.findAllByStudentEmail(userEmail);
+		Iterator<PointEntity> itr = pointEntities.iterator();
 		while(itr.hasNext()) {
-			TeacherClassroomModel model = new TeacherClassroomModel();
+			PointModel model = new PointModel();
 			model.loadFromEntity(itr.next());
-			teacherClassroomModels.add(model);
+			pointModels.add(model);
 		}
-		return teacherClassroomModels;
+		return pointModels;
 	}
 
 	@Override
-	public Long save(TeacherClassroomModel model, String method) {
+	public Long save(PointModel model, String method) {
 		model = getModifiedField(model, method);
-		TeacherClassroomEntity teacherClassroomEntity = new TeacherClassroomEntity();
-		teacherClassroomEntity.loadFromDTO(model);
-		return teacherClassroomDAO.save(teacherClassroomEntity);
+		PointEntity pointEntity = new PointEntity();
+		pointEntity.loadFromDTO(model);
+		return pointDAO.save(pointEntity);
 	}
 
 	@Override
-	public Long delete(TeacherClassroomModel model) {
-		TeacherClassroomEntity teacherClassroomEntity = new TeacherClassroomEntity();
-		teacherClassroomEntity.loadFromDTO(model);
-		return teacherClassroomDAO.delete(teacherClassroomEntity);
+	public Long delete(PointModel model) {
+		PointEntity pointEntity = new PointEntity();
+		pointEntity.loadFromDTO(model);
+		return pointDAO.delete(pointEntity);
 	}
 
 	@Override
 	public int getTotalItem() {
-		return teacherClassroomDAO.getTotalItem();
+		return pointDAO.getTotalItem();
 	}
 
 	@Override
-	public Long savePoint(TeacherClassroomModel model) {
-		TeacherClassroomEntity teacherClassroomEntity = new TeacherClassroomEntity();
-		teacherClassroomEntity.loadFromDTO(model);
-		return teacherClassroomDAO.savePoint(teacherClassroomEntity);
+	public Long savePoint(PointModel model) {
+		PointEntity pointEntity = new PointEntity();
+		pointEntity.loadFromDTO(model);
+		return pointDAO.savePoint(pointEntity);
 	}
 
 	@Override
-	public List<TeacherClassroomModel> findAllByClassroom(String className) {
-		List<TeacherClassroomModel> teacherClassroomModels = new ArrayList<TeacherClassroomModel>();
-		List<TeacherClassroomEntity> teacherClassroomEntities = teacherClassroomDAO.findAllByClassroom(className);
-		Iterator<TeacherClassroomEntity> itr = teacherClassroomEntities.iterator();
+	public List<PointModel> findAllByClassroom(String className) {
+		List<PointModel> pointModels = new ArrayList<PointModel>();
+		List<PointEntity> pointEntities = pointDAO.findAllByClassroom(className);
+		Iterator<PointEntity> itr = pointEntities.iterator();
 		while(itr.hasNext()) {
-			TeacherClassroomModel model = new TeacherClassroomModel();
+			PointModel model = new PointModel();
 			model.loadFromEntity(itr.next());
-			teacherClassroomModels.add(model);
+			pointModels.add(model);
 		}
-		return teacherClassroomModels;
+		return pointModels;
 	}
 	
-	private TeacherClassroomModel getModifiedField(TeacherClassroomModel model, String method) {
+	private PointModel getModifiedField(PointModel model, String method) {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		

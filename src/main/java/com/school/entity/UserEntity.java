@@ -125,21 +125,23 @@ public class UserEntity extends BaseEntity implements Serializable {
 
 
 	public void loadFromDTO(UserModel model) {
-		this.setId(model.getId());
-		this.setCreatedBy(model.getCreatedBy());
-		this.setCreatedDate(model.getCreatedDate());
-		this.setModifiedBy(model.getModifiedBy());
-		this.setModifiedDate(model.getModifiedDate());
-		this.phone = model.getPhone();
-		this.address = model.getAddress();
-		this.dob = model.getDob();
-		this.email = model.getEmail();
-		this.fullname = model.getFullname();
-		this.password = model.getPassword();
-		//this.roleId = model.getRoleId();
-		RoleModel role = new RoleModel();
-		role.setId(model.getRoleId());
-		this.role.loadFromDTO(role);
+		if (model != null) {
+			this.setId(model.getId());
+			this.setCreatedBy(model.getCreatedBy());
+			this.setCreatedDate(model.getCreatedDate());
+			this.setModifiedBy(model.getModifiedBy());
+			this.setModifiedDate(model.getModifiedDate());
+			this.phone = model.getPhone();
+			this.address = model.getAddress();
+			this.dob = model.getDob();
+			this.email = model.getEmail();
+			this.fullname = model.getFullname();
+			this.password = model.getPassword();
+			// this.roleId = model.getRoleId();
+			RoleModel role = new RoleModel();
+			role.setId(model.getRoleId());
+			this.role.loadFromDTO(role);
+		}
 	}
 
 }

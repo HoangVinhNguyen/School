@@ -2,7 +2,7 @@ package com.school.model;
 
 import com.school.entity.CourseEntity;
 
-public class CourseModel extends AbstractModel {
+public class CourseModel extends BaseModel {
 
 	private String name;
 	private String code;
@@ -21,13 +21,15 @@ public class CourseModel extends AbstractModel {
 	}
 	
 	public void loadFromEntity(CourseEntity entity) {
-		this.setId(entity.getId());
-		this.code = entity.getCode();
-		this.name = entity.getName();
-		this.setCreatedBy(entity.getCreatedBy());
-		this.setCreatedDate(entity.getCreatedDate());
-		this.setModifiedBy(entity.getModifiedBy());
-		this.setModifiedDate(entity.getModifiedDate());
+		if (entity != null) {
+			this.setId(entity.getId());
+			this.code = entity.getCode();
+			this.name = entity.getName();
+			this.setCreatedBy(entity.getCreatedBy());
+			this.setCreatedDate(entity.getCreatedDate());
+			this.setModifiedBy(entity.getModifiedBy());
+			this.setModifiedDate(entity.getModifiedDate());
+		 }
 	}
 	
 }

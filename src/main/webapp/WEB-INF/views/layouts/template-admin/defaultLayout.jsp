@@ -2,6 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@include file="../../../../common/taglib.jsp" %>
 
+<tiles:importAttribute name="javascripts"/>
+<%-- <tiles:importAttribute name="stylesheets"/> --%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,18 +15,16 @@
     <link rel="stylesheet" href="<c:url value='/resource/template/admin/assets/css/ace.min.css' />" class="ace-main-stylesheet" id="main-ace-style" />
     <link rel="stylesheet" href="<c:url value='/resource/template/admin/assets/css/ace-rtl.min.css' />" />
     <link rel="stylesheet" href="<c:url value='/resource/template/admin/assets/css/ace-skins.min.css' />" />
-    <script src="<c:url value='/resource/template/admin/assets/js/ace-extra.min.js' />"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="<c:url value='/resource/template/admin/assets/fonts/fonts.googleapis.com.css' />" />
+    <link rel="stylesheet" href="<c:url value='/resource/template/admin/css/custom.css'/>" />
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type='text/javascript' src='<c:url value="/resource/template/admin/js/jquery-2.2.3.min.js" />'></script>
     <script src="<c:url value='/resource/template/admin/assets/js/jquery.2.1.1.min.js' />"></script>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="<c:url value='/resource/template/paging/jquery.twbsPagination.js' />"></script>
-    <link rel="stylesheet" href="<c:url value='/resource/template/admin/assets/fonts/fonts.googleapis.com.css' />" />
-    
-    <link rel="stylesheet" href="<c:url value='/resource/template/admin/css/custom.css'/>" />
+    <script src="<c:url value='/resource/template/admin/assets/js/ace-extra.min.js' />"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
 </head>
 <body class="no-skin">
@@ -81,7 +82,9 @@
 	<!-- page specific plugin scripts -->
 	
 	<script src="<c:url value='/resource/template/admin/assets/js/jquery-ui.min.js'/>" ></script>
-	<script type="text/javascript" src="<c:url value='/resource/template/admin/js/custom.js'/>"></script>
+	<c:forEach var="js" items="${javascripts}">
+    	<script type="text/javascript" src="<c:url value='${js}'/>"></script>
+	</c:forEach>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </body>
 </html>

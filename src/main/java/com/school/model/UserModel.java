@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 
 import com.school.entity.UserEntity;
 
-public class UserModel extends AbstractModel {
+public class UserModel extends BaseModel {
 
 	private String email;
 	private String password;
@@ -80,20 +80,39 @@ public class UserModel extends AbstractModel {
 	}
 	
 	public void loadFromEntity(UserEntity entity) {
-		this.setId(entity.getId());
-		this.setCreatedBy(entity.getCreatedBy());
-		this.setCreatedDate(entity.getCreatedDate());
-		this.setModifiedBy(entity.getModifiedBy());
-		this.setModifiedDate(entity.getModifiedDate());
-		this.phone = entity.getPhone();
-		this.address = entity.getAddress();
-		this.dob = entity.getDob();
-		this.email = entity.getEmail();
-		this.fullname = entity.getFullname();
-		//this.roleId = entity.getRoleId();
-		this.role.loadFromEntity(entity.getRole());;
-		this.password = entity.getPassword();
-		this.role.loadFromEntity(entity.getRole());
+		if (entity != null) {
+			this.setId(entity.getId());
+			this.setCreatedBy(entity.getCreatedBy());
+			this.setCreatedDate(entity.getCreatedDate());
+			this.setModifiedBy(entity.getModifiedBy());
+			this.setModifiedDate(entity.getModifiedDate());
+			this.phone = entity.getPhone();
+			this.address = entity.getAddress();
+			this.dob = entity.getDob();
+			this.email = entity.getEmail();
+			this.fullname = entity.getFullname();
+			//this.roleId = entity.getRoleId();
+			this.role.loadFromEntity(entity.getRole());
+			this.password = entity.getPassword();
+			this.role.loadFromEntity(entity.getRole());
+		}
+	}
+	
+	public void loadFromEntityNotPassword(UserEntity entity) {
+		if (entity != null) {
+			this.setId(entity.getId());
+			this.setCreatedBy(entity.getCreatedBy());
+			this.setCreatedDate(entity.getCreatedDate());
+			this.setModifiedBy(entity.getModifiedBy());
+			this.setModifiedDate(entity.getModifiedDate());
+			this.phone = entity.getPhone();
+			this.address = entity.getAddress();
+			this.dob = entity.getDob();
+			this.email = entity.getEmail();
+			this.fullname = entity.getFullname();
+			this.role.loadFromEntity(entity.getRole());
+			this.role.loadFromEntity(entity.getRole());
+		}
 	}
 
 }

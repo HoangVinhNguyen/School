@@ -26,13 +26,15 @@ public class CourseEntity extends BaseEntity {
 	}
 	
 	public void loadFromDTO(CourseModel model) {
-		this.setId(model.getId());
-		this.code = model.getCode();
-		this.name = model.getName();
-		this.setCreatedBy(model.getCreatedBy());
-		this.setCreatedDate(model.getCreatedDate());
-		this.setModifiedBy(model.getModifiedBy());
-		this.setModifiedDate(model.getModifiedDate());
+		if (model != null) {
+			this.setId(model.getId());
+			this.code = model.getCode();
+			this.name = model.getName();
+			this.setCreatedBy(model.getCreatedBy());
+			this.setCreatedDate(model.getCreatedDate());
+			this.setModifiedBy(model.getModifiedBy());
+			this.setModifiedDate(model.getModifiedDate());
+		 }
 	}
 	
 }

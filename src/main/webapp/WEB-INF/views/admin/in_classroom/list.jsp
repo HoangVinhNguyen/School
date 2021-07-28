@@ -154,8 +154,9 @@
 										<thead>
 											<tr>
 												<th scope="col">#</th>
-												<th scope="col">Mã học sinh</th>
-												<th scope="col">Mã lớp</th>
+												<th scope="col">Email học sinh</th>
+												<th scope="col">Tên học sinh</th>
+												<th scope="col">Tên lớp học</th>
 												<th scope="col">Người tạo</th>
 												<th scope="col">Ngày tạo</th>
 												<th scope="col">Người chỉnh sửa</th>

@@ -46,4 +46,14 @@ public class AdminController {
 		return "classroom-administration";
 	}
 	
+	@RequestMapping(value= {"/grade"}, method = RequestMethod.GET)
+	public String getGrade(HttpServletRequest request) {
+		return "grade-administration";
+	}
+	
+	@RequestMapping(value= {"/level-grade"}, method = RequestMethod.GET)
+	public String getLevelGrade(HttpServletRequest request) {
+		return "level-grade-administration";
+	}
+	
 }

@@ -1,44 +1,49 @@
 package com.school.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.school.model.InClassroomModel;
 
 @Entity
-@Table(name="in_classroom")
+@Table(name = "in_classroom")
 public class InClassroomEntity extends BaseEntity {
 
-	@Column(name="student_id")
-	private Long studentId;
-	@Column(name="classroom_id")
-	private Long classroomId;
+	@OneToOne
+	@JoinColumn(name = "user_id", nullable = false)
+	private UserEntity student;
+	@OneToOne
+	@JoinColumn(name = "classroom_id", nullable = false)
+	private ClassroomEntity classroom;
 
-	public Long getClassroomId() {
-		return classroomId;
+	public UserEntity getStudent() {
+		return student;
 	}
 
-	public void setClassroomId(Long classroomId) {
-		this.classroomId = classroomId;
+	public void setStudent(UserEntity student) {
+		this.student = student;
 	}
 
-	public Long getStudentId() {
-		return studentId;
+	public ClassroomEntity getClassroom() {
+		return classroom;
 	}
 
-	public void setStudentId(Long studentId) {
-		this.studentId = studentId;
+	public void setClassroom(ClassroomEntity classroom) {
+		this.classroom = classroom;
 	}
 
 	public void loadFromDTO(InClassroomModel model) {
-		this.setId(model.getId());
-		this.studentId = model.getStudentId();
-		this.classroomId = model.getClassroomId();
-		this.setCreatedBy(model.getCreatedBy());
-		this.setCreatedDate(model.getCreatedDate());
-		this.setModifiedBy(model.getModifiedBy());
-		this.setModifiedDate(model.getModifiedDate());
+		if (model != null) {
+			this.setId(model.getId());
+			this.student.loadFromDTO(model.getStudentModel());
+			this.classroom.loadFromDTO(model.getClassroomModel());
+			this.setCreatedBy(model.getCreatedBy());
+			this.setCreatedDate(model.getCreatedDate());
+			this.setModifiedBy(model.getModifiedBy());
+			this.setModifiedDate(model.getModifiedDate());
+		}
 	}
-	
+
 }

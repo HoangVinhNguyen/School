@@ -81,8 +81,12 @@ public class UserDAO implements IUserDAO{
 		StringBuilder sql = new StringBuilder("SELECT u FROM UserEntity u");
 		//sql.append(" INNER JOIN RoleEntity as r on r.id=u.role_id");
 		sql.append(" WHERE u.isDeleted=0 and u.id=?0");
-		return (UserEntity) sessionFactory.getCurrentSession().createQuery(sql.toString())
-				.setParameter(0, id).list().get(0);
+		List list = sessionFactory.getCurrentSession().createQuery(sql.toString())
+				.setParameter(0, id).getResultList();
+		if (!list.isEmpty()) {
+			return (UserEntity) list.get(0);
+		}
+		return null;
 	}
 
 	@Override

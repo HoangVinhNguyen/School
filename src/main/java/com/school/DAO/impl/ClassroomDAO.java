@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.school.DAO.IClassroomDAO;
 import com.school.entity.ClassroomEntity;
+import com.school.entity.GradeEntity;
 
 @Repository
 @Transactional
@@ -25,13 +26,21 @@ public class ClassroomDAO implements IClassroomDAO{
 	@Override
 	public ClassroomEntity findOneByCode(String code) {
 		String hql = "SELECT c FROM ClassroomEntity c WHERE c.code = ?0 AND c.isDeleted = 0";
-		return (ClassroomEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, code).list().get(0);
+		List list = sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, code).getResultList();
+		if (!list.isEmpty()) {
+			return (ClassroomEntity) list.get(0);
+		}
+		return null;
 	}
 	
 	@Override
 	public ClassroomEntity findOneByName(String name) {
 		String hql = "SELECT c FROM ClassroomEntity c WHERE c.name = ?0 AND c.isDeleted = 0";
-		return (ClassroomEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, name).list().get(0);
+		List list = sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, name).getResultList();
+		if (!list.isEmpty()) {
+			return (ClassroomEntity) list.get(0);
+		}
+		return null;
 	}
 
 	@Override
@@ -46,13 +55,14 @@ public class ClassroomDAO implements IClassroomDAO{
 		if (entity.getId() != null) {
 			classroomModelCheck = findOne(entity.getId());
 			if (classroomModelCheck != null && classroomModelCheck.getId() != 0) {
-				String hql = "UPDATE ClassroomEntity SET name=?0, code=?1, modifiedBy=?2, modifiedDate=?3 WHERE id=?4";
+				String hql = "UPDATE ClassroomEntity SET name=?0, code=?1, grade=?2, modifiedBy=?3, modifiedDate=?4 WHERE id=?5";
 				sessionFactory.getCurrentSession().createQuery(hql)
 				.setParameter(0, entity.getName())
 				.setParameter(1, entity.getCode())
-				.setParameter(2, entity.getModifiedBy())
-				.setParameter(3, entity.getModifiedDate())
-				.setParameter(4, entity.getId()).executeUpdate();
+				.setParameter(2, entity.getGrade())
+				.setParameter(3, entity.getModifiedBy())
+				.setParameter(4, entity.getModifiedDate())
+				.setParameter(5, entity.getId()).executeUpdate();
 				return entity.getId();
 			}
 		}
@@ -85,5 +95,15 @@ public class ClassroomDAO implements IClassroomDAO{
 		.setParameter(1, entity.getModifiedDate())
 		.setParameter(2, entity.getId()).executeUpdate();
 		return entity.getId();
+	}
+
+	@Override
+	public List<ClassroomEntity> findByGrade(GradeEntity gradeEntity) {
+		String hql = "SELECT cr FROM ClassroomEntity cr WHERE cr.grade=?0 AND cr.isDeleted=0";
+		List list = sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, gradeEntity).getResultList();
+		if (!list.isEmpty()) {
+			return list;
+		}
+		return null;
 	}
 }
