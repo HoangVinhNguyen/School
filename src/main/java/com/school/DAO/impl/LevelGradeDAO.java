@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.school.DAO.ILevelGradeDAO;
+import com.school.constant.SystemConstant;
 import com.school.entity.LevelGradeEntity;
 
 @Repository
@@ -19,7 +20,12 @@ public class LevelGradeDAO implements ILevelGradeDAO{
 	
 	@Override
 	public LevelGradeEntity findOne(long id) {
-		return (LevelGradeEntity) sessionFactory.getCurrentSession().get(LevelGradeEntity.class, id);
+		String hql = "SELECT lg FROM LevelGradeEntity lg WHERE lg.id = ?0 AND lg.isDeleted = 0";
+		List list = sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, id).getResultList();
+		if (!list.isEmpty()) {
+			return (LevelGradeEntity) list.get(0);
+		}
+		return null;
 	}
 
 	@Override
@@ -51,24 +57,38 @@ public class LevelGradeDAO implements ILevelGradeDAO{
 	@Override
 	public Long save(LevelGradeEntity entity) {
 		LevelGradeEntity levelGradeModelCheck;
+		LevelGradeEntity levelGradeModelCheckName;
+		LevelGradeEntity levelGradeModelCheckCode;
 		if (entity.getId() != null) {
 			levelGradeModelCheck = findOne(entity.getId());
 			if (levelGradeModelCheck != null && levelGradeModelCheck.getId() != 0) {
-				String hql = "UPDATE LevelGradeEntity SET name=?0, code=?1, modifiedBy=?2, modifiedDate=?3 WHERE id=?4";
-				sessionFactory.getCurrentSession().createQuery(hql)
-				.setParameter(0, entity.getName())
-				.setParameter(1, entity.getCode())
-				.setParameter(2, entity.getModifiedBy())
-				.setParameter(3, entity.getModifiedDate())
-				.setParameter(4, entity.getId()).executeUpdate();
-				return entity.getId();
+				levelGradeModelCheckCode = findOneByCode(entity.getCode());
+				levelGradeModelCheckName = findOneByName(entity.getName());
+				if (levelGradeModelCheckCode == null || levelGradeModelCheckName == null) {
+					String hql = "UPDATE LevelGradeEntity SET name=?0, code=?1, modifiedBy=?2, modifiedDate=?3 WHERE id=?4";
+					sessionFactory.getCurrentSession().createQuery(hql)
+					.setParameter(0, entity.getName())
+					.setParameter(1, entity.getCode())
+					.setParameter(2, entity.getModifiedBy())
+					.setParameter(3, entity.getModifiedDate())
+					.setParameter(4, entity.getId()).executeUpdate();
+					return entity.getId();
+				}
+				return SystemConstant.DUPLICATE;
 			}
 		}
 		else {
-			sessionFactory.getCurrentSession().save(entity);
-			return entity.getId();
+			levelGradeModelCheckCode = findOneByCode(entity.getCode());
+			levelGradeModelCheckName = findOneByName(entity.getName());
+			if (levelGradeModelCheckCode == null && levelGradeModelCheckName == null) {
+				sessionFactory.getCurrentSession().save(entity);
+				return entity.getId();
+			}
+			else {
+				return SystemConstant.DUPLICATE;
+			}
 		}
-		return 0L;
+		return SystemConstant.ERROR;
 	}
 
 	@Override
@@ -81,6 +101,7 @@ public class LevelGradeDAO implements ILevelGradeDAO{
 
 	@Override
 	public Long delete(LevelGradeEntity entity) {
+		
 		String hql = "UPDATE LevelGradeEntity SET modifiedBy=?0, modifiedDate=?1, isDeleted=1 WHERE id=?2";
 		sessionFactory.getCurrentSession().createQuery(hql)
 		.setParameter(0, entity.getModifiedBy())

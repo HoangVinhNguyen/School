@@ -50,8 +50,15 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public Long findByEmail(String email) {
-		return userDAO.findByEmail(email);
+	public UserModel findByEmail(String email) {
+		UserModel model = new UserModel();
+		UserEntity entity = new UserEntity();
+		entity = userDAO.findByEmail(email);
+		if (entity != null) {
+			model.loadFromEntityNotPassword(entity);
+			return model;
+		}
+		return null;
 	}
 
 	@Override
@@ -184,7 +191,7 @@ public class UserService implements IUserService {
 	}
 	
 	private String generateEmailFromNameTeacher(String name) {
-		Long checkID;
+		UserModel userCheck;
 		int uq = 1;
 		if (name != null) {
 			name = name.toLowerCase();
@@ -202,8 +209,8 @@ public class UserService implements IUserService {
 			nameMail = mail.toString();
 			mail.append(SystemConstant.DOMAINNAME);
 			while(true) {
-				checkID = findByEmail(mail.toString());
-				if (checkID == 0) {
+				userCheck = findByEmail(mail.toString());
+				if (userCheck == null) {
 					return mail.toString();
 				}
 				else {

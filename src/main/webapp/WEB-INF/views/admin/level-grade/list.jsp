@@ -17,7 +17,7 @@
 
 				<button id="btnGetLevelGrade" type="button" class="btn btn-primary">Xem danh sách</button>
 				<button data-toggle="modal" data-target="#add-modal" id="btnAddLevelGrade" type="button" class="btn btn-success">Thêm bậc học</button>
-				<button data-toggle="modal" data-target="#add-classroom-file" id="btnAddLevelGradeFile" type="button" class="btn btn-success">Thêm danh sách bậc học</button>
+				<button data-toggle="modal" data-target="#add-classroom-file" id="btnAddLevelGradeFile" type="button" class="btn btn-success" disabled>Thêm danh sách bậc học</button>
 				
 				<div class="row">
 					<div class="col-xs-12">

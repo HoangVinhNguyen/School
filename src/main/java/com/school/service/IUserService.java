@@ -9,7 +9,7 @@ import com.school.model.UserModel;
 public interface IUserService {
 
 	public UserModel findByEmailAndPasswordAndStatus(String email, String password, Integer status);
-	public Long findByEmail(String email);
+	public UserModel findByEmail(String email);
 	public UserModel findByUserName(String email);
 	public List<UserModel> findAll();
 	public UserModel findOne(long id);

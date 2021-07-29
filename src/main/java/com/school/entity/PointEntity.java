@@ -13,49 +13,49 @@ public class PointEntity extends BaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name="teacher_id")
-	private UserEntity teacherEntity;
+	private UserEntity teacher;
 	@ManyToOne
 	@JoinColumn(name="student_id")
-	private UserEntity studentEntity;
+	private UserEntity student;
 	@ManyToOne
 	@JoinColumn(name="classroom_id")
-	private ClassroomEntity classroomEntity;
+	private ClassroomEntity classroom;
 	@ManyToOne
 	@JoinColumn(name="course_id")
-	private CourseEntity courseEntity;
+	private CourseEntity course;
 	private Double point;
 
 
-	public UserEntity getTeacherEntity() {
-		return teacherEntity;
+	public UserEntity getTeacher() {
+		return teacher;
 	}
 
-	public void setTeacherEntity(UserEntity teacherEntity) {
-		this.teacherEntity = teacherEntity;
+	public void setTeacher(UserEntity teacher) {
+		this.teacher = teacher;
 	}
 
-	public UserEntity getStudentEntity() {
-		return studentEntity;
+	public UserEntity getStudent() {
+		return student;
 	}
 
-	public void setStudentEntity(UserEntity studentEntity) {
-		this.studentEntity = studentEntity;
+	public void setStudent(UserEntity student) {
+		this.student = student;
 	}
 
-	public ClassroomEntity getClassroomEntity() {
-		return classroomEntity;
+	public ClassroomEntity getClassroom() {
+		return classroom;
 	}
 
-	public void setClassroomEntity(ClassroomEntity classroomEntity) {
-		this.classroomEntity = classroomEntity;
+	public void setClassroom(ClassroomEntity classroom) {
+		this.classroom = classroom;
 	}
 
-	public CourseEntity getCourseEntity() {
-		return courseEntity;
+	public CourseEntity getCourse() {
+		return course;
 	}
 
-	public void setCourseEntity(CourseEntity courseEntity) {
-		this.courseEntity = courseEntity;
+	public void setCourse(CourseEntity course) {
+		this.course = course;
 	}
 
 	public Double getPoint() {
@@ -65,7 +65,7 @@ public class PointEntity extends BaseEntity {
 	public void setPoint(Double point) {
 		this.point = point;
 	}
-	
+
 	public void loadFromDTO(PointModel model) {
 		if (model != null) {
 			this.setId(model.getId());
@@ -73,10 +73,10 @@ public class PointEntity extends BaseEntity {
 			this.setCreatedDate(model.getCreatedDate());
 			this.setModifiedBy(model.getModifiedBy());
 			this.setModifiedDate(model.getModifiedDate());
-			this.classroomEntity.loadFromDTO(model.getClassroomModel());
-			this.courseEntity.loadFromDTO(model.getCourseModel());
-			this.studentEntity.loadFromDTO(model.getStudentModel());
-			this.teacherEntity.loadFromDTO(model.getStudentModel());
+			this.classroom.loadFromDTO(model.getClassroom());
+			this.course.loadFromDTO(model.getCourse());
+			this.student.loadFromDTO(model.getStudent());
+			this.teacher.loadFromDTO(model.getTeacher());
 			this.point = model.getPoint();
 		 }
 	}

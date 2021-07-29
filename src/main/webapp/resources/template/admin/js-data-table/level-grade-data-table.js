@@ -50,7 +50,6 @@ function GetDataLevelGrade() {
 		dataType: 'json',
 		contentType: 'application/json'
 	}).done(function(data) {
-
 		tableLevelGrade.clear().draw();
 		//tableLevelGrade.ajax.reload();
 		for (grade of data) {
@@ -127,27 +126,27 @@ $('#btnUpdateModal').on('click', function() {
 	$.ajax({
 		url: 'http://localhost:8080/school/admin/api-admin-level-grade',
 		type: 'PUT',
-		dataType: 'json',
+		dataType: 'text',
 		contentType: 'application/json',
 		data: jsonToPost
 	}).done(function(data) {
 		GetDataLevelGrade();
 		Swal.fire({
 			title: 'Cập nhật thành công',
-			text: "",
+			text: data,
 			icon: 'success',
-			confirmButtonText: 'Đóng'
+			confirmButtonText: 'Đóng',
 		});
 	}).fail(function(jqXHR, textStatus, err) {
 		Swal.fire({
 			title: 'Ôi lỗi',
-			text: "",
+			text: jqXHR.responseText,
 			icon: 'error',
 			confirmButtonText: 'Đóng'
 		});
-		console.error(jqXHR);
+		/*console.error(jqXHR);
 		console.error(textStatus);
-		console.error(err);
+		console.error(err);*/
 	});
 });
 
@@ -161,27 +160,27 @@ $('#btnAddModal').on('click', function() {
 	$.ajax({
 		url: 'http://localhost:8080/school/admin/api-admin-level-grade',
 		type: 'POST',
-		dataType: 'json',
+		dataType: 'text',
 		contentType: 'application/json',
 		data: jsonToPost
 	}).done(function(data) {
 		GetDataLevelGrade();
 		Swal.fire({
 			title: 'Thêm mới thành công',
-			text: "",
+			text: data,
 			icon: 'success',
 			confirmButtonText: 'Đóng'
 		});
 	}).fail(function(jqXHR, textStatus, err) {
 		Swal.fire({
 			title: 'Ôi lỗi',
-			text: "",
+			text: jqXHR.responseText,
 			icon: 'error',
 			confirmButtonText: 'Đóng'
 		});
-		console.error(jqXHR);
+		/*console.error(jqXHR);
 		console.error(textStatus);
-		console.error(err);
+		console.error(err);*/
 	});
 });
 
@@ -194,14 +193,14 @@ $('#btnDeleteModal').on('click', function() {
 	$.ajax({
 		url: 'http://localhost:8080/school/admin/api-admin-level-grade',
 		type: 'DELETE',
-		dataType: 'json',
+		dataType: 'text',
 		contentType: 'application/json',
 		data: jsonToPost
 	}).done(function(data) {
 		GetDataLevelGrade();
 		Swal.fire({
 			title: 'Xóa thành công',
-			text: "",
+			text: data,
 			icon: 'success',
 			confirmButtonText: 'Đóng'
 		});
@@ -209,13 +208,13 @@ $('#btnDeleteModal').on('click', function() {
 	}).fail(function(jqXHR, textStatus, err) {
 		Swal.fire({
 			title: 'Ôi lỗi',
-			text: "",
+			text: jqXHR.responseText,
 			icon: 'error',
 			confirmButtonText: 'Đóng'
 		});
-		console.error(jqXHR);
+		/*console.error(jqXHR);
 		console.error(textStatus);
-		console.error(err);
+		console.error(err);*/
 	});
 });
 

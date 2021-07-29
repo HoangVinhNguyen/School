@@ -5,19 +5,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.school.model.InClassroomModel;
+import com.school.model.InCourseModel;
 
 @Entity
-@Table(name = "in_classroom")
-public class InClassroomEntity extends BaseEntity {
+@Table(name = "in_course")
+public class InCourseEntity extends BaseEntity {
 
 	@OneToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	private UserEntity user;
 	@OneToOne
-	@JoinColumn(name = "classroom_id", nullable = false)
-	private ClassroomEntity classroom;
-
+	@JoinColumn(name = "course_id", nullable = false)
+	private CourseEntity course;
 
 	public UserEntity getUser() {
 		return user;
@@ -27,19 +26,19 @@ public class InClassroomEntity extends BaseEntity {
 		this.user = user;
 	}
 
-	public ClassroomEntity getClassroom() {
-		return classroom;
+	public CourseEntity getCourse() {
+		return course;
 	}
 
-	public void setClassroom(ClassroomEntity classroom) {
-		this.classroom = classroom;
+	public void setCourse(CourseEntity course) {
+		this.course = course;
 	}
 
-	public void loadFromDTO(InClassroomModel model) {
+	public void loadFromDTO(InCourseModel model) {
 		if (model != null) {
 			this.setId(model.getId());
 			this.user.loadFromDTO(model.getUserModel());
-			this.classroom.loadFromDTO(model.getClassroomModel());
+			this.course.loadFromDTO(model.getCourseModel());
 			this.setCreatedBy(model.getCreatedBy());
 			this.setCreatedDate(model.getCreatedDate());
 			this.setModifiedBy(model.getModifiedBy());

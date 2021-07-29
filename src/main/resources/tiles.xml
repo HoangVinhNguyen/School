@@ -39,10 +39,10 @@
 	        <add-attribute value="/resource/template/admin/js-data-table/user-data-table.js" />
 	    </put-list-attribute>
     </definition>
-    <definition name="teacher-classroom-administration" extends="admin-base-definition">
-        <put-attribute name="body" value="/WEB-INF/views/admin/teacher_classroom/list.jsp" />
+    <definition name="in-course-administration" extends="admin-base-definition">
+        <put-attribute name="body" value="/WEB-INF/views/admin/in-course/list.jsp" />
         <put-list-attribute name="javascripts">
-	        <add-attribute value="/resource/template/admin/js-data-table/teacher-classroom-data-table.js" />
+	        <add-attribute value="/resource/template/admin/js-data-table/in-course-data-table.js" />
 	    </put-list-attribute>
     </definition>
     <definition name="in-classroom-administration" extends="admin-base-definition">

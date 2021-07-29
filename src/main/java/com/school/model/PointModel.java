@@ -4,43 +4,42 @@ import com.school.entity.PointEntity;
 
 public class PointModel extends BaseModel {
 
-	private UserModel teacherModel = new UserModel();
-	private UserModel studentModel = new UserModel();
-	private ClassroomModel classroomModel = new ClassroomModel();
-	private CourseModel courseModel = new CourseModel();
+	private UserModel teacher = new UserModel();
+	private UserModel student = new UserModel();
+	private ClassroomModel classroom = new ClassroomModel();
+	private CourseModel course = new CourseModel();
 	private Double point;
 
-
-	public UserModel getTeacherModel() {
-		return teacherModel;
+	public UserModel getTeacher() {
+		return teacher;
 	}
 
-	public void setTeacherModel(UserModel teacherModel) {
-		this.teacherModel = teacherModel;
+	public void setTeacher(UserModel teacher) {
+		this.teacher = teacher;
 	}
 
-	public UserModel getStudentModel() {
-		return studentModel;
+	public UserModel getStudent() {
+		return student;
 	}
 
-	public void setStudentModel(UserModel studentModel) {
-		this.studentModel = studentModel;
+	public void setStudent(UserModel student) {
+		this.student = student;
 	}
 
-	public ClassroomModel getClassroomModel() {
-		return classroomModel;
+	public ClassroomModel getClassroom() {
+		return classroom;
 	}
 
-	public void setClassroomModel(ClassroomModel classroomModel) {
-		this.classroomModel = classroomModel;
+	public void setClassroom(ClassroomModel classroom) {
+		this.classroom = classroom;
 	}
 
-	public CourseModel getCourseModel() {
-		return courseModel;
+	public CourseModel getCourse() {
+		return course;
 	}
 
-	public void setCourseModel(CourseModel courseModel) {
-		this.courseModel = courseModel;
+	public void setCourse(CourseModel course) {
+		this.course = course;
 	}
 
 	public Double getPoint() {
@@ -50,14 +49,14 @@ public class PointModel extends BaseModel {
 	public void setPoint(Double point) {
 		this.point = point;
 	}
-	
+
 	public void loadFromEntity(PointEntity entity) {
 		if (entity != null) {
 			this.setId(entity.getId());
-			this.classroomModel.loadFromEntity(entity.getClassroomEntity());
-			this.courseModel.loadFromEntity(entity.getCourseEntity());
-			this.studentModel.loadFromEntityNotPassword(entity.getStudentEntity());
-			this.teacherModel.loadFromEntityNotPassword(entity.getTeacherEntity());
+			this.classroom.loadFromEntity(entity.getClassroom());
+			this.course.loadFromEntity(entity.getCourse());
+			this.student.loadFromEntityNotPassword(entity.getStudent());
+			this.teacher.loadFromEntityNotPassword(entity.getTeacher());
 			this.point = entity.getPoint();
 			this.setId(entity.getId());
 			this.setCreatedBy(entity.getCreatedBy());
@@ -66,5 +65,5 @@ public class PointModel extends BaseModel {
 			this.setModifiedDate(entity.getModifiedDate());
 		}
 	}
-	
+
 }

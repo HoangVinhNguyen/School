@@ -16,13 +16,13 @@
 			<div class="page-content">
 
 				<button id="btnGetGrade" type="button" class="btn btn-primary">Xem danh sách</button>
-				<button data-toggle="modal" data-target="#add-modal" id="btnAddGrade" type="button" class="btn btn-success">Thêm cấp lớp học</button>
-				<button data-toggle="modal" data-target="#add-classroom-file" id="btnAddGradeFile" type="button" class="btn btn-success">Thêm danh sách cấp lớp học</button>
+				<button data-toggle="modal" data-target="#add-modal-grade" id="btnAddGrade" type="button" class="btn btn-success">Thêm cấp lớp học</button>
+				<button data-toggle="modal" data-target="#add-grade-file" id="btnAddGradeFile" type="button" class="btn btn-success">Thêm danh sách cấp lớp học</button>
 				
 				<div class="row">
 					<div class="col-xs-12">
 						<!-- modal button Add New -->
-						<div id="add-modal" class="modal fade" tabindex="-1">
+						<div id="add-modal-grade" class="modal fade" tabindex="-1">
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">
@@ -34,13 +34,17 @@
 									<div class="modal-body">
 										<form>
 											<div class="form-group">
-												<label for="txtAddNameGrade" class="col-form-label">Tên cấp lớp:</label>
+												<label for="txtAddNameGrade" class="col-form-label">Tên cấp lớp</label>
 													<input type="text" class="form-control"
 													id="txtAddNameGrade">
 											</div>
 											<div class="form-group">
-												<label for="txtAddCodeGrade" class="col-form-label">Mã cấp lớp:</label>
+												<label for="txtAddCodeGrade" class="col-form-label">Mã cấp lớp</label>
 												<input class="form-control" id="txtAddCodeGrade">
+											</div>
+											<div class="form-group">
+												<label for="txtAddLevelGrade" class="col-form-label">Tên bậc học</label>
+												<select class="form-control" id="txtAddLevelGrade"></select>
 											</div>
 										</form>
 									</div>
@@ -59,7 +63,7 @@
 						<!-- modal button Add New -->
 
 						<!-- modal button Update -->
-						<div id="update-modal" class="modal fade" tabindex="-1">
+						<div id="update-modal-grade" class="modal fade" tabindex="-1">
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">
@@ -71,18 +75,22 @@
 									<div class="modal-body">
 										<form>
 											<div class="form-group">
-												<label for="txtIDUpdate" class="col-form-label">ID:</label>
-												<input type="text" class="form-control" id="txtIDUpdate"
+												<label for="txtIDUpdateGrade" class="col-form-label">ID</label>
+												<input type="text" class="form-control" id="txtIDUpdateGrade"
 													disabled>
 											</div>
 											<div class="form-group">
-												<label for="txtStore_idUpdate" class="col-form-label">Tên
-													cấp lớp:</label> <input type="text" class="form-control"
-													id="txtNameGrade">
+												<label for="txtNameUpdateGrade" class="col-form-label">Tên
+													cấp lớp</label> <input type="text" class="form-control"
+													id="txtNameUpdateGrade">
 											</div>
 											<div class="form-group">
-												<label for="txtFirst_nameUpdate" class="col-form-label">Mã
-													cấp lớp:</label> <input class="form-control" id="txtCodeGrade">
+												<label for="txtCodeUpdateGrade" class="col-form-label">Mã
+													cấp lớp</label> <input class="form-control" id="txtCodeUpdateGrade">
+											</div>
+											<div class="form-group">
+												<label for="txtUpdateLevelGrade" class="col-form-label">Tên bậc học</label>
+												<select class="form-control" id="txtUpdateLevelGrade"></select>
 											</div>
 										</form>
 									</div>
@@ -101,7 +109,7 @@
 						<!-- modal button Update -->
 
 						<!-- modal button Delete -->
-						<div id="delete-modal" class="modal fade" tabindex="-1">
+						<div id="delete-modal-grade" class="modal fade" tabindex="-1">
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">
@@ -113,19 +121,23 @@
 									<div class="modal-body">
 										<form>
 											<div class="form-group">
-												<label for="txtIDUpdate" class="col-form-label">ID:</label>
-												<input type="text" class="form-control" id="txtIDDelete"
+												<label for="txtIDUpdate" class="col-form-label">ID</label>
+												<input type="text" class="form-control" id="txtIDDeleteGrade"
 													disabled>
 											</div>
 											<div class="form-group">
 												<label for="txtStore_idUpdate" class="col-form-label">Tên
-													cấp lớp:</label> <input type="text" class="form-control"
+													cấp lớp</label> <input type="text" class="form-control"
 													id="txtNameGradeDelete" disabled>
 											</div>
 											<div class="form-group">
 												<label for="txtFirst_nameUpdate" class="col-form-label">Mã
-													cấp lớp:</label> <input class="form-control"
+													cấp lớp</label> <input class="form-control"
 													id="txtCodeGradeDelete" disabled>
+											</div>
+											<div class="form-group">
+												<label for="txtDeleteLevelGrade" class="col-form-label">Tên bậc học</label>
+												<input class="form-control" id="txtDeleteLevelGrade" disabled>
 											</div>
 										</form>
 									</div>
@@ -144,7 +156,7 @@
 						<!-- modal button Delete -->
 
 						<!-- modal button Add New with File -->
-						<div id="add-classroom-file" class="modal fade" tabindex="-1">
+						<div id="add-grade-file" class="modal fade" tabindex="-1">
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">
@@ -189,6 +201,7 @@
 												<th scope="col">#</th>
 												<th scope="col">Tên cấp lớp học</th>
 												<th scope="col">Mã cấp lớp học</th>
+												<th scope="col">Tên bậc học</th>
 												<th scope="col">Người tạo</th>
 												<th scope="col">Ngày tạo</th>
 												<th scope="col">Người chỉnh sửa</th>

@@ -1,13 +1,20 @@
 package com.school.model;
 
-import com.school.entity.InClassroomEntity;
-import com.school.entity.RoleEntity;
+import com.school.entity.InCourseEntity;
 
-public class InClassroomModel extends BaseModel {
+public class InCourseModel extends BaseModel {
 
 	private UserModel userModel = new UserModel();
-	private ClassroomModel classroomModel = new ClassroomModel();
+	private CourseModel courseModel = new CourseModel();
 
+	public CourseModel getCourseModel() {
+		return courseModel;
+	}
+
+	public void setCourseModel(CourseModel courseModel) {
+		this.courseModel = courseModel;
+	}
+	
 	public UserModel getUserModel() {
 		return userModel;
 	}
@@ -16,19 +23,11 @@ public class InClassroomModel extends BaseModel {
 		this.userModel = userModel;
 	}
 
-	public ClassroomModel getClassroomModel() {
-		return classroomModel;
-	}
-
-	public void setClassroomModel(ClassroomModel classroomModel) {
-		this.classroomModel = classroomModel;
-	}
-
-	public void loadFromEntity(InClassroomEntity entity) {
+	public void loadFromEntity(InCourseEntity entity) {
 		if (entity != null) {
 			this.setId(entity.getId());
 			this.userModel.loadFromEntity(entity.getUser());
-			this.classroomModel.loadFromEntity(entity.getClassroom());
+			this.courseModel.loadFromEntity(entity.getCourse());
 			this.setCreatedBy(entity.getCreatedBy());
 			this.setCreatedDate(entity.getCreatedDate());
 			this.setModifiedBy(entity.getModifiedBy());

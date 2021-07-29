@@ -20,7 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.school.DAO.ILevelGradeDAO;
 import com.school.constant.SystemConstant;
 import com.school.entity.LevelGradeEntity;
+import com.school.model.GradeModel;
 import com.school.model.LevelGradeModel;
+import com.school.service.IGradeService;
 import com.school.service.ILevelGradeService;
 
 @Service
@@ -28,6 +30,9 @@ public class LevelGradeService implements ILevelGradeService {
 
 	@Autowired
 	private ILevelGradeDAO levelGradeDAO;
+	
+	@Autowired
+	private IGradeService gradeService;
 	
 	@Override
 	public LevelGradeModel findOne(long id) {
@@ -58,10 +63,13 @@ public class LevelGradeService implements ILevelGradeService {
 	@Override
 	public Long save(LevelGradeModel model, String method) {
 		model = getModifiedField(model, method);
-		LevelGradeEntity gradeEntity = new LevelGradeEntity();
-		gradeEntity.loadFromDTO(model);
-		Long result = levelGradeDAO.save(gradeEntity);
-		return result;
+		if (validateField(model, method)) {
+			LevelGradeEntity gradeEntity = new LevelGradeEntity();
+			gradeEntity.loadFromDTO(model);
+			Long result = levelGradeDAO.save(gradeEntity);
+			return result;
+		}
+		return SystemConstant.ERROR;
 	}
 
 	@Override
@@ -79,32 +87,14 @@ public class LevelGradeService implements ILevelGradeService {
 
 	@Override
 	public Long delete(LevelGradeModel model) {
-		LevelGradeEntity gradeEntity = new LevelGradeEntity();
-		gradeEntity.loadFromDTO(model);
-		return levelGradeDAO.delete(gradeEntity);
-	}
-	
-	private LevelGradeModel getModifiedField(LevelGradeModel model, String method) {
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		
-		switch (method) {
-		case SystemConstant.INSERT:
-			model.setModifiedDate(timestamp);
-			model.setCreatedBy(authentication.getName());
-			model.setCreatedDate(timestamp);
-			break;
-		case SystemConstant.MODIFY:
-			model.setModifiedDate(timestamp);
-			model.setModifiedBy(authentication.getName());
-			break;
-		case SystemConstant.INSERT_FILE:
-			model.setModifiedDate(timestamp);
-			model.setCreatedBy(authentication.getName());
-			model.setCreatedDate(timestamp);
-			break;
+		List<GradeModel> modelResult = new ArrayList<>();
+		modelResult = gradeService.findAllByLevelGreadId(model);
+		if (modelResult == null) {
+			LevelGradeEntity gradeEntity = new LevelGradeEntity();
+			gradeEntity.loadFromDTO(model);
+			return levelGradeDAO.delete(gradeEntity);
 		}
-		return model;
+		return SystemConstant.ERROR;
 	}
 
 	@Override
@@ -132,9 +122,11 @@ public class LevelGradeService implements ILevelGradeService {
 						}
 					}
 					model = getModifiedField(model, SystemConstant.INSERT_FILE);
-					LevelGradeEntity entity = new LevelGradeEntity();
-					entity.loadFromDTO(model);
-					levelGradeDAO.save(entity);
+					if (validateField(model, SystemConstant.INSERT_FILE)) {
+						LevelGradeEntity entity = new LevelGradeEntity();
+						entity.loadFromDTO(model);
+						levelGradeDAO.save(entity);
+					}
 				}
 			}
 			return 1L;
@@ -143,5 +135,52 @@ public class LevelGradeService implements ILevelGradeService {
 			e.printStackTrace();
 			return 0L;
 		}
+	}
+	
+	private LevelGradeModel getModifiedField(LevelGradeModel model, String method) {
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		switch (method) {
+		case SystemConstant.INSERT:
+			model.setModifiedDate(timestamp);
+			model.setCreatedBy(authentication.getName());
+			model.setCreatedDate(timestamp);
+			break;
+		case SystemConstant.MODIFY:
+			model.setModifiedDate(timestamp);
+			model.setModifiedBy(authentication.getName());
+			break;
+		case SystemConstant.INSERT_FILE:
+			model.setModifiedDate(timestamp);
+			model.setCreatedBy(authentication.getName());
+			model.setCreatedDate(timestamp);
+			break;
+		}
+		return model;
+	}
+	
+	private boolean validateField(LevelGradeModel model, String method) {
+		switch (method) {
+		case SystemConstant.INSERT:
+			if (model.getCode() == null || model.getName()  == null || model.getCreatedBy() == null 
+					|| model.getCode() == "" || model.getName() == "" || model.getCreatedBy() == "")  {
+				return false;
+			}
+			break;
+		case SystemConstant.MODIFY:
+			if (model.getCode() == null || model.getName()  == null || model.getModifiedBy() == null 
+					|| model.getCode() == "" || model.getName() == "" || model.getModifiedBy() == "")  {
+				return false;
+			}
+			break;
+		case SystemConstant.INSERT_FILE:
+			if (model.getCode() == null || model.getName()  == null || model.getCreatedBy() == null 
+					|| model.getCode() == "" || model.getName() == "" || model.getCreatedBy() == "")  {
+				return false;
+			}
+			break;
+		}
+		return true;
 	}
 }

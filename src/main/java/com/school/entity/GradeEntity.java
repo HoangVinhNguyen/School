@@ -44,6 +44,7 @@ public class GradeEntity extends BaseEntity {
 			this.setId(model.getId());
 			this.code = model.getCode();
 			this.name = model.getName();
+			this.levelGradeEntity = new LevelGradeEntity();
 			this.levelGradeEntity.loadFromDTO(model.getLevelGradeModel());
 			this.setCreatedBy(model.getCreatedBy());
 			this.setCreatedDate(model.getCreatedDate());

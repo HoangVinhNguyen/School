@@ -31,7 +31,7 @@ public class UserDAO implements IUserDAO{
 	}
 
 	@Override
-	public Long findByEmail(String email) {
+	public UserEntity findByEmail(String email) {
 		StringBuilder sql = new StringBuilder("SELECT u FROM UserEntity as u ");
 		//sql.append(" INNER JOIN RoleEntity as r on r.id=u.role_id");
 		sql.append(" WHERE u.email=?0 and u.isDeleted=0");
@@ -39,9 +39,9 @@ public class UserDAO implements IUserDAO{
 				.setParameter(0, email).getResultList();
 		if (!list.isEmpty()) {
 			UserEntity user = (UserEntity) list.get(0);
-			return user.getId();
+			return user;
 		}
-		return 0L;
+		return null;
 	}
 
 	@Override
@@ -56,8 +56,8 @@ public class UserDAO implements IUserDAO{
 	@Override
 	public Long save(UserEntity entity) {
 		if (entity.getId() != null) {
-			Long id = findByEmail(entity.getEmail());
-			if (id != 0) {
+			UserEntity entityCheck = findByEmail(entity.getEmail());
+			if (entityCheck != null) {
 				String hql = "UPDATE UserEntity SET email=?0, fullname=?1, dob=?2, address=?3, "
 						+ "role=?4, modifiedBy=?5, modifiedDate=?6 WHERE id=?7";
 				sessionFactory.getCurrentSession().createQuery(hql)

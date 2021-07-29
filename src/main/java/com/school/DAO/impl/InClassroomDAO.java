@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.school.DAO.IInClassroomDAO;
 import com.school.entity.ClassroomEntity;
 import com.school.entity.InClassroomEntity;
+import com.school.entity.UserEntity;
+import com.school.model.ClassroomModel;
 import com.school.model.UserModel;
 import com.school.service.IClassroomService;
 import com.school.service.IUserService;
@@ -49,21 +51,25 @@ public class InClassroomDAO implements IInClassroomDAO{
 
 	@Override
 	public InClassroomEntity findOneByUser(String userEmail) {
-		Long id = userService.findByEmail(userEmail);
-		if (id != null) {
-			String hql = "SELECT c FROM InClassroomEntity c WHERE c.studentId=?0 AND c.isDeleted=0";
-			return (InClassroomEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, id).getSingleResult();
+		UserModel model = userService.findByEmail(userEmail);
+		if (model != null) {
+			UserEntity entity = new UserEntity();
+			entity.loadFromDTO(model);
+			String hql = "SELECT c FROM InClassroomEntity c WHERE c.user=?0 AND c.isDeleted=0";
+			return (InClassroomEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, entity).getSingleResult();
 		}
 		return null;
 	}
 	
 	@Override
 	public InClassroomEntity findOneByUserId(Long id) {
-		UserModel user = userService.findOne(id);
-		if (user != null) {
-			String hql = "SELECT c FROM InClassroomEntity c WHERE c.studentId=?0 AND c.isDeleted=0";
+		UserModel model = userService.findOne(id);
+		if (model != null) {
+			UserEntity entity = new UserEntity();
+			entity.loadFromDTO(model);
+			String hql = "SELECT c FROM InClassroomEntity c WHERE c.user=?0 AND c.isDeleted=0";
 			List results = sessionFactory.getCurrentSession().createQuery(hql)
-					.setParameter(0, user.getId()).getResultList();
+					.setParameter(0, entity).getResultList();
 			if (!results.isEmpty()) {
 				return (InClassroomEntity) results.get(0);
 			}
@@ -73,11 +79,12 @@ public class InClassroomDAO implements IInClassroomDAO{
 	
 	@Override
 	public List<InClassroomEntity> findOneByClass(String className) {
-		ClassroomEntity classroom = new ClassroomEntity();
-		classroom.loadFromDTO(classroomService.findOneByName(className));
-		if (classroom != null) {
-			String hql = "SELECT c FROM InClassroomEntity WHERE c.classroomId=?0 AND c.isDeleted=0";
-			return (List<InClassroomEntity>) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, classroom.getId()).list();
+		ClassroomModel model = classroomService.findOneByName(className);
+		if (model != null) {
+			ClassroomEntity entity = new ClassroomEntity();
+			entity.loadFromDTO(model);
+			String hql = "SELECT c FROM InClassroomEntity WHERE c.classroom=?0 AND c.isDeleted=0";
+			return (List<InClassroomEntity>) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, entity).list();
 		}
 		return null;
 	}
@@ -93,16 +100,16 @@ public class InClassroomDAO implements IInClassroomDAO{
 		if (entity.getId() != null) {
 			InClassroomEntity inClassroomModelCheck =  findOne(entity.getId());
 			if ((inClassroomModelCheck != null && inClassroomModelCheck.getId() != 0)) {
-				String hql = "UPDATE InClassroomEntity SET classroomId=?0, modifiedBy=?1, modifiedDate=?2 WHERE id=?3";
+				String hql = "UPDATE InClassroomEntity SET classroom=?0, modifiedBy=?1, modifiedDate=?2 WHERE id=?3";
 				sessionFactory.getCurrentSession().createQuery(hql)
-				.setParameter(0, entity.getClassroom().getId())
+				.setParameter(0, entity.getClassroom())
 				.setParameter(1, entity.getModifiedBy())
 				.setParameter(2, entity.getModifiedDate())
 				.setParameter(3, entity.getId()).executeUpdate();
 				return entity.getId();
 			}
 		}
-		InClassroomEntity inClassroomModelCheck2 = findOneByUserId(entity.getStudent().getId());
+		InClassroomEntity inClassroomModelCheck2 = findOneByUserId(entity.getUser().getId());
 		if (inClassroomModelCheck2 == null || inClassroomModelCheck2.getId() == 0) {
 			sessionFactory.getCurrentSession().save(entity);
 			return entity.getId();

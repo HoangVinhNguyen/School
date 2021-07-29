@@ -20,14 +20,20 @@ import org.springframework.web.multipart.MultipartFile;
 import com.school.DAO.IGradeDAO;
 import com.school.constant.SystemConstant;
 import com.school.entity.GradeEntity;
+import com.school.entity.LevelGradeEntity;
 import com.school.model.GradeModel;
+import com.school.model.LevelGradeModel;
 import com.school.service.IGradeService;
+import com.school.service.ILevelGradeService;
 
 @Service
 public class GradeService implements IGradeService {
 
 	@Autowired
 	private IGradeDAO gradeDAO;
+	
+	@Autowired
+	private ILevelGradeService levelGradeService;
 	
 	@Override
 	public GradeModel findOne(long id) {
@@ -49,6 +55,25 @@ public class GradeService implements IGradeService {
 		model.loadFromEntity(gradeDAO.findOneByName(name));
 		return model;
 	}
+	
+	@Override
+	public List<GradeModel> findAllByLevelGreadId(LevelGradeModel levelGradeModel) {
+		LevelGradeEntity entity = new LevelGradeEntity();
+		List<GradeEntity> entityResult = new ArrayList<>();
+		List<GradeModel> models = new ArrayList<>();
+		
+		entity.loadFromDTO(levelGradeModel);
+		entityResult = gradeDAO.findAllByLevelGreadId(entity);
+		if (entityResult != null) {
+			for (GradeEntity item : entityResult) {
+				GradeModel model = new GradeModel();
+				model.loadFromEntity(item);
+				models.add(model);
+			}
+			return models;
+		}
+		return null;
+	}
 
 	@Override
 	public int getTotalItem() {
@@ -57,11 +82,18 @@ public class GradeService implements IGradeService {
 
 	@Override
 	public Long save(GradeModel model, String method) {
-		model = getModifiedField(model, method);
-		GradeEntity gradeEntity = new GradeEntity();
-		gradeEntity.loadFromDTO(model);
-		Long result = gradeDAO.save(gradeEntity);
-		return result;
+		LevelGradeModel levelGradeModel = levelGradeService.findOne(model.getLevelGradeModel().getId());
+		if (levelGradeModel != null) {
+			model.setLevelGradeModel(levelGradeModel);
+			model = getModifiedField(model, method);
+			if (validateField(model, method)) {
+				GradeEntity gradeEntity = new GradeEntity();
+				gradeEntity.loadFromDTO(model);
+				Long result = gradeDAO.save(gradeEntity);
+				return result;
+			}
+		}
+		return SystemConstant.ERROR;
 	}
 
 	@Override
@@ -84,29 +116,6 @@ public class GradeService implements IGradeService {
 		return gradeDAO.delete(gradeEntity);
 	}
 	
-	private GradeModel getModifiedField(GradeModel model, String method) {
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		
-		switch (method) {
-		case SystemConstant.INSERT:
-			model.setModifiedDate(timestamp);
-			model.setCreatedBy(authentication.getName());
-			model.setCreatedDate(timestamp);
-			break;
-		case SystemConstant.MODIFY:
-			model.setModifiedDate(timestamp);
-			model.setModifiedBy(authentication.getName());
-			break;
-		case SystemConstant.INSERT_FILE:
-			model.setModifiedDate(timestamp);
-			model.setCreatedBy(authentication.getName());
-			model.setCreatedDate(timestamp);
-			break;
-		}
-		return model;
-	}
-
 	@Override
 	public Long saveList(MultipartFile file) {
 		try {
@@ -132,9 +141,12 @@ public class GradeService implements IGradeService {
 						}
 					}
 					model = getModifiedField(model, SystemConstant.INSERT_FILE);
-					GradeEntity entity = new GradeEntity();
-					entity.loadFromDTO(model);
-					gradeDAO.save(entity);
+					if (validateField(model, SystemConstant.INSERT_FILE)) {
+						GradeEntity entity = new GradeEntity();
+						entity.loadFromDTO(model);
+						gradeDAO.save(entity);
+					}
+					
 				}
 			}
 			return 1L;
@@ -143,5 +155,52 @@ public class GradeService implements IGradeService {
 			e.printStackTrace();
 			return 0L;
 		}
+	}
+	
+	private GradeModel getModifiedField(GradeModel model, String method) {
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		switch (method) {
+		case SystemConstant.INSERT:
+			model.setModifiedDate(timestamp);
+			model.setCreatedBy(authentication.getName());
+			model.setCreatedDate(timestamp);
+			break;
+		case SystemConstant.MODIFY:
+			model.setModifiedDate(timestamp);
+			model.setModifiedBy(authentication.getName());
+			break;
+		case SystemConstant.INSERT_FILE:
+			model.setModifiedDate(timestamp);
+			model.setCreatedBy(authentication.getName());
+			model.setCreatedDate(timestamp);
+			break;
+		}
+		return model;
+	}
+	
+	private boolean validateField(GradeModel model, String method) {
+		switch (method) {
+		case SystemConstant.INSERT:
+			if (model.getCode() == null || model.getName()  == null || model.getCreatedBy() == null 
+					|| model.getCode() == "" || model.getName() == "" || model.getCreatedBy() == "")  {
+				return false;
+			}
+			break;
+		case SystemConstant.MODIFY:
+			if (model.getCode() == null || model.getName()  == null || model.getModifiedBy() == null 
+					|| model.getCode() == "" || model.getName() == "" || model.getModifiedBy() == "")  {
+				return false;
+			}
+			break;
+		case SystemConstant.INSERT_FILE:
+			if (model.getCode() == null || model.getName()  == null || model.getCreatedBy() == null 
+					|| model.getCode() == "" || model.getName() == "" || model.getCreatedBy() == "")  {
+				return false;
+			}
+			break;
+		}
+		return true;
 	}
 }
