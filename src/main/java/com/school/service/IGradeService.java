@@ -1,6 +1,10 @@
 package com.school.service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,4 +23,6 @@ public interface IGradeService {
 	public Long delete(GradeModel gradeModel);
 	
 	public Long saveList(MultipartFile file);
+	public Long downloadForm(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException;
+	public Long getReport(HttpServletRequest request, HttpServletResponse response);
 }

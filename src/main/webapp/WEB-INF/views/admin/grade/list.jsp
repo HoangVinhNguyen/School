@@ -18,7 +18,10 @@
 				<button id="btnGetGrade" type="button" class="btn btn-primary">Xem danh sách</button>
 				<button data-toggle="modal" data-target="#add-modal-grade" id="btnAddGrade" type="button" class="btn btn-success">Thêm cấp lớp học</button>
 				<button data-toggle="modal" data-target="#add-grade-file" id="btnAddGradeFile" type="button" class="btn btn-success">Thêm danh sách cấp lớp học</button>
-				
+				<hr>
+				<button id="btnGetGradeForm" type="button" class="btn btn-primary">Lấy mẫu Microsoft Excel</button>
+				<button id="btnGetGradeExcel" type="button" class="btn btn-primary">Lấy nội dung của bảng</button>
+				<hr>
 				<div class="row">
 					<div class="col-xs-12">
 						<!-- modal button Add New -->
@@ -121,17 +124,17 @@
 									<div class="modal-body">
 										<form>
 											<div class="form-group">
-												<label for="txtIDUpdate" class="col-form-label">ID</label>
+												<label for="txtIDDeleteGrade" class="col-form-label">ID</label>
 												<input type="text" class="form-control" id="txtIDDeleteGrade"
 													disabled>
 											</div>
 											<div class="form-group">
-												<label for="txtStore_idUpdate" class="col-form-label">Tên
+												<label for="txtNameGradeDelete" class="col-form-label">Tên
 													cấp lớp</label> <input type="text" class="form-control"
 													id="txtNameGradeDelete" disabled>
 											</div>
 											<div class="form-group">
-												<label for="txtFirst_nameUpdate" class="col-form-label">Mã
+												<label for="txtCodeGradeDelete" class="col-form-label">Mã
 													cấp lớp</label> <input class="form-control"
 													id="txtCodeGradeDelete" disabled>
 											</div>

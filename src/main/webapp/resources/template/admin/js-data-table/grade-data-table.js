@@ -124,6 +124,12 @@ $("#delete-modal-grade").on('shown.bs.modal', function() {
 	$("#txtCodeGradeDelete").val(dataTableRowGrade[2]);
 	$('#txtDeleteLevelGrade').val(dataTableRowGrade[3]);
 });
+
+// add content for modal from file.
+$("#add-grade-file").on('shown.bs.modal', function() {
+	$('#fileNameGrade').val("");
+});
+
 // gọi api cập nhật lớp học.
 $('#btnUpdateModal').on('click', function() {
 	const dataToPost = {
@@ -202,7 +208,7 @@ $('#btnAddModal').on('click', function() {
 // Delete
 $('#btnDeleteModal').on('click', function() {
 	const dataToPost = {
-		id: $('#txtIDDelete').val()
+		id: $('#txtIDDeleteGrade').val()
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
@@ -272,6 +278,14 @@ $('#fileGrade').change(function() {
 	$('#fileNameGrade').val(name[name.length - 1]);
 });
 
+$('#btnGetGradeForm').on('click', function() {
+	DownloadFormGrade();
+});
+
+$('#btnGetGradeExcel').on('click', function() {
+	DownloadReportGrade();
+});
+
 function GetDataLevelGradeForSelect(element, selectString) {
 	$.ajax({
 		url: 'http://localhost:8080/school/admin/api-admin-level-grade',
@@ -298,4 +312,13 @@ function GetDataLevelGradeForSelect(element, selectString) {
 		return null;
 	});
 }
+
+function DownloadFormGrade() {
+	window.location.href = "http://localhost:8080/school/admin/api-admin-grade-file-form-download";
+}
+
+function DownloadReportGrade() {
+	window.location.href = "http://localhost:8080/school/admin/api-admin-grade-file-report-download";
+}
+
 /*====================================================================*/

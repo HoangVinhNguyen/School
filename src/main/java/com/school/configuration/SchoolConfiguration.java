@@ -18,6 +18,8 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartResolver;
@@ -96,6 +98,7 @@ public class SchoolConfiguration extends WebMvcConfigurerAdapter {
 		bean.setHibernateProperties(hibernateProperties);
 		return bean;
 	}
+	
 	
 	@Bean(name="transactionManager")
 	@Autowired

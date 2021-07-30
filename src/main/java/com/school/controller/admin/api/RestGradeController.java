@@ -1,8 +1,15 @@
 package com.school.controller.admin.api;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -66,5 +73,15 @@ public class RestGradeController {
 	@RequestMapping(value={"/api-admin-grade-file"}, method= RequestMethod.POST)
 	public Long sendFileClassroom(@RequestParam(name="file") MultipartFile file) {
 		return gradeService.saveList(file);
+	}
+	
+	@RequestMapping(value={"/api-admin-grade-file-form-download"}, method=RequestMethod.GET)
+	public void download(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+		gradeService.downloadForm(request, response);
+	}
+	
+	@RequestMapping(value={"/api-admin-grade-file-report-download"}, method=RequestMethod.GET)
+	public void downloadReport(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+		gradeService.getReport(request, response);
 	}
 }
