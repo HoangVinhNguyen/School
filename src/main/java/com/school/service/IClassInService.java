@@ -8,19 +8,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.school.model.ClassroomModel;
+import com.school.model.ClassInModel;
 import com.school.model.GradeModel;
 
-public interface IClassroomService {
+public interface IClassInService {
 
-	public List<ClassroomModel> findAll();
-	public List<ClassroomModel> findByGrade(GradeModel gradeModel);
-	public ClassroomModel findOne(long id);
-	public ClassroomModel findOneByCode(String code);
-	public ClassroomModel findOneByName(String name);
+	public List<ClassInModel> findAll();
+	public ClassInModel findOne(long id);
+	public ClassInModel findOneByCode(String code);
+	public ClassInModel findOneByName(String name);
+	public List<ClassInModel> findAllByLevelGreadId(GradeModel gradeModel);
 	public int getTotalItem();
-	public Long save(ClassroomModel classroomModel, String method);
-	public Long delete(ClassroomModel classroomModel);
+	public Long save(ClassInModel classInModel, String method);
+	public Long delete(ClassInModel classInModel);
 	
 	public Long saveList(MultipartFile file);
 	public Long downloadForm(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException;

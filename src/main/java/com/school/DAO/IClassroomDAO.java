@@ -12,6 +12,7 @@ public interface IClassroomDAO {
 	public ClassroomEntity findOne(long id);
 	public ClassroomEntity findOneByCode(String code);
 	public ClassroomEntity findOneByName(String name);
+	public ClassroomEntity findOneByNameAndCodeAndGreadId(ClassroomEntity entity);
 	public Long save(ClassroomEntity classroomEntity);
 	public Long delete(ClassroomEntity classroomEntity);
 	public int getTotalItem();

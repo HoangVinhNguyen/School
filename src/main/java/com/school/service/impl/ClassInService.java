@@ -23,10 +23,6 @@ import org.apache.poi.ooxml.POIXMLProperties;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Color;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
@@ -40,57 +36,57 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.school.DAO.IGradeDAO;
+import com.school.DAO.IClassInDAO;
 import com.school.constant.SystemConstant;
+import com.school.entity.ClassInEntity;
 import com.school.entity.GradeEntity;
-import com.school.entity.LevelGradeEntity;
+import com.school.model.ClassInModel;
 import com.school.model.GradeModel;
-import com.school.model.LevelGradeModel;
+import com.school.service.IClassInService;
 import com.school.service.IGradeService;
-import com.school.service.ILevelGradeService;
 import com.school.utils.GetCellValueMultiType;
 
 @Service
-public class GradeService implements IGradeService {
+public class ClassInService implements IClassInService {
 
 	@Autowired
-	private IGradeDAO gradeDAO;
+	private IClassInDAO classInDAO;
 	
 	@Autowired
-	private ILevelGradeService levelGradeService;
+	private IGradeService gradeService;
 	
 	@Override
-	public GradeModel findOne(long id) {
-		GradeModel model = new GradeModel();
-		model.loadFromEntity(gradeDAO.findOne(id));
+	public ClassInModel findOne(long id) {
+		ClassInModel model = new ClassInModel();
+		model.loadFromEntity(classInDAO.findOne(id));
 		return model;
 	}
 
 	@Override
-	public GradeModel findOneByCode(String code) {
-		GradeModel model = new GradeModel();
-		model.loadFromEntity(gradeDAO.findOneByCode(code));
+	public ClassInModel findOneByCode(String code) {
+		ClassInModel model = new ClassInModel();
+		model.loadFromEntity(classInDAO.findOneByCode(code));
 		return model;
 	}
 	
 	@Override
-	public GradeModel findOneByName(String name) {
-		GradeModel model = new GradeModel();
-		model.loadFromEntity(gradeDAO.findOneByName(name));
+	public ClassInModel findOneByName(String name) {
+		ClassInModel model = new ClassInModel();
+		model.loadFromEntity(classInDAO.findOneByName(name));
 		return model;
 	}
 	
 	@Override
-	public List<GradeModel> findAllByLevelGreadId(LevelGradeModel levelGradeModel) {
-		LevelGradeEntity entity = new LevelGradeEntity();
-		List<GradeEntity> entityResult = new ArrayList<>();
-		List<GradeModel> models = new ArrayList<>();
+	public List<ClassInModel> findAllByLevelGreadId(GradeModel gradeModel) {
+		GradeEntity entity = new GradeEntity();
+		List<ClassInEntity> entityResult = new ArrayList<>();
+		List<ClassInModel> models = new ArrayList<>();
 		
-		entity.loadFromDTO(levelGradeModel);
-		entityResult = gradeDAO.findAllByLevelGreadId(entity);
+		entity.loadFromDTO(gradeModel);
+		entityResult = classInDAO.findAllByGreadId(entity);
 		if (entityResult != null) {
-			for (GradeEntity item : entityResult) {
-				GradeModel model = new GradeModel();
+			for (ClassInEntity item : entityResult) {
+				ClassInModel model = new ClassInModel();
 				model.loadFromEntity(item);
 				models.add(model);
 			}
@@ -101,19 +97,19 @@ public class GradeService implements IGradeService {
 
 	@Override
 	public int getTotalItem() {
-		return gradeDAO.getTotalItem();
+		return classInDAO.getTotalItem();
 	}
 
 	@Override
-	public Long save(GradeModel model, String method) {
-		LevelGradeModel levelGradeModel = levelGradeService.findOne(model.getLevelGradeModel().getId());
-		if (levelGradeModel != null) {
-			model.setLevelGradeModel(levelGradeModel);
+	public Long save(ClassInModel model, String method) {
+		GradeModel gradeModel = gradeService.findOne(model.getGrade().getId());
+		if (gradeModel != null) {
+			model.setGrade(gradeModel);
 			model = getModifiedField(model, method);
 			if (validateField(model, method)) {
-				GradeEntity gradeEntity = new GradeEntity();
+				ClassInEntity gradeEntity = new ClassInEntity();
 				gradeEntity.loadFromDTO(model);
-				Long result = gradeDAO.save(gradeEntity);
+				Long result = classInDAO.save(gradeEntity);
 				return result;
 			}
 		}
@@ -121,12 +117,12 @@ public class GradeService implements IGradeService {
 	}
 
 	@Override
-	public List<GradeModel> findAll() {
-		List<GradeModel> gradeModels = new ArrayList<GradeModel>();
-		List<GradeEntity> gradeEntities = gradeDAO.findAll();
-		Iterator<GradeEntity> itr = gradeEntities.iterator();
+	public List<ClassInModel> findAll() {
+		List<ClassInModel> gradeModels = new ArrayList<ClassInModel>();
+		List<ClassInEntity> gradeEntities = classInDAO.findAll();
+		Iterator<ClassInEntity> itr = gradeEntities.iterator();
 		while(itr.hasNext()) {
-			GradeModel model = new GradeModel();
+			ClassInModel model = new ClassInModel();
 			model.loadFromEntity(itr.next());
 			gradeModels.add(model);
 		}
@@ -134,10 +130,10 @@ public class GradeService implements IGradeService {
 	}
 
 	@Override
-	public Long delete(GradeModel model) {
-		GradeEntity gradeEntity = new GradeEntity();
+	public Long delete(ClassInModel model) {
+		ClassInEntity gradeEntity = new ClassInEntity();
 		gradeEntity.loadFromDTO(model);
-		return gradeDAO.delete(gradeEntity);
+		return classInDAO.delete(gradeEntity);
 	}
 	
 	@Override
@@ -162,11 +158,11 @@ public class GradeService implements IGradeService {
 		pathF.append(fullPath);
 		pathF.append("/resources/form-file/");
 		String dataDirectory2 = pathF.toString().replace("/", "\\\\");
-		Path file = Paths.get(dataDirectory2.substring(2), "grade-form.xlsx");
+		Path file = Paths.get(dataDirectory2.substring(2), "class-form.xlsx");
 		if (Files.exists(file)) {
 			// .xls - application/vnd.ms-excel.
 			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-			response.addHeader("Content-Disposition", "attachment; filename=bieu-mau-khoi-lop-hoc.xlsx");
+			response.addHeader("Content-Disposition", "attachment; filename=bieu-mau-lop-hoc.xlsx");
 			try {
 				Files.copy(file, response.getOutputStream());
 				response.getOutputStream().flush();
@@ -181,7 +177,7 @@ public class GradeService implements IGradeService {
 	
 	@Override
 	public Long getReport(HttpServletRequest request, HttpServletResponse response) {
-		List<GradeModel> list = findAll();
+		List<ClassInModel> list = findAll();
 		if (list != null) {
 			XSSFWorkbook workbook = new XSSFWorkbook();
 			POIXMLProperties xmlProps = workbook.getProperties();    
@@ -228,24 +224,24 @@ public class GradeService implements IGradeService {
 	        
 	        Row rowTitle = sheet.createRow(rowCount++);
 	        Cell cell_title = rowTitle.createCell(0);
-	        cell_title.setCellValue(SystemConstant.TITLE_GRADE);
+	        cell_title.setCellValue(SystemConstant.TITLE_CLASS);
 	        cell_title.setCellStyle(style);
 	        sheet.addMergedRegion(new CellRangeAddress(0,0,0,2));
 	        
 	        Row rowTitleSub = sheet.createRow(rowCount++);
 	        Cell cellName = rowTitleSub.createCell(0);
-	        cellName.setCellValue(SystemConstant.TITLE_NAME);
+	        cellName.setCellValue(SystemConstant.TITLE_NAME_CLASS);
 	        cellName.setCellStyle(style2);
 	        Cell cellCode = rowTitleSub.createCell(1);
-	        cellCode.setCellValue(SystemConstant.TITLE_CODE);
+	        cellCode.setCellValue(SystemConstant.TITLE_CODE_CLASS);
 	        cellCode.setCellStyle(style2);
 	        Cell cellLevelGrade = rowTitleSub.createCell(2);
-	        cellLevelGrade.setCellValue(SystemConstant.TITLE_LEVEL_GRADE);
+	        cellLevelGrade.setCellValue(SystemConstant.TITLE_GRADE_CLASS);
 	        cellLevelGrade.setCellStyle(style2);
 	        
-			Iterator<GradeModel> itr = list.iterator();
+			Iterator<ClassInModel> itr = list.iterator();
 			while(itr.hasNext()) {
-				GradeModel model = itr.next();
+				ClassInModel model = itr.next();
 				Row row = sheet.createRow(rowCount++);
 				int checkColumn = 0;
 	            for (Field field : model.getClass().getDeclaredFields()) {
@@ -264,9 +260,9 @@ public class GradeService implements IGradeService {
 	            		sheet.autoSizeColumn(checkColumn);
 	            		checkColumn++;
 	            		break;
-	            	case SystemConstant.LEVEL_GRADE_FIELD:
+	            	case SystemConstant.GRADE_FIELD:
 	            		Cell cell_level_grade = row.createCell(2);
-	            		cell_level_grade.setCellValue(model.getLevelGradeModel().getName());
+	            		cell_level_grade.setCellValue(model.getGrade().getName());
 	            		cell_level_grade.setCellStyle(style3);
 	            		sheet.autoSizeColumn(checkColumn);
 	            		checkColumn++;
@@ -279,13 +275,13 @@ public class GradeService implements IGradeService {
 			}
 			
 			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-			response.addHeader("Content-Disposition", "attachment; filename=danh-sach-khoi-lop-hoc.xlsx");
+			response.addHeader("Content-Disposition", "attachment; filename=danh-sach-lop-hoc.xlsx");
 			try {
 				
 				workbook.write(response.getOutputStream());
 				response.getOutputStream().flush();
 			} catch (IOException e) {
-				System.out.println("report grade file");
+				System.out.println("report class file");
 				e.printStackTrace();
 				return SystemConstant.ERROR;
 			}
@@ -294,7 +290,7 @@ public class GradeService implements IGradeService {
 		return SystemConstant.ERROR;
 	}
 	
-	private GradeModel getModifiedField(GradeModel model, String method) {
+	private ClassInModel getModifiedField(ClassInModel model, String method) {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
@@ -317,7 +313,7 @@ public class GradeService implements IGradeService {
 		return model;
 	}
 	
-	private boolean validateField(GradeModel model, String method) {
+	private boolean validateField(ClassInModel model, String method) {
 		switch (method) {
 		case SystemConstant.INSERT:
 			if (model.getCode() == null || model.getName()  == null || model.getCreatedBy() == null 
@@ -350,7 +346,7 @@ public class GradeService implements IGradeService {
 				for (Row row : sheet)
 				{
 					if (row.getRowNum() > 1) {
-						GradeModel model = new GradeModel();
+						ClassInModel model = new ClassInModel();
 						for (Cell cell : row)
 						{
 							/*
@@ -364,27 +360,27 @@ public class GradeService implements IGradeService {
 								model.setCode(GetCellValueMultiType.CellStringValueOf(cell));
 								break;
 							case 2: // level grade.
-								LevelGradeModel levelGradeModel = new LevelGradeModel();
-								levelGradeModel = levelGradeService.findOneByName(GetCellValueMultiType.CellStringValueOf(cell));
-								if (levelGradeModel == null)
+								GradeModel gradeModel = new GradeModel();
+								gradeModel = gradeService.findOneByName(GetCellValueMultiType.CellStringValueOf(cell));
+								if (gradeModel == null)
 								{
 									return SystemConstant.ERROR;
 								}
-								model.setLevelGradeModel(levelGradeModel);
+								model.setGrade(gradeModel);
 								break;
 							}
 						}
 						model = getModifiedField(model, SystemConstant.INSERT_FILE);
 						if (validateField(model, SystemConstant.INSERT_FILE)) {
-							GradeEntity entity = new GradeEntity();
+							ClassInEntity entity = new ClassInEntity();
 							entity.loadFromDTO(model);
-							gradeDAO.save(entity);
+							classInDAO.save(entity);
 						}
 					}
 				}
 				return 1L;
 			} catch (IOException e) {
-				System.out.println("save list grade");
+				System.out.println("save list class");
 				e.printStackTrace();
 				return SystemConstant.ERROR;
 			}
@@ -395,7 +391,7 @@ public class GradeService implements IGradeService {
 				for (Row row : sheet)
 				{
 					if (row.getRowNum() > 1) {
-						GradeModel model = new GradeModel();
+						ClassInModel model = new ClassInModel();
 						for (Cell cell : row)
 						{
 							/*
@@ -409,27 +405,27 @@ public class GradeService implements IGradeService {
 								model.setCode(GetCellValueMultiType.CellStringValueOf(cell));
 								break;
 							case 2: // level grade.
-								LevelGradeModel levelGradeModel = new LevelGradeModel();
-								levelGradeModel = levelGradeService.findOneByName(GetCellValueMultiType.CellStringValueOf(cell));
-								if (levelGradeModel == null)
+								GradeModel gradeModel = new GradeModel();
+								gradeModel = gradeService.findOneByName(GetCellValueMultiType.CellStringValueOf(cell));
+								if (gradeModel == null)
 								{
 									return SystemConstant.ERROR;
 								}
-								model.setLevelGradeModel(levelGradeModel);
+								model.setGrade(gradeModel);
 								break;
 							}
 						}
 						model = getModifiedField(model, SystemConstant.INSERT_FILE);
 						if (validateField(model, SystemConstant.INSERT_FILE)) {
-							GradeEntity entity = new GradeEntity();
+							ClassInEntity entity = new ClassInEntity();
 							entity.loadFromDTO(model);
-							gradeDAO.save(entity);
+							classInDAO.save(entity);
 						}
 					}
 				}
 				return 1L;
 			} catch (IOException e) {
-				System.out.println("save list grade");
+				System.out.println("save list class");
 				e.printStackTrace();
 				return SystemConstant.ERROR;
 			}

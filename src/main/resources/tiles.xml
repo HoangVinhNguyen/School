@@ -63,6 +63,12 @@
 	        <add-attribute value="/resource/template/admin/js-data-table/classroom-data-table.js" />
 	    </put-list-attribute>
     </definition>
+    <definition name="class-administration" extends="admin-base-definition">
+        <put-attribute name="body" value="/WEB-INF/views/admin/class/list.jsp" />
+        <put-list-attribute name="javascripts">
+	        <add-attribute value="/resource/template/admin/js-data-table/class-data-table.js" />
+	    </put-list-attribute>
+    </definition>
     <definition name="grade-administration" extends="admin-base-definition">
         <put-attribute name="body" value="/WEB-INF/views/admin/grade/list.jsp" />
         <put-list-attribute name="javascripts">

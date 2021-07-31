@@ -7,10 +7,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +27,7 @@ import com.school.model.GradeModel;
 import com.school.model.LevelGradeModel;
 import com.school.service.IGradeService;
 import com.school.service.ILevelGradeService;
+import com.school.utils.GetCellValueMultiType;
 
 @Service
 public class LevelGradeService implements ILevelGradeService {
@@ -99,41 +103,13 @@ public class LevelGradeService implements ILevelGradeService {
 
 	@Override
 	public Long saveList(MultipartFile file) {
+		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 		try {
 			InputStream fileInputStream = file.getInputStream();
-			HSSFWorkbook wb = new HSSFWorkbook(fileInputStream);
-			HSSFSheet sheet = wb.getSheetAt(0);
-			for (Row row : sheet) // iteration over row using for each loop
-			{
-				if (row.getRowNum() != 0) {
-					LevelGradeModel model = new LevelGradeModel();
-					for (Cell cell : row) // iteration over cell using for each loop
-					{
-						/*
-						 * _NONE(-1), NUMERIC(0), STRING(1), FORMULA(2), BLANK(3), BOOLEAN(4), ERROR(5);
-						 */
-						switch (cell.getColumnIndex()) {
-						case 0:
-							model.setName(cell.getStringCellValue());
-							break;
-						case 1:
-							model.setCode(cell.getStringCellValue());
-							break;
-						}
-					}
-					model = getModifiedField(model, SystemConstant.INSERT_FILE);
-					if (validateField(model, SystemConstant.INSERT_FILE)) {
-						LevelGradeEntity entity = new LevelGradeEntity();
-						entity.loadFromDTO(model);
-						levelGradeDAO.save(entity);
-					}
-				}
-			}
-			return 1L;
+			return saveFileWithExtensionType(fileInputStream, extension);
 		} catch (IOException e) {
-			System.out.println("save list classrooms");
 			e.printStackTrace();
-			return 0L;
+			return SystemConstant.ERROR;
 		}
 	}
 	
@@ -182,5 +158,83 @@ public class LevelGradeService implements ILevelGradeService {
 			break;
 		}
 		return true;
+	}
+	
+	private Long saveFileWithExtensionType(InputStream fileInputStream, String extension) {
+		switch (extension) {
+		case SystemConstant.XLS:
+			try {
+				HSSFWorkbook wb = new HSSFWorkbook(fileInputStream);
+				HSSFSheet sheet = wb.getSheetAt(0);
+				for (Row row : sheet)
+				{
+					if (row.getRowNum() > 1) {
+						LevelGradeModel model = new LevelGradeModel();
+						for (Cell cell : row) // iteration over cell using for each loop
+						{
+							/*
+							 * _NONE(-1), NUMERIC(0), STRING(1), FORMULA(2), BLANK(3), BOOLEAN(4), ERROR(5);
+							 */
+							switch (cell.getColumnIndex()) {
+							case 0:
+								model.setName(GetCellValueMultiType.CellStringValueOf(cell));
+								break;
+							case 1:
+								model.setCode(GetCellValueMultiType.CellStringValueOf(cell));
+								break;
+							}
+						}
+						model = getModifiedField(model, SystemConstant.INSERT_FILE);
+						if (validateField(model, SystemConstant.INSERT_FILE)) {
+							LevelGradeEntity entity = new LevelGradeEntity();
+							entity.loadFromDTO(model);
+							levelGradeDAO.save(entity);
+						}
+					}
+				}
+				return 1L;
+			} catch (IOException e) {
+				System.out.println("save list grade");
+				e.printStackTrace();
+				return SystemConstant.ERROR;
+			}
+		case SystemConstant.XLSX:
+			try {
+				XSSFWorkbook wb = new XSSFWorkbook(fileInputStream);
+				XSSFSheet sheet = wb.getSheetAt(0);
+				for (Row row : sheet)
+				{
+					if (row.getRowNum() > 1) {
+						LevelGradeModel model = new LevelGradeModel();
+						for (Cell cell : row) // iteration over cell using for each loop
+						{
+							/*
+							 * _NONE(-1), NUMERIC(0), STRING(1), FORMULA(2), BLANK(3), BOOLEAN(4), ERROR(5);
+							 */
+							switch (cell.getColumnIndex()) {
+							case 0:
+								model.setName(GetCellValueMultiType.CellStringValueOf(cell));
+								break;
+							case 1:
+								model.setCode(GetCellValueMultiType.CellStringValueOf(cell));
+								break;
+							}
+						}
+						model = getModifiedField(model, SystemConstant.INSERT_FILE);
+						if (validateField(model, SystemConstant.INSERT_FILE)) {
+							LevelGradeEntity entity = new LevelGradeEntity();
+							entity.loadFromDTO(model);
+							levelGradeDAO.save(entity);
+						}
+					}
+				}
+				return 1L;
+			} catch (IOException e) {
+				System.out.println("save list grade");
+				e.printStackTrace();
+				return SystemConstant.ERROR;
+			}
+		}
+		return SystemConstant.ERROR;
 	}
 }

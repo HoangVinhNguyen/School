@@ -78,6 +78,13 @@
                     </a> --%>
                     <a id="getClassroom" href='<c:url value="/admin/classroom"/>' >
                         <i class="menu-icon fa fa-caret-right"></i>
+                        Danh sách phòng học
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                 <li>
+                    <a id="getClass" href='<c:url value="/admin/class"/>' >
+                        <i class="menu-icon fa fa-caret-right"></i>
                         Danh sách lớp học
                     </a>
                     <b class="arrow"></b>
@@ -90,7 +97,7 @@
                     <b class="arrow"></b>
                 </li>
                 <li>
-                    <a id="getGrade" href='<c:url value="/admin/level-grade"/>' >
+                    <a id="getLevelGrade" href='<c:url value="/admin/level-grade"/>' >
                         <i class="menu-icon fa fa-caret-right"></i>
                         Danh sách bậc học
                     </a>

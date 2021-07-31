@@ -12,7 +12,7 @@ import com.school.model.InClassroomModel;
 public class InClassroomEntity extends BaseEntity {
 
 	@OneToOne
-	@JoinColumn(name = "user_id", nullable = false)
+	@JoinColumn(name = "grade_id", nullable = false)
 	private UserEntity user;
 	@OneToOne
 	@JoinColumn(name = "classroom_id", nullable = false)

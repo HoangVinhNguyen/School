@@ -2,13 +2,13 @@
  * 
  */
 
-/*================================== GRADE ==================================*/
-var tableGrade;
-var dataTableRowGrade;
+/*================================== CLASS ==================================*/
+var tableClass;
+var dataTableRowClass;
 var rowData;
 
 $(document).ready(function() {
-	tableGrade = $('#dynamic-table').DataTable({
+	tableClass = $('#dynamic-table').DataTable({
 		destroy: true,
 		retrieve: true,
 		stateSave: true,
@@ -21,12 +21,12 @@ $(document).ready(function() {
 			"defaultContent": `<div class="btn-group" role="group">
 
 															<button data-toggle="modal"
-              data-target="#update-modal-grade" type="button" class="btn btn-xs btn-info">
+              data-target="#update-modal-class" type="button" class="btn btn-xs btn-info">
 																<i class="ace-icon fa fa-pencil bigger-120"></i>
 															</button>
 
 															<button data-toggle="modal"
-              data-target="#delete-modal-grade" type="button" class="btn btn-xs btn-danger">
+              data-target="#delete-modal-class" type="button" class="btn btn-xs btn-danger">
 																<i class="ace-icon fa fa-trash-o bigger-120"></i>
 															</button>
 														</div>`
@@ -35,27 +35,27 @@ $(document).ready(function() {
 });
 
 
-$('#btnGetGrade').on('click', function() {
-	GetDataGrade();
+$('#btnGetClass').on('click', function() {
+	GetDataClass();
 });
 
 $('#dynamic-table tbody').on('click', 'tr', function() {
-	dataTableRowGrade = tableGrade.row(this).data();
+	dataTableRowClass = tableClass.row(this).data();
 });
 
-function GetDataGrade() {
+function GetDataClass() {
 	$.ajax({
-		url: 'http://localhost:8080/school/admin/api-admin-grade',
+		url: 'http://localhost:8080/school/admin/api-admin-class',
 		type: 'GET',
 		dataType: 'json',
 		contentType: 'application/json'
 	}).done(function(data) {
 
-		tableGrade.clear().draw();
-		//tableGrade.ajax.reload();
-		for (grade of data) {
-			if (grade.createdDate != null) {
-				var dateC = new Date(grade.createdDate);
+		tableClass.clear().draw();
+		//tableClass.ajax.reload();
+		for (classIn of data) {
+			if (classIn.createdDate != null) {
+				var dateC = new Date(classIn.createdDate);
 				var dateTimeC = dateC.getFullYear() + "-" +
 					("0" + (dateC.getMonth() + 1)).slice(-2) + "-" +
 					("0" + dateC.getDate()).slice(-2) + " " +
@@ -67,8 +67,8 @@ function GetDataGrade() {
 				var dateTimeC = null;
 			}
 
-			if (grade.modifiedDate) {
-				var date = new Date(grade.modifiedDate);
+			if (classIn.modifiedDate) {
+				var date = new Date(classIn.modifiedDate);
 				var dateTime = date.getFullYear() + "-" +
 					("0" + (date.getMonth() + 1)).slice(-2) + "-" +
 					("0" + date.getDate()).slice(-2) + " " +
@@ -79,8 +79,8 @@ function GetDataGrade() {
 			else {
 				dateTime = null;
 			}
-			tableGrade.row.add(
-				[grade.id, grade.name, grade.code, grade.levelGradeModel.name, grade.createdBy, dateTimeC, grade.modifiedBy, dateTime]
+			tableClass.row.add(
+				[classIn.id, classIn.name, classIn.code, classIn.grade.name, classIn.createdBy, dateTimeC, classIn.modifiedBy, dateTime]
 			).draw(false);
 		}
 		Swal.fire({
@@ -105,50 +105,50 @@ function GetDataGrade() {
 }
 
 // add content for modal add new.
-$("#add-modal-grade").on('shown.bs.modal', function() {
-	GetDataLevelGradeForSelect($('#txtAddLevelGrade'), null);
+$("#add-modal-class").on('shown.bs.modal', function() {
+	GetDataGradeClassForSelect($('#txtAddGradeClass'), null);
 });
 
 // add content for modal update.
-$("#update-modal-grade").on('shown.bs.modal', function() {
-	GetDataLevelGradeForSelect($('#txtUpdateLevelGrade'), dataTableRowGrade[3]);
-	$("#txtIDUpdateGrade").val(dataTableRowGrade[0]);
-	$("#txtNameUpdateGrade").val(dataTableRowGrade[1]);
-	$("#txtCodeUpdateGrade").val(dataTableRowGrade[2]);
+$("#update-modal-class").on('shown.bs.modal', function() {
+	GetDataGradeClassForSelect($('#txtUpdateGradeClass'), dataTableRowClass[3]);
+	$("#txtIDUpdateClass").val(dataTableRowClass[0]);
+	$("#txtNameUpdateClass").val(dataTableRowClass[1]);
+	$("#txtCodeUpdateClass").val(dataTableRowClass[2]);
 });
 
 // add content for modal delete.
-$("#delete-modal-grade").on('shown.bs.modal', function() {
-	$("#txtIDDeleteGrade").val(dataTableRowGrade[0]);
-	$("#txtNameGradeDelete").val(dataTableRowGrade[1]);
-	$("#txtCodeGradeDelete").val(dataTableRowGrade[2]);
-	$('#txtDeleteLevelGrade').val(dataTableRowGrade[3]);
+$("#delete-modal-class").on('shown.bs.modal', function() {
+	$("#txtIDDeleteClass").val(dataTableRowClass[0]);
+	$("#txtNameClassDelete").val(dataTableRowClass[1]);
+	$("#txtCodeClassDelete").val(dataTableRowClass[2]);
+	$('#txtDeleteGradeClass').val(dataTableRowClass[3]);
 });
 
 // add content for modal from file.
-$("#add-grade-file").on('shown.bs.modal', function() {
-	$('#fileNameGrade').val("");
+$("#add-class-file").on('shown.bs.modal', function() {
+	$('#fileNameClass').val("");
 });
 
 // gọi api cập nhật lớp học.
-$('#btnUpdateGradeModal').on('click', function() {
+$('#btnUpdateClassModal').on('click', function() {
 	const dataToPost = {
-		id: +$('#txtIDUpdateGrade').val(),
-		name: $('#txtNameUpdateGrade').val(),
-		code: $('#txtCodeUpdateGrade').val(),
-		levelGradeModel: {
-			id: +$('#txtUpdateLevelGrade').val()
+		id: +$('#txtIDUpdateClass').val(),
+		name: $('#txtNameUpdateClass').val(),
+		code: $('#txtCodeUpdateClass').val(),
+		grade: {
+			id: +$('#txtUpdateGradeClass').val()
 		}
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/admin/api-admin-grade',
+		url: 'http://localhost:8080/school/admin/api-admin-class',
 		type: 'PUT',
 		dataType: 'text',
 		contentType: 'application/json',
 		data: jsonToPost
 	}).done(function(data) {
-		GetDataGrade();
+		GetDataClass();
 		Swal.fire({
 			title: 'Cập nhật thành công',
 			text: "",
@@ -169,23 +169,23 @@ $('#btnUpdateGradeModal').on('click', function() {
 });
 
 // Add new
-$('#btnAddGradeModal').on('click', function() {
+$('#btnAddClassModal').on('click', function() {
 	const dataToPost = {
-		name: $('#txtAddNameGrade').val(),
-		code: $('#txtAddCodeGrade').val(),
-		levelGradeModel: {
-			id: +$('#txtAddLevelGrade').val()
+		name: $('#txtNameAddClass').val(),
+		code: $('#txtCodeAddClass').val(),
+		grade: {
+			id: +$('#txtAddGradeClass').val()
 		}
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/admin/api-admin-grade',
+		url: 'http://localhost:8080/school/admin/api-admin-class',
 		type: 'POST',
 		dataType: 'text',
 		contentType: 'application/json',
 		data: jsonToPost
 	}).done(function(data) {
-		GetDataGrade();
+		GetDataClass();
 		Swal.fire({
 			title: 'Thêm mới thành công',
 			text: "",
@@ -206,19 +206,19 @@ $('#btnAddGradeModal').on('click', function() {
 });
 
 // Delete
-$('#btnDeleteGradeModal').on('click', function() {
+$('#btnDeleteClassModal').on('click', function() {
 	const dataToPost = {
-		id: $('#txtIDDeleteGrade').val()
+		id: $('#txtIDDeleteClass').val()
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/admin/api-admin-grade',
+		url: 'http://localhost:8080/school/admin/api-admin-class',
 		type: 'DELETE',
 		dataType: 'text',
 		contentType: 'application/json',
 		data: jsonToPost
 	}).done(function(data) {
-		GetDataGrade();
+		GetDataClass();
 		Swal.fire({
 			title: 'Xóa thành công',
 			text: "",
@@ -240,18 +240,18 @@ $('#btnDeleteGradeModal').on('click', function() {
 });
 
 // Add by file
-$('#btnAddGradeList').on('click', function(e) {
+$('#btnAddClassList').on('click', function(e) {
 	e.preventDefault();
-	let formData = new FormData($('#dataGrade')[0]);
+	let formData = new FormData($('#dataClass')[0]);
 	$.ajax({
-		url: 'http://localhost:8080/school/admin/api-admin-grade-file',
+		url: 'http://localhost:8080/school/admin/api-admin-class-file',
 		type: 'POST',
 		data: formData,
 		cache: false,
 		contentType: false,
 		processData: false
 	}).done(function(data) {
-		GetDataGrade();
+		GetDataClass();
 		Swal.fire({
 			title: 'Thêm mới thành công',
 			text: "",
@@ -270,25 +270,25 @@ $('#btnAddGradeList').on('click', function(e) {
 		console.error(err);
 	});
 });
-$('#openSendFileGrade').on('click', function() {
-	$('#fileGrade').click();
+$('#openSendFileClass').on('click', function() {
+	$('#fileClass').click();
 });
-$('#fileGrade').change(function() {
-	let name = $('#fileGrade').val().split('\\');
-	$('#fileNameGrade').val(name[name.length - 1]);
-});
-
-$('#btnGetGradeForm').on('click', function() {
-	DownloadFormGrade();
+$('#fileClass').change(function() {
+	let name = $('#fileClass').val().split('\\');
+	$('#fileNameClass').val(name[name.length - 1]);
 });
 
-$('#btnGetGradeExcel').on('click', function() {
-	DownloadReportGrade();
+$('#btnGetClassForm').on('click', function() {
+	DownloadFormClass();
 });
 
-function GetDataLevelGradeForSelect(element, selectString) {
+$('#btnGetClassExcel').on('click', function() {
+	DownloadReportClass();
+});
+
+function GetDataGradeClassForSelect(element, selectString) {
 	$.ajax({
-		url: 'http://localhost:8080/school/admin/api-admin-level-grade',
+		url: 'http://localhost:8080/school/admin/api-admin-grade',
 		type: 'GET',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -313,12 +313,12 @@ function GetDataLevelGradeForSelect(element, selectString) {
 	});
 }
 
-function DownloadFormGrade() {
-	window.location.href = "http://localhost:8080/school/admin/api-admin-grade-file-form-download";
+function DownloadFormClass() {
+	window.location.href = "http://localhost:8080/school/admin/api-admin-class-file-form-download";
 }
 
-function DownloadReportGrade() {
-	window.location.href = "http://localhost:8080/school/admin/api-admin-grade-file-report-download";
+function DownloadReportClass() {
+	window.location.href = "http://localhost:8080/school/admin/api-admin-class-file-report-download";
 }
 
 /*====================================================================*/

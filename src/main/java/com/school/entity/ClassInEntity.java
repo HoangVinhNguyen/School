@@ -1,25 +1,22 @@
 package com.school.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.school.model.ClassroomModel;
-import com.school.model.GradeModel;
+import com.school.model.ClassInModel;
 
 @Entity
-@Table(name="classroom")
-public class ClassroomEntity extends BaseEntity{
+@Table(name="class")
+public class ClassInEntity extends BaseEntity {
 
 	private String name;
 	private String code;
-	@OneToMany
-	@JoinColumn(name="grade_id", nullable = true)
-	private List<GradeEntity> grade;
+	
+	@ManyToOne
+	@JoinColumn(name="grade_id", nullable=false)
+	private GradeEntity grade;
 	
 	public String getName() {
 		return name;
@@ -34,29 +31,25 @@ public class ClassroomEntity extends BaseEntity{
 		this.code = code;
 	}
 	
-	public List<GradeEntity> getGrade() {
+	public GradeEntity getGrade() {
 		return grade;
 	}
-	public void setGrade(List<GradeEntity> grade) {
+	
+	public void setGrade(GradeEntity grade) {
 		this.grade = grade;
 	}
 	
-	public void loadFromDTO(ClassroomModel model) {
+	public void loadFromDTO(ClassInModel model) {
 		if (model != null) {
 			this.setId(model.getId());
 			this.code = model.getCode();
 			this.name = model.getName();
-			this.grade = new ArrayList<GradeEntity>();
-			model.getGrade().forEach(g -> {
-				GradeEntity gradeEntity = new GradeEntity();
-				gradeEntity.loadFromDTO(g);
-				this.grade.add(gradeEntity);
-			});
+			this.grade = new GradeEntity();
+			this.grade.loadFromDTO(model.getGrade());
 			this.setCreatedBy(model.getCreatedBy());
 			this.setCreatedDate(model.getCreatedDate());
 			this.setModifiedBy(model.getModifiedBy());
 			this.setModifiedDate(model.getModifiedDate());
 		 }
 	}
-	
 }

@@ -1,15 +1,12 @@
 package com.school.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.school.entity.ClassInEntity;
 
-import com.school.entity.ClassroomEntity;
-
-public class ClassroomModel extends BaseModel {
+public class ClassInModel extends BaseModel {
 
 	private String name;
 	private String code;
-	private List<GradeModel> grade = new ArrayList<GradeModel>();
+	private GradeModel grade = new GradeModel();
 
 	public String getName() {
 		return name;
@@ -27,28 +24,24 @@ public class ClassroomModel extends BaseModel {
 		this.code = code;
 	}
 
-	public List<GradeModel> getGrade() {
+	public GradeModel getGrade() {
 		return grade;
 	}
 
-	public void setGrade(List<GradeModel> grade) {
+	public void setGrade(GradeModel grade) {
 		this.grade = grade;
 	}
 
-	public void loadFromEntity(ClassroomEntity entity) {
+	public void loadFromEntity(ClassInEntity entity) {
 		if (entity != null) {
 			this.setId(entity.getId());
 			this.code = entity.getCode();
 			this.name = entity.getName();
-			entity.getGrade().forEach(g -> {
-				GradeModel gradeModel = new GradeModel();
-				gradeModel.loadFromEntity(g);
-				this.grade.add(gradeModel);
-			});
+			this.grade.loadFromEntity(entity.getGrade());
 			this.setCreatedBy(entity.getCreatedBy());
 			this.setCreatedDate(entity.getCreatedDate());
 			this.setModifiedBy(entity.getModifiedBy());
 			this.setModifiedDate(entity.getModifiedDate());
-		}
+		 }
 	}
 }

@@ -21,12 +21,12 @@ $(document).ready(function() {
 			"defaultContent": `<div class="btn-group" role="group">
 
 															<button data-toggle="modal"
-              data-target="#update-modal" type="button" class="btn btn-xs btn-info">
+              data-target="#update-modal-classroom" type="button" class="btn btn-xs btn-info">
 																<i class="ace-icon fa fa-pencil bigger-120"></i>
 															</button>
 
 															<button data-toggle="modal"
-              data-target="#delete-modal" type="button" class="btn btn-xs btn-danger">
+              data-target="#delete-modal-classroom" type="button" class="btn btn-xs btn-danger">
 																<i class="ace-icon fa fa-trash-o bigger-120"></i>
 															</button>
 														</div>`
@@ -45,7 +45,7 @@ $('#dynamic-table tbody').on('click', 'tr', function() {
 
 function GetDataClassroom() {
 	$.ajax({
-		url: 'http://localhost:8080/school/admin/api-admin-grade',
+		url: 'http://localhost:8080/school/admin/api-admin-classroom',
 		type: 'GET',
 		dataType: 'json',
 		contentType: 'application/json'
@@ -53,9 +53,9 @@ function GetDataClassroom() {
 
 		tableClassroom.clear().draw();
 		//tableClassroom.ajax.reload();
-		for (grade of data) {
-			if (grade.createdDate != null) {
-				var dateC = new Date(grade.createdDate);
+		for (classroom of data) {
+			if (classroom.createdDate != null) {
+				var dateC = new Date(classroom.createdDate);
 				var dateTimeC = dateC.getFullYear() + "-" +
 					("0" + (dateC.getMonth() + 1)).slice(-2) + "-" +
 					("0" + dateC.getDate()).slice(-2) + " " +
@@ -67,8 +67,8 @@ function GetDataClassroom() {
 				var dateTimeC = null;
 			}
 
-			if (grade.modifiedDate) {
-				var date = new Date(grade.modifiedDate);
+			if (classroom.modifiedDate) {
+				var date = new Date(classroom.modifiedDate);
 				var dateTime = date.getFullYear() + "-" +
 					("0" + (date.getMonth() + 1)).slice(-2) + "-" +
 					("0" + date.getDate()).slice(-2) + " " +
@@ -80,7 +80,7 @@ function GetDataClassroom() {
 				dateTime = null;
 			}
 			tableClassroom.row.add(
-				[grade.id, grade.name, grade.code, grade.createdBy, dateTimeC, grade.modifiedBy, dateTime]
+				[classroom.id, classroom.name, classroom.code, classroom.createdBy, dateTimeC, classroom.modifiedBy, dateTime]
 			).draw(false);
 		}
 		Swal.fire({
@@ -104,28 +104,28 @@ function GetDataClassroom() {
 	});
 }
 // add content for modal update.
-$("#update-modal").on('shown.bs.modal', function() {
-	$("#txtIDUpdate").val(dataTableRowClassroom[0]);
+$("#update-modal-classroom").on('shown.bs.modal', function() {
+	$("#txtIDUpdateClassroom").val(dataTableRowClassroom[0]);
 	$("#txtNameClassroom").val(dataTableRowClassroom[1]);
 	$("#txtCodeClassroom").val(dataTableRowClassroom[2]);
 });
 
 // add content for modal delete.
-$("#delete-modal").on('shown.bs.modal', function() {
-	$("#txtIDDelete").val(dataTableRowClassroom[0]);
+$("#delete-modal-classroom").on('shown.bs.modal', function() {
+	$("#txtIDDeleteClassroom").val(dataTableRowClassroom[0]);
 	$("#txtNameClassroomDelete").val(dataTableRowClassroom[1]);
 	$("#txtCodeClassroomDelete").val(dataTableRowClassroom[2]);
 });
 // gọi api cập nhật lớp học.
-$('#btnUpdateModal').on('click', function() {
+$('#btnUpdateClassroomModal').on('click', function() {
 	const dataToPost = {
-		id: +$('#txtIDUpdate').val(),
-		name: $('#txtNameClassroom').val(),
-		code: $('#txtCodeClassroom').val()
+		id: +$('#txtIDUpdateClassroom').val(),
+		name: $('#txtNameUpdateClassroom').val(),
+		code: $('#txtCodeUpdateClassroom').val()
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/admin/api-admin-grade',
+		url: 'http://localhost:8080/school/admin/api-admin-classroom',
 		type: 'PUT',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -152,14 +152,14 @@ $('#btnUpdateModal').on('click', function() {
 });
 
 // Add new
-$('#btnAddModal').on('click', function() {
+$('#btnAddClassroomModal').on('click', function() {
 	const dataToPost = {
-		name: $('#txtAddNameClassroom').val(),
-		code: $('#txtAddCodeClassroom').val()
+		name: $('#txtNameAddClassroom').val(),
+		code: $('#txtCodeAddClassroom').val()
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/admin/api-admin-grade',
+		url: 'http://localhost:8080/school/admin/api-admin-classroom',
 		type: 'POST',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -186,13 +186,13 @@ $('#btnAddModal').on('click', function() {
 });
 
 // Delete
-$('#btnDeleteModal').on('click', function() {
+$('#btnDeleteClassroomModal').on('click', function() {
 	const dataToPost = {
-		id: $('#txtIDDelete').val()
+		id: $('#txtIDDeleteClassroom').val()
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/admin/api-admin-grade',
+		url: 'http://localhost:8080/school/admin/api-admin-classroom',
 		type: 'DELETE',
 		dataType: 'json',
 		contentType: 'application/json',
@@ -224,7 +224,7 @@ $('#btnAddClassroomList').on('click', function(e) {
 	e.preventDefault();
 	let formData = new FormData($('#dataClassroom')[0]);
 	$.ajax({
-		url: 'http://localhost:8080/school/admin/api-admin-grade-file',
+		url: 'http://localhost:8080/school/admin/api-admin-classroom-file',
 		type: 'POST',
 		data: formData,
 		cache: false,
