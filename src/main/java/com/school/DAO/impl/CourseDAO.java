@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.school.DAO.ICourseDAO;
+import com.school.constant.SystemConstant;
 import com.school.entity.CourseEntity;
 
 @Repository
@@ -65,29 +66,38 @@ public class CourseDAO implements ICourseDAO{
 	public Long save(CourseEntity entity) {
 		if (entity != null) {
 			CourseEntity courseModelCheck;
+			CourseEntity courseModelCheckName;
+			CourseEntity courseModelCheckCode;
 			if (entity.getId() != null) {
 				courseModelCheck = findOne(entity.getId());
 				if (courseModelCheck != null && courseModelCheck.getId() != 0) {
-					String hql = "UPDATE CourseEntity SET name=?0, code=?1, modifiedBy=?2, modifiedDate=?3 WHERE id=?4";
-					sessionFactory.getCurrentSession().createQuery(hql)
-					.setParameter(0, entity.getName())
-					.setParameter(1, entity.getCode())
-					.setParameter(2, entity.getModifiedBy())
-					.setParameter(3, entity.getModifiedDate())
-					.setParameter(4, entity.getId()).executeUpdate();
-					return entity.getId();
+					courseModelCheckName = findOneByName(entity.getName());
+					courseModelCheckCode = findOneByCode(entity.getCode());
+					if (courseModelCheckCode == null || courseModelCheckName == null) {
+						String hql = "UPDATE CourseEntity SET name=?0, code=?1, modifiedBy=?2, modifiedDate=?3 WHERE id=?4";
+						sessionFactory.getCurrentSession().createQuery(hql)
+						.setParameter(0, entity.getName())
+						.setParameter(1, entity.getCode())
+						.setParameter(2, entity.getModifiedBy())
+						.setParameter(3, entity.getModifiedDate())
+						.setParameter(4, entity.getId()).executeUpdate();
+						return entity.getId();
+					}
+					return SystemConstant.DUPLICATE;
 				}
 			}
-			if (findOneByCode(entity.getCode()) == null) {
-				sessionFactory.getCurrentSession().save(entity);
-				return entity.getId();
-			}
 			else {
-				sessionFactory.getCurrentSession().beginTransaction().rollback();
-				return 0L;
+				courseModelCheckName = findOneByName(entity.getName());
+				courseModelCheckCode = findOneByCode(entity.getCode());
+				if (courseModelCheckCode == null && courseModelCheckName == null) {
+					sessionFactory.getCurrentSession().save(entity);
+					return entity.getId();
+				} else {
+					return SystemConstant.DUPLICATE;
+				}
 			}
 		}
-		return 0L;
+		return SystemConstant.ERROR;
 	}
 
 	@Override

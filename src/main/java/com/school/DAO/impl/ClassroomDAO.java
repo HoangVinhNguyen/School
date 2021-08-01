@@ -96,7 +96,7 @@ public class ClassroomDAO implements IClassroomDAO {
 				return SystemConstant.DUPLICATE;
 			}
 		}
-		return 0L;
+		return SystemConstant.ERROR;
 	}
 
 	@Override

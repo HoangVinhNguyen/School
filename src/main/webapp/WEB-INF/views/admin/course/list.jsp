@@ -16,9 +16,12 @@
 			<div class="page-content">
 
 				<button id="btnGetListUser" type="button" class="btn btn-primary">Xem danh sách</button>
-				<button data-toggle="modal" data-target="#add-course-modal" id="btnAddUser" type="button" class="btn btn-success">Thêm môn học</button>
+				<button data-toggle="modal" data-target="#add-course-modal" id="btnAddCourse" type="button" class="btn btn-success">Thêm môn học</button>
 				<button data-toggle="modal" data-target="#add-course-file" id="btnAddCourseFile" type="button" class="btn btn-success">Thêm danh sách môn học</button>
-				
+				<hr>
+				<button id="btnGetCourseForm" type="button" class="btn btn-primary">Lấy mẫu Microsoft Excel</button>
+				<button id="btnGetCourseExcel" type="button" class="btn btn-primary">Lấy nội dung của bảng</button>
+				<hr>
 				<div class="row">
 					<div class="col-xs-12">
 						<!-- modal button Add New -->
@@ -34,13 +37,13 @@
 									<div class="modal-body">
 										<form>
 											<div class="form-group">
-												<label for="txtNameCourseAdd" class="col-form-label">Tên môn học:</label>
+												<label for="txtNameAddCourse" class="col-form-label">Tên môn học</label>
 													<input type="text" class="form-control"
-													id="txtNameCourseAdd">
+													id="txtNameAddCourse">
 											</div>
 											<div class="form-group">
-												<label for="txtCodeCourseAdd" class="col-form-label">Mã môn học:</label>
-												<input class="form-control" id="txtCodeCourseAdd">
+												<label for="txtCodeAddCourse" class="col-form-label">Mã môn học</label>
+												<input class="form-control" id="txtCodeAddCourse">
 											</div>
 										</form>
 									</div>
@@ -71,18 +74,18 @@
 									<div class="modal-body">
 										<form>
 											<div class="form-group">
-												<label for="txtIDCourseUpdate" class="col-form-label">ID:</label>
-												<input type="text" class="form-control" id="txtIDCourseUpdate"
+												<label for="txtIDUpdateCourse" class="col-form-label">ID</label>
+												<input type="text" class="form-control" id="txtIDUpdateCourse"
 													disabled>
 											</div>
 											<div class="form-group">
-												<label for="txtNameCourseUpdate" class="col-form-label">Tên môn học:</label>
+												<label for="txtNameUpdateCourse" class="col-form-label">Tên môn học</label>
 													<input type="text" class="form-control"
-													id="txtNameCourseUpdate">
+													id="txtNameUpdateCourse">
 											</div>
 											<div class="form-group">
-												<label for="txtCodeCourseUpdate" class="col-form-label">Mã môn học:</label>
-												<input class="form-control" id="txtCodeCourseUpdate">
+												<label for="txtCodeUpdateCourse" class="col-form-label">Mã môn học</label>
+												<input class="form-control" id="txtCodeUpdateCourse">
 											</div>
 										</form>
 									</div>
@@ -113,18 +116,18 @@
 									<div class="modal-body">
 										<form>
 											<div class="form-group">
-												<label for="txtIDCourseDelete" class="col-form-label">ID:</label>
-												<input type="text" class="form-control" id="txtIDCourseDelete"
+												<label for="txtIDDeleteCourse" class="col-form-label">ID</label>
+												<input type="text" class="form-control" id="txtIDDeleteCourse"
 													disabled>
 											</div>
 											<div class="form-group">
-												<label for="txtNameCourseDelete" class="col-form-label">Tên môn học:</label>
+												<label for="txtNameDeleteCourse" class="col-form-label">Tên môn học</label>
 													<input type="text" class="form-control"
-													id="txtNameCourseDelete" disabled>
+													id="txtNameDeleteCourse" disabled>
 											</div>
 											<div class="form-group">
-												<label for="txtCodeCourseDelete" class="col-form-label">Mã môn học:</label>
-												<input class="form-control" id="txtCodeCourseDelete" disabled>
+												<label for="txtCodeDeleteCourse" class="col-form-label">Mã môn học</label>
+												<input class="form-control" id="txtCodeDeleteCourse" disabled>
 											</div>
 										</form>
 									</div>

@@ -127,7 +127,7 @@ $('#btnUpdateClassroomModal').on('click', function() {
 	$.ajax({
 		url: 'http://localhost:8080/school/admin/api-admin-classroom',
 		type: 'PUT',
-		dataType: 'json',
+		dataType: 'text',
 		contentType: 'application/json',
 		data: jsonToPost
 	}).done(function(data) {
@@ -161,7 +161,7 @@ $('#btnAddClassroomModal').on('click', function() {
 	$.ajax({
 		url: 'http://localhost:8080/school/admin/api-admin-classroom',
 		type: 'POST',
-		dataType: 'json',
+		dataType: 'text',
 		contentType: 'application/json',
 		data: jsonToPost
 	}).done(function(data) {
@@ -194,7 +194,7 @@ $('#btnDeleteClassroomModal').on('click', function() {
 	$.ajax({
 		url: 'http://localhost:8080/school/admin/api-admin-classroom',
 		type: 'DELETE',
-		dataType: 'json',
+		dataType: 'text',
 		contentType: 'application/json',
 		data: jsonToPost
 	}).done(function(data) {

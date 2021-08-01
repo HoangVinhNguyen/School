@@ -13,7 +13,7 @@ $(document).ready(function() {
 		retrieve: true,
 		"autoWidth": false,
 		language: { "url": "//cdn.datatables.net/plug-ins/1.10.22/i18n/Vietnamese.json" },
-		"ajax": rowDataUser,
+		"ajax": rowDataCourse,
 		"columnDefs": [{
 			"targets": -1,
 			"data": null,
@@ -104,30 +104,30 @@ function GetDataCourse() {
 }
 // add content for modal update.
 $("#update-course-modal").on('shown.bs.modal', function() {
-	$("#txtIDCourseUpdate").val(dataTableRowCourse[0]);
-	$("#txtNameCourseUpdate").val(dataTableRowCourse[1]);
-	$("#txtCodeCourseUpdate").val(dataTableRowCourse[2]);
+	$("#txtIDUpdateCourse").val(dataTableRowCourse[0]);
+	$("#txtNameUpdateCourse").val(dataTableRowCourse[1]);
+	$("#txtCodeUpdateCourse").val(dataTableRowCourse[2]);
 });
 
 // add content for modal delete.
 $("#delete-course-modal").on('shown.bs.modal', function() {
-	$("#txtIDCourseDelete").val(dataTableRowCourse[0]);
-	$("#txtNameCourseDelete").val(dataTableRowCourse[1]);
-	$("#txtCodeCourseDelete").val(dataTableRowCourse[2]);
+	$("#txtIDDeleteCourse").val(dataTableRowCourse[0]);
+	$("#txtNameDeleteCourse").val(dataTableRowCourse[1]);
+	$("#txtCodeDeleteCourse").val(dataTableRowCourse[2]);
 });
 // gọi api cập nhật lớp học.
 $('#btnUpdateCourseModal').on('click', function() {
 
 	const dataToPost = {
-		id: +$("#txtIDCourseUpdate").val(),
-		name: $('#txtNameCourseUpdate').val(),
-		code: $('#txtCodeCourseUpdate').val(),
+		id: +$("#txtIDUpdateCourse").val(),
+		name: $('#txtNameUpdateCourse').val(),
+		code: $('#txtCodeUpdateCourse').val(),
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
 		url: 'http://localhost:8080/school/admin/api-admin-course',
 		type: 'PUT',
-		dataType: 'json',
+		dataType: 'text',
 		contentType: 'application/json',
 		data: jsonToPost
 	}).done(function(data) {
@@ -155,15 +155,14 @@ $('#btnUpdateCourseModal').on('click', function() {
 $('#btnAddCourseModal').on('click', function() {
 
 	const dataToPost = {
-		id: +$("#txtIDCourseAdd").val(),
-		name: $('#txtNameCourseAdd').val(),
-		code: $('#txtCodeCourseAdd').val(),
+		name: $('#txtNameAddCourse').val(),
+		code: $('#txtCodeAddCourse').val(),
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
 		url: 'http://localhost:8080/school/admin/api-admin-course',
 		type: 'POST',
-		dataType: 'json',
+		dataType: 'text',
 		contentType: 'application/json',
 		data: jsonToPost
 	}).done(function(data) {
@@ -190,13 +189,13 @@ $('#btnAddCourseModal').on('click', function() {
 // Delete
 $('#btnDeleteCourseModal').on('click', function() {
 	const dataToPost = {
-		id: $('#txtIDCourseDelete').val()
+		id: $('#txtIDDeleteCourse').val()
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
 		url: 'http://localhost:8080/school/admin/api-admin-course',
 		type: 'DELETE',
-		dataType: 'json',
+		dataType: 'text',
 		contentType: 'application/json',
 		data: jsonToPost
 	}).done(function(data) {
@@ -259,5 +258,21 @@ $('#fileCourse').change(function() {
 	let name = $('#fileCourse').val().split('\\');
 	$('#fileNameCourse').val(name[name.length - 1]);
 });
+
+$('#btnGetCourseForm').on('click', function() {
+	DownloadFormCourse();
+});
+
+$('#btnGetCourseExcel').on('click', function() {
+	DownloadReportCourse();
+});
+
+function DownloadFormCourse() {
+	window.location.href = "http://localhost:8080/school/admin/api-admin-course-file-form-download";
+}
+
+function DownloadReportCourse() {
+	window.location.href = "http://localhost:8080/school/admin/api-admin-course-file-report-download";
+}
 
 /*====================================================================*/

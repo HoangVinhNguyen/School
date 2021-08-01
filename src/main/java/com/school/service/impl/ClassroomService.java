@@ -191,10 +191,12 @@ public class ClassroomService implements IClassroomService {
 
 	@Override
 	public Long getReport(HttpServletRequest request, HttpServletResponse response) {
-		List<ClassroomModel> listResult = findAll();
-		List<ClassroomModel> list = listResult.stream() 
-				  .filter(HelpDistinctStream.distinctByKey(p -> p.getName())) 
-				  .collect(Collectors.toList());
+		List<ClassroomModel> list = findAll();
+		/*
+		 * List<ClassroomModel> list = listResult.stream()
+		 * .filter(HelpDistinctStream.distinctByKey(p -> p.getName()))
+		 * .collect(Collectors.toList());
+		 */
 		if (list != null) {
 			XSSFWorkbook workbook = new XSSFWorkbook();
 			POIXMLProperties xmlProps = workbook.getProperties();    
