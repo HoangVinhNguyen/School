@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ooxml.POIXMLProperties;
@@ -150,39 +151,13 @@ public class ClassroomService implements IClassroomService {
 
 	@Override
 	public Long saveList(MultipartFile file) {
+		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 		try {
 			InputStream fileInputStream = file.getInputStream();
-			HSSFWorkbook wb = new HSSFWorkbook(fileInputStream);
-			HSSFSheet sheet = wb.getSheetAt(0);
-			for (Row row : sheet) // iteration over row using for each loop
-			{
-				if (row.getRowNum() != 0) {
-					ClassroomModel model = new ClassroomModel();
-					for (Cell cell : row) // iteration over cell using for each loop
-					{
-						/*
-						 * _NONE(-1), NUMERIC(0), STRING(1), FORMULA(2), BLANK(3), BOOLEAN(4), ERROR(5);
-						 */
-						switch (cell.getColumnIndex()) {
-						case 0:
-							model.setName(cell.getStringCellValue());
-							break;
-						case 1:
-							model.setCode(cell.getStringCellValue());
-							break;
-						}
-					}
-					model = getModifiedField(model, SystemConstant.INSERT_FILE);
-					ClassroomEntity entity = new ClassroomEntity();
-					entity.loadFromDTO(model);
-					classroomDAO.save(entity);
-				}
-			}
-			return 1L;
+			return saveFileWithExtensionType(fileInputStream, extension);
 		} catch (IOException e) {
-			System.out.println("save list classrooms");
 			e.printStackTrace();
-			return 0L;
+			return SystemConstant.ERROR;
 		}
 	}
 
@@ -201,7 +176,7 @@ public class ClassroomService implements IClassroomService {
 		if (Files.exists(file)) {
 			// .xls - application/vnd.ms-excel.
 			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-			response.addHeader("Content-Disposition", "attachment; filename=classroom-form.xlsx");
+			response.addHeader("Content-Disposition", "attachment; filename=bieu-mau-phong-hoc.xlsx");
 			try {
 				Files.copy(file, response.getOutputStream());
 				response.getOutputStream().flush();
@@ -268,7 +243,7 @@ public class ClassroomService implements IClassroomService {
 	        Cell cell_title = rowTitle.createCell(0);
 	        cell_title.setCellValue(SystemConstant.TITLE_CLASSROOM);
 	        cell_title.setCellStyle(style);
-	        sheet.addMergedRegion(new CellRangeAddress(0,0,0,2));
+	        sheet.addMergedRegion(new CellRangeAddress(0,0,0,1));
 	        
 	        Row rowTitleSub = sheet.createRow(rowCount++);
 	        Cell cellName = rowTitleSub.createCell(0);
@@ -289,14 +264,12 @@ public class ClassroomService implements IClassroomService {
 	            		Cell cell_name = row.createCell(0);
 	            		cell_name.setCellValue(model.getName());
 	            		cell_name.setCellStyle(style3);
-	            		sheet.autoSizeColumn(checkColumn);
 	            		checkColumn++;
 	            		break;
 	            	case SystemConstant.CODE_FIELD:
 	            		Cell cell_code = row.createCell(1);
 	            		cell_code.setCellValue(model.getCode());
 	            		cell_code.setCellStyle(style3);
-	            		sheet.autoSizeColumn(checkColumn);
 	            		checkColumn++;
 	            		break;
 	            	}
@@ -305,11 +278,11 @@ public class ClassroomService implements IClassroomService {
 	            	}
 	            }
 			}
-			
+			sheet.autoSizeColumn(0, true);
+			sheet.autoSizeColumn(1);
 			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-			response.addHeader("Content-Disposition", "attachment; filename=danh-sach-phòng-hoc.xlsx");
+			response.addHeader("Content-Disposition", "attachment; filename=danh-sach-phong-hoc.xlsx");
 			try {
-				
 				workbook.write(response.getOutputStream());
 				response.getOutputStream().flush();
 			} catch (IOException e) {
@@ -455,7 +428,7 @@ public class ClassroomService implements IClassroomService {
 				}
 				return 1L;
 			} catch (IOException e) {
-				System.out.println("save list grade");
+				System.out.println("save list classroom");
 				e.printStackTrace();
 				return SystemConstant.ERROR;
 			}

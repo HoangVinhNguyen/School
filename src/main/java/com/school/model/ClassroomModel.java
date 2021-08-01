@@ -1,7 +1,7 @@
 package com.school.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.school.entity.ClassroomEntity;
 
@@ -9,7 +9,7 @@ public class ClassroomModel extends BaseModel {
 
 	private String name;
 	private String code;
-	private List<GradeModel> grade = new ArrayList<GradeModel>();
+	private Set<ClassInModel> classIn = new HashSet();
 
 	public String getName() {
 		return name;
@@ -27,24 +27,19 @@ public class ClassroomModel extends BaseModel {
 		this.code = code;
 	}
 
-	public List<GradeModel> getGrade() {
-		return grade;
+	public Set<ClassInModel> getClassIn() {
+		return classIn;
 	}
 
-	public void setGrade(List<GradeModel> grade) {
-		this.grade = grade;
+	public void setClassIn(Set<ClassInModel> classIn) {
+		this.classIn = classIn;
 	}
-
+	
 	public void loadFromEntity(ClassroomEntity entity) {
 		if (entity != null) {
 			this.setId(entity.getId());
 			this.code = entity.getCode();
 			this.name = entity.getName();
-			entity.getGrade().forEach(g -> {
-				GradeModel gradeModel = new GradeModel();
-				gradeModel.loadFromEntity(g);
-				this.grade.add(gradeModel);
-			});
 			this.setCreatedBy(entity.getCreatedBy());
 			this.setCreatedDate(entity.getCreatedDate());
 			this.setModifiedBy(entity.getModifiedBy());

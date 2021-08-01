@@ -40,7 +40,7 @@ public class SystemConstant {
 	
 	// report form
 	// GRADE
-	public static final String TITLE_GRADE = "DANH SÁCH CÁC CẤP LỚP HỌC";
+	public static final String TITLE_GRADE = "DANH SÁCH CẤP LỚP HỌC";
 	public static final String TITLE_NAME = "Tên cấp lớp học";
 	public static final String TITLE_CODE = "Mã cấp lớp học";
 	public static final String TITLE_LEVEL_GRADE = "Tên bậc học";
@@ -48,13 +48,17 @@ public class SystemConstant {
 	public static final String CODE_FIELD = "code";
 	public static final String LEVEL_GRADE_FIELD = "levelGradeModel";
 	// CLASS
-	public static final String TITLE_CLASS = "DANH SÁCH CÁC LỚP HỌC";
+	public static final String TITLE_CLASS = "DANH SÁCH LỚP HỌC";
 	public static final String TITLE_NAME_CLASS = "Tên lớp học";
 	public static final String TITLE_CODE_CLASS = "Mã lớp học";
 	public static final String TITLE_GRADE_CLASS = "Tên khối lớp học";
 	public static final String GRADE_FIELD = "grade";
-	
-	public static final String TITLE_CLASSROOM = "DANH SÁCH CÁC PHÒNG HỌC";
+	// CLASSROOM
+	public static final String TITLE_CLASSROOM = "DANH SÁCH PHÒNG HỌC";
 	public static final String TITLE_NAME_CLASSROOM = "Tên phòng học";
 	public static final String TITLE_CODE_CLASSROOM = "Mã phòng học";
+	// COURSE
+	public static final String TITLE_COURSE = "DANH SÁCH MÔN HỌC";
+	public static final String TITLE_NAME_COURSE = "Tên môn học";
+	public static final String TITLE_CODE_COURSE = "Mã môn học";
 }

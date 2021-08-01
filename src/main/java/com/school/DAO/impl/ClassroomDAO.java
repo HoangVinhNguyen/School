@@ -16,9 +16,6 @@ import com.school.service.IGradeService;
 @Repository
 @Transactional
 public class ClassroomDAO implements IClassroomDAO {
-	
-	@Autowired
-	private IGradeService gradeService;
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -50,11 +47,10 @@ public class ClassroomDAO implements IClassroomDAO {
 	
 	@Override
 	public ClassroomEntity findOneByNameAndCodeAndGreadId(ClassroomEntity entity) {
-		String hql = "SELECT c FROM ClassroomEntity c WHERE c.code=?0 AND c.name=?1 AND c.grade=?2 AND g.isDeleted = 0";
+		String hql = "SELECT c FROM ClassroomEntity c WHERE c.code=?0 AND c.name=?1 AND g.isDeleted = 0";
 		List list = sessionFactory.getCurrentSession().createQuery(hql)
 				.setParameter(0, entity.getCode())
-				.setParameter(1, entity.getName())
-				.setParameter(2, entity.getGrade()).getResultList();
+				.setParameter(1, entity.getName()).getResultList();
 		if (!list.isEmpty()) {
 			return (ClassroomEntity) list.get(0);
 		}
@@ -78,27 +74,14 @@ public class ClassroomDAO implements IClassroomDAO {
 				classroomEntityCheckCode = findOneByCode(entity.getCode());
 				classroomEntityCheckName = findOneByName(entity.getName());
 				if (classroomEntityCheckCode == null || classroomEntityCheckName == null) {
-					String hql = "UPDATE ClassroomEntity SET name=?0, code=?1, grade=?2, modifiedBy=?3, modifiedDate=?4 WHERE id=?5";
+					String hql = "UPDATE ClassroomEntity SET name=?0, code=?1, modifiedBy=?2, modifiedDate=?3 WHERE id=?4";
 					sessionFactory.getCurrentSession().createQuery(hql)
 					.setParameter(0, entity.getName())
 					.setParameter(1, entity.getCode())
-					.setParameter(2, entity.getGrade())
-					.setParameter(3, entity.getModifiedBy())
-					.setParameter(4, entity.getModifiedDate())
-					.setParameter(5, entity.getId()).executeUpdate();
+					.setParameter(2, entity.getModifiedBy())
+					.setParameter(3, entity.getModifiedDate())
+					.setParameter(4, entity.getId()).executeUpdate();
 					return entity.getId();
-				}
-				else {
-					ClassroomEntity classroomEntityCheckExist = findOneByNameAndCodeAndGreadId(entity);
-					if (classroomEntityCheckExist == null) {
-						String hql = "UPDATE ClassroomEntity SET grade=?0, modifiedBy=?1, modifiedDate=?2 WHERE id=?3";
-						sessionFactory.getCurrentSession().createQuery(hql)
-						.setParameter(0, entity.getGrade())
-						.setParameter(1, entity.getModifiedBy())
-						.setParameter(2, entity.getModifiedDate())
-						.setParameter(3, entity.getId()).executeUpdate();
-						return entity.getId();
-					}
 				}
 				return SystemConstant.DUPLICATE;
 			}

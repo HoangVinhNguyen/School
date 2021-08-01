@@ -1,15 +1,13 @@
 package com.school.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.school.model.ClassroomModel;
-import com.school.model.GradeModel;
 
 @Entity
 @Table(name="classroom")
@@ -17,9 +15,9 @@ public class ClassroomEntity extends BaseEntity{
 
 	private String name;
 	private String code;
-	@OneToMany
-	@JoinColumn(name="grade_id", nullable = true)
-	private List<GradeEntity> grade;
+	
+	@ManyToMany(mappedBy = "classroom")
+    private Set<ClassInEntity> classIn = new HashSet<>();
 	
 	public String getName() {
 		return name;
@@ -34,11 +32,12 @@ public class ClassroomEntity extends BaseEntity{
 		this.code = code;
 	}
 	
-	public List<GradeEntity> getGrade() {
-		return grade;
+	public Set<ClassInEntity> getClassIn() {
+		return classIn;
 	}
-	public void setGrade(List<GradeEntity> grade) {
-		this.grade = grade;
+	
+	public void setClassIn(Set<ClassInEntity> classIn) {
+		this.classIn = classIn;
 	}
 	
 	public void loadFromDTO(ClassroomModel model) {
@@ -46,12 +45,7 @@ public class ClassroomEntity extends BaseEntity{
 			this.setId(model.getId());
 			this.code = model.getCode();
 			this.name = model.getName();
-			this.grade = new ArrayList<GradeEntity>();
-			model.getGrade().forEach(g -> {
-				GradeEntity gradeEntity = new GradeEntity();
-				gradeEntity.loadFromDTO(g);
-				this.grade.add(gradeEntity);
-			});
+			
 			this.setCreatedBy(model.getCreatedBy());
 			this.setCreatedDate(model.getCreatedDate());
 			this.setModifiedBy(model.getModifiedBy());

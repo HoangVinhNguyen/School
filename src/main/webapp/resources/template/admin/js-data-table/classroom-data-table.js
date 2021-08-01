@@ -106,15 +106,15 @@ function GetDataClassroom() {
 // add content for modal update.
 $("#update-modal-classroom").on('shown.bs.modal', function() {
 	$("#txtIDUpdateClassroom").val(dataTableRowClassroom[0]);
-	$("#txtNameClassroom").val(dataTableRowClassroom[1]);
-	$("#txtCodeClassroom").val(dataTableRowClassroom[2]);
+	$("#txtNameUpdateClassroom").val(dataTableRowClassroom[1]);
+	$("#txtCodeUpdateClassroom").val(dataTableRowClassroom[2]);
 });
 
 // add content for modal delete.
 $("#delete-modal-classroom").on('shown.bs.modal', function() {
 	$("#txtIDDeleteClassroom").val(dataTableRowClassroom[0]);
-	$("#txtNameClassroomDelete").val(dataTableRowClassroom[1]);
-	$("#txtCodeClassroomDelete").val(dataTableRowClassroom[2]);
+	$("#txtNameDeleteClassroom").val(dataTableRowClassroom[1]);
+	$("#txtCodeDeleteClassroom").val(dataTableRowClassroom[2]);
 });
 // gọi api cập nhật lớp học.
 $('#btnUpdateClassroomModal').on('click', function() {
@@ -257,4 +257,21 @@ $('#fileClassroom').change(function() {
 	let name = $('#fileClassroom').val().split('\\');
 	$('#fileNameClassroom').val(name[name.length - 1]);
 });
+
+$('#btnGetClassroomForm').on('click', function() {
+	DownloadFormClassroom();
+});
+
+$('#btnGetClassroomExcel').on('click', function() {
+	DownloadReportClassroom();
+});
+
+function DownloadFormClassroom() {
+	window.location.href = "http://localhost:8080/school/admin/api-admin-classroom-file-form-download";
+}
+
+function DownloadReportClassroom() {
+	window.location.href = "http://localhost:8080/school/admin/api-admin-classroom-file-report-download";
+}
+
 /*====================================================================*/
