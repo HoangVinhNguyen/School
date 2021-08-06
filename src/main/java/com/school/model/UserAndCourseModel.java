@@ -1,12 +1,14 @@
 package com.school.model;
 
-import com.school.entity.InCourseEntity;
+import com.school.constant.SystemConstant;
+import com.school.entity.UserAndCourseEntity;
 
-public class InCourseModel extends BaseModel {
+public class UserAndCourseModel extends BaseModel {
 
 	private UserModel userModel = new UserModel();
 	private CourseModel courseModel = new CourseModel();
-
+	private CourseModel oldCourse = new CourseModel();
+	
 	public CourseModel getCourseModel() {
 		return courseModel;
 	}
@@ -23,11 +25,19 @@ public class InCourseModel extends BaseModel {
 		this.userModel = userModel;
 	}
 
-	public void loadFromEntity(InCourseEntity entity) {
+	public CourseModel getOldCourse() {
+		return oldCourse;
+	}
+
+	public void setOldCourse(CourseModel oldCourse) {
+		this.oldCourse = oldCourse;
+	}
+	
+	public void loadFromEntity(UserAndCourseEntity entity) {
 		if (entity != null) {
-			this.setId(entity.getId());
 			this.userModel.loadFromEntity(entity.getUser());
 			this.courseModel.loadFromEntity(entity.getCourse());
+			this.oldCourse.loadFromEntity(entity.getOldCourse());
 			this.setCreatedBy(entity.getCreatedBy());
 			this.setCreatedDate(entity.getCreatedDate());
 			this.setModifiedBy(entity.getModifiedBy());

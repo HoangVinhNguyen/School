@@ -65,6 +65,13 @@
                     <b class="arrow"></b>
                 </li>
                 <li>
+                    <a href='<c:url value="/admin/userCourse"/>' >
+                        <i class="menu-icon fa fa-caret-right"></i>
+                        Quản lí môn học
+                    </a>
+                    <b class="arrow"></b>
+                </li>
+                <li>
                     <a href='<c:url value="/admin/course"/>' >
                         <i class="menu-icon fa fa-caret-right"></i>
                         Danh sách môn học

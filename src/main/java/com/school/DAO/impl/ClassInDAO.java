@@ -1,6 +1,9 @@
 package com.school.DAO.impl;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.school.DAO.IClassInDAO;
 import com.school.constant.SystemConstant;
 import com.school.entity.ClassInEntity;
+import com.school.entity.ClassroomEntity;
 import com.school.entity.GradeEntity;
+import com.school.entity.UserEntity;
+import com.school.model.ClassroomModel;
+import com.school.service.IClassroomService;
 
 @Repository
 @Transactional
@@ -18,6 +25,9 @@ public class ClassInDAO implements IClassInDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	@Autowired
+	private IClassroomService classroomService;
 	
 	@Override
 	public ClassInEntity findOne(long id) {
@@ -127,12 +137,45 @@ public class ClassInDAO implements IClassInDAO {
 		}
 		return 0L;
 	}
+	
+	@Override
+	public Long saveClassroom(ClassInEntity entity) {
+		if (entity != null) {
+			ClassInEntity entityCheck = findOneByName(entity.getName());
+			if (entityCheck != null) {
+				Iterator<ClassroomEntity> it = entity.getListClassroom().iterator();
+				Set<ClassroomEntity> cs = new HashSet<ClassroomEntity>();
+				while (it.hasNext()) {
+					ClassroomEntity classroom = (ClassroomEntity) it.next();
+					if (classroom.getName() != null) {
+						ClassroomModel classroomModel = classroomService.findOneByName(classroom.getName());
+						if (classroomModel != null && classroomModel.getId() != null) {
+							classroom.loadFromDTO(classroomModel);
+							cs.add(classroom);
+						}
+						it.remove();
+					}
+				}
+				if (cs != null) {
+					entity.getListClassroom().addAll(cs);
+					entityCheck.setListClassroom(entity.getListClassroom());
+					entityCheck.setModifiedBy(entity.getModifiedBy());
+					entityCheck.setModifiedDate(entity.getModifiedDate());
+					ClassInEntity entityRs = (ClassInEntity) sessionFactory.getCurrentSession().merge(entityCheck);
+					return entityRs.getId();
+				}
+			}
+			return SystemConstant.ERROR;
+		}
+		return SystemConstant.ERROR;
+	}
 
 	@Override
 	public List<ClassInEntity> findAll() {
 		String hql = "SELECT g FROM ClassInEntity g WHERE g.isDeleted=0";
 		@SuppressWarnings("unchecked")
 		List<ClassInEntity> list = sessionFactory.getCurrentSession().createQuery(hql).list();
+		//list.forEach(c -> c.getListUser().forEach(u -> System.out.println("Email: " + u.getEmail())));
 		return list;
 	}
 

@@ -52,8 +52,11 @@ public class CourseService implements ICourseService {
 	public CourseModel findOne(long id) {
 		if (id > 0) {
 			CourseModel model = new CourseModel();
-			model.loadFromEntity(courseDAO.findOne(id));
-			return model;
+			CourseEntity entity = courseDAO.findOne(id);
+			if (entity != null) {
+				model.loadFromEntity(entity);
+				return model;
+			}
 		}
 		return null;
 	}
@@ -62,8 +65,11 @@ public class CourseService implements ICourseService {
 	public CourseModel findOneByCode(String code) {
 		if (code != null) {
 			CourseModel model = new CourseModel();
-			model.loadFromEntity(courseDAO.findOneByCode(code));
-			return model;
+			CourseEntity entity = courseDAO.findOneByCode(code);
+			if (entity != null) {
+				model.loadFromEntity(entity);
+				return model;
+			}
 		}
 		return null;
 	}
@@ -72,8 +78,11 @@ public class CourseService implements ICourseService {
 	public CourseModel findOneByName(String name) {
 		if (name != null) {
 			CourseModel model = new CourseModel();
-			model.loadFromEntity(courseDAO.findOneByName(name));
-			return model;
+			CourseEntity entity = courseDAO.findOneByName(name);
+			if (entity != null) {
+				model.loadFromEntity(entity);
+				return model;
+			}
 		}
 		return null;
 	}
@@ -93,18 +102,32 @@ public class CourseService implements ICourseService {
 		}
 		return SystemConstant.ERROR;
 	}
+	
+	@Override
+	public Long saveUser(CourseModel model, String method) {
+		if (model != null) {
+			model = getModifiedField(model, method);
+			CourseEntity userEntity = new CourseEntity();
+			userEntity.loadFromDTO(model);
+			return courseDAO.saveUser(userEntity);
+		}
+		return SystemConstant.ERROR;
+	}
 
 	@Override
 	public List<CourseModel> findAll() {
 		List<CourseModel> courseModels = new ArrayList<CourseModel>();
 		List<CourseEntity> courseEntities = courseDAO.findAll();
 		Iterator<CourseEntity> itr = courseEntities.iterator();
-		while(itr.hasNext()) {
-			CourseModel model = new CourseModel();
-			model.loadFromEntity(itr.next());
-			courseModels.add(model);
+		if (courseEntities != null && !courseEntities.isEmpty()) {
+			while(itr.hasNext()) {
+				CourseModel model = new CourseModel();
+				model.loadFromEntity(itr.next());
+				courseModels.add(model);
+			}
+			return courseModels;
 		}
-		return courseModels;
+		return null;
 	}
 
 	@Override

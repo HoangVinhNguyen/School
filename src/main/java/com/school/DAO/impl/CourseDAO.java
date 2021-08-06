@@ -1,6 +1,9 @@
 package com.school.DAO.impl;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.school.DAO.ICourseDAO;
 import com.school.constant.SystemConstant;
 import com.school.entity.CourseEntity;
+import com.school.entity.UserEntity;
+import com.school.model.UserModel;
+import com.school.service.IUserService;
 
 @Repository
 @Transactional
@@ -17,6 +23,9 @@ public class CourseDAO implements ICourseDAO{
 	
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	@Autowired
+	private IUserService userService;
 
 	@Override
 	public List<CourseEntity> findAll() {
@@ -108,5 +117,38 @@ public class CourseDAO implements ICourseDAO{
 		.setParameter(1, entity.getModifiedDate())
 		.setParameter(2, entity.getId()).executeUpdate();
 		return entity.getId();
+	}
+
+	@Override
+	public Long saveUser(CourseEntity entity) {
+		if (entity != null) {
+			CourseEntity entityCheck = findOneByName(entity.getName());
+			if (entityCheck != null) {
+				Iterator<UserEntity> it = entity.getUser().iterator();
+				Set<UserEntity> cs = new HashSet<UserEntity>();
+				while (it.hasNext()) {
+					UserEntity user = (UserEntity) it.next();
+					if (user.getEmail() != null) {
+						UserModel userModel = userService.findByEmail(user.getEmail());
+						if (userModel != null) {
+							user.loadFromDTO(userModel);
+							cs.add(user);
+						}
+						it.remove();
+					}
+				}
+				entity.getUser().addAll(cs);
+				if (cs != null) {
+					entityCheck.setUser(entity.getUser());
+				}
+				entityCheck.setModifiedBy(entity.getModifiedBy());
+				entityCheck.setModifiedDate(entity.getModifiedDate());
+				sessionFactory.getCurrentSession().clear();
+				sessionFactory.getCurrentSession().update(entityCheck);
+				return entity.getId();
+			}
+			return SystemConstant.ERROR;
+		}
+		return SystemConstant.ERROR;
 	}
 }

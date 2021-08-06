@@ -14,6 +14,8 @@ public interface IUserService {
 	public List<UserModel> findAll();
 	public UserModel findOne(long id);
 	public Long save(UserModel userModel, String method);
+	public Long saveCourse(UserModel userModel, String method);
+	public Long saveClazz(UserModel userModel, String method);
 	public Long delete(UserModel userModel);
 	
 	public Long saveList(MultipartFile file, String role);

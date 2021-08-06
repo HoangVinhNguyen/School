@@ -20,6 +20,7 @@ public interface IClassInService {
 	public List<ClassInModel> findAllByLevelGreadId(GradeModel gradeModel);
 	public int getTotalItem();
 	public Long save(ClassInModel classInModel, String method);
+	public Long saveClassroom(ClassInModel classInModel, String method);
 	public Long delete(ClassInModel classInModel);
 	
 	public Long saveList(MultipartFile file);

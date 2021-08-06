@@ -21,6 +21,8 @@ public class SystemConstant {
 	
 	public static final String ANONYMOUS = "anonymous";
 	
+	public static final long NULL_MODEL = -1L;
+	
 	// SQL logic
 	public static final Long DUPLICATE = -1L;
 	public static final String DUPLICATE_RES = "Dữ liệu đã tồn tại";

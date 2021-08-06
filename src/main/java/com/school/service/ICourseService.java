@@ -17,6 +17,7 @@ public interface ICourseService {
 	public CourseModel findOneByCode(String code);
 	public CourseModel findOneByName(String name);
 	public Long save(CourseModel courseModel, String method);
+	public Long saveUser(CourseModel courseModel, String method);
 	public Long delete(CourseModel courseModel);
 	public int getTotalItem();
 	

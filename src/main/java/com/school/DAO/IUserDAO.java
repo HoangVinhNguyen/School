@@ -12,5 +12,7 @@ public interface IUserDAO {
 	public List<UserEntity> findAll();
 	public UserEntity findOne(long id);
 	public Long save(UserEntity userEntity);
+	public Long saveCourse(UserEntity userEntity);
+	public Long saveClazz(UserEntity userEntity);
 	public Long delete(UserEntity userEntity);
 }

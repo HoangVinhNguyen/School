@@ -4,29 +4,29 @@
 
 /*================================== TEACHER CLASSROOM ==================================*/
 var classroomArray = [];
-var tableInCourse;
-var dataTableRowInCourse;
-var rowDataInCourse;
+var tableUserCourse;
+var dataTableRowUserCourse;
+var rowDataUserCourse;
 
 $(document).ready(function() {
-	tableInCourse = $('#teacherclassroom-table').DataTable({
+	tableUserCourse = $('#userCourse-table').DataTable({
 		destroy: true,
 		retrieve: true,
 		"autoWidth": false,
 		language: { "url": "//cdn.datatables.net/plug-ins/1.10.22/i18n/Vietnamese.json" },
-		"ajax": rowDataInCourse,
+		"ajax": rowDataUserCourse,
 		"columnDefs": [{
 			"targets": -1,
 			"data": null,
 			"defaultContent": `<div class="btn-group" role="group">
 
 															<button data-toggle="modal"
-              data-target="#update-teacherclassroom-modal" type="button" class="btn btn-xs btn-info">
+              data-target="#update-userCourse-modal" type="button" class="btn btn-xs btn-info">
 																<i class="ace-icon fa fa-pencil bigger-120"></i>
 															</button>
 
 															<button data-toggle="modal"
-              data-target="#delete-teacherclassroom-modal" type="button" class="btn btn-xs btn-danger">
+              data-target="#delete-userCourse-modal" type="button" class="btn btn-xs btn-danger">
 																<i class="ace-icon fa fa-trash-o bigger-120"></i>
 															</button>
 														</div>`
@@ -35,26 +35,25 @@ $(document).ready(function() {
 });
 
 
-$('#btnGetInCourse').on('click', function() {
-	GetDataInCourse();
+$('#btnGetUserCourse').on('click', function() {
+	GetDataUserCourse();
 });
 
-$('#teacherclassroom-table tbody').on('click', 'tr', function() {
-	dataTableRowInCourse = tableInCourse.row(this).data();
+$('#userCourse-table tbody').on('click', 'tr', function() {
+	dataTableRowUserCourse = tableUserCourse.row(this).data();
 });
 
-function GetDataInCourse() {
+function GetDataUserCourse() {
 	$.ajax({
-		url: 'http://localhost:8080/school/admin/api-admin-in-course',
+		url: 'http://localhost:8080/school/admin/api-admin-user-course',
 		type: 'GET',
 		dataType: 'json',
 		contentType: 'application/json'
 	}).done(function(data) {
-		tableInCourse.clear().draw();
-		for (teacherClassroom of data) {
-
-			if (teacherClassroom.createdDate != null) {
-				var dateC = new Date(teacherClassroom.createdDate);
+		tableUserCourse.clear().draw();
+		for (userCourse of data) {
+			if (userCourse.createdDate != null) {
+				var dateC = new Date(userCourse.createdDate);
 				var dateTimeC = dateC.getFullYear() + "-" +
 					("0" + (dateC.getMonth() + 1)).slice(-2) + "-" +
 					("0" + dateC.getDate()).slice(-2) + " " +
@@ -66,8 +65,8 @@ function GetDataInCourse() {
 				var dateTimeC = null;
 			}
 
-			if (teacherClassroom.modifiedDate) {
-				var date = new Date(teacherClassroom.modifiedDate);
+			if (userCourse.modifiedDate) {
+				var date = new Date(userCourse.modifiedDate);
 				var dateTime = date.getFullYear() + "-" +
 					("0" + (date.getMonth() + 1)).slice(-2) + "-" +
 					("0" + date.getDate()).slice(-2) + " " +
@@ -78,8 +77,8 @@ function GetDataInCourse() {
 			else {
 				dateTime = null;
 			}
-			tableInCourse.row.add(
-				[teacherClassroom.id, teacherClassroom.teacherId, teacherClassroom.studentId, teacherClassroom.classroomId, teacherClassroom.courseId, teacherClassroom.createdBy, dateTimeC, teacherClassroom.modifiedBy, dateTime]
+			tableUserCourse.row.add(
+				[userCourse.id, userCourse.teacherId, userCourse.studentId, userCourse.classroomId, userCourse.courseId, userCourse.createdBy, dateTimeC, userCourse.modifiedBy, dateTime]
 			).draw(false);
 		}
 		Swal.fire({
@@ -103,25 +102,25 @@ function GetDataInCourse() {
 	});
 }
 // add content for modal update.
-$("#update-teacherclassroom-modal").on('shown.bs.modal', function() {
-	$("#txtIDUpdateInCourse").val(dataTableRowInCourse[0]);
-	$("#txtIDTeacherUpdate").val(dataTableRowInCourse[1]);
-	$("#txtIDStudentUpdate").val(dataTableRowInCourse[2]);
-	$("#txtIDClassroomUpdate").val(dataTableRowInCourse[3]);
-	$("#txtIDCourseUpdate").val(dataTableRowInCourse[4]);
+$("#update-userCourse-modal").on('shown.bs.modal', function() {
+	$("#txtIDUpdateUserCourse").val(dataTableRowUserCourse[0]);
+	$("#txtIDTeacherUpdate").val(dataTableRowUserCourse[1]);
+	$("#txtIDStudentUpdate").val(dataTableRowUserCourse[2]);
+	$("#txtIDClassroomUpdate").val(dataTableRowUserCourse[3]);
+	$("#txtIDCourseUpdate").val(dataTableRowUserCourse[4]);
 });
 
 // add content for modal delete.
-$("#delete-teacherclassroom-modal").on('shown.bs.modal', function() {
-	$("#txtIDDeleteInCourse").val(dataTableRowInCourse[0]);
-	$("#txtIDTeacherDelete").val(dataTableRowInCourse[1]);
-	$("#txtIDStudentDelete").val(dataTableRowInCourse[2]);
-	$("#txtIDClassroomDelete").val(dataTableRowInCourse[3]);
-	$("#txtIDCourseDelete").val(dataTableRowInCourse[4]);
+$("#delete-userCourse-modal").on('shown.bs.modal', function() {
+	$("#txtIDDeleteUserCourse").val(dataTableRowUserCourse[0]);
+	$("#txtIDTeacherDelete").val(dataTableRowUserCourse[1]);
+	$("#txtIDStudentDelete").val(dataTableRowUserCourse[2]);
+	$("#txtIDClassroomDelete").val(dataTableRowUserCourse[3]);
+	$("#txtIDCourseDelete").val(dataTableRowUserCourse[4]);
 });
 
 // Add new
-$('#btnAddInCourse').on('click', function() {
+$('#btnAddUserCourse').on('click', function() {
 	const dataToPost = {
 		teacherId: $('#txtIDTeacherAdd').val(),
 		studentId: $('#txtIDStudentAdd').val(),
@@ -130,13 +129,13 @@ $('#btnAddInCourse').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/admin/api-admin-in-course',
+		url: 'http://localhost:8080/school/admin/api-admin-user-course',
 		type: 'POST',
-		dataType: 'json',
+		dataType: 'text',
 		contentType: 'application/json',
 		data: jsonToPost
 	}).done(function(data) {
-		GetDataInCourse();
+		GetDataUserCourse();
 		Swal.fire({
 			title: 'Thêm mới thành công',
 			text: "",
@@ -157,7 +156,7 @@ $('#btnAddInCourse').on('click', function() {
 });
 
 // gọi api cập nhật lớp học.
-$('#btnUpdateInCourseModal').on('click', function() {
+$('#btnUpdateUserCourseModal').on('click', function() {
 	const dataToPost = {
 		teacherId: $('#txtIDTeacherUpdate').val(),
 		studentId: $('#txtIDStudentUpdate').val(),
@@ -166,13 +165,13 @@ $('#btnUpdateInCourseModal').on('click', function() {
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/admin/api-admin-in-course',
+		url: 'http://localhost:8080/school/admin/api-admin-user-course',
 		type: 'PUT',
-		dataType: 'json',
+		dataType: 'text',
 		contentType: 'application/json',
 		data: jsonToPost
 	}).done(function(data) {
-		GetDataInCourse();
+		GetDataUserCourse();
 		Swal.fire({
 			title: 'Cập nhật thành công',
 			text: "",
@@ -193,19 +192,19 @@ $('#btnUpdateInCourseModal').on('click', function() {
 });
 
 // Delete
-$('#btnDeleteInCourseModal').on('click', function() {
+$('#btnDeleteUserCourseModal').on('click', function() {
 	const dataToPost = {
-		id: $('#txtIDDeleteInCourse').val()
+		id: $('#txtIDDeleteUserCourse').val()
 	}
 	const jsonToPost = JSON.stringify(dataToPost);
 	$.ajax({
-		url: 'http://localhost:8080/school/admin/api-admin-in-course',
+		url: 'http://localhost:8080/school/admin/api-admin-user-course',
 		type: 'DELETE',
-		dataType: 'json',
+		dataType: 'text',
 		contentType: 'application/json',
 		data: jsonToPost
 	}).done(function(data) {
-		GetDataInCourse();
+		GetDataUserCourse();
 		Swal.fire({
 			title: 'Xóa thành công',
 			text: "",
@@ -231,14 +230,14 @@ $("form#dataTeacher").submit(function(e) {
 	var formData = new FormData(this);
 
 	$.ajax({
-		url: 'http://localhost:8080/school/admin/api-admin-teacherclassroom-array',
+		url: 'http://localhost:8080/school/admin/api-admin-userCourse-array',
 		type: 'POST',
 		data: formData,
 		cache: false,
 		contentType: false,
 		processData: false
 	}).done(function(data) {
-		GetDataInCourse();
+		GetDataUserCourse();
 		Swal.fire({
 			title: 'Thêm mới thành công',
 			text: "",

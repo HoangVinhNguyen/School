@@ -153,7 +153,7 @@ $('#btnUpdateUserModal').on('click', function() {
 	$.ajax({
 		url: 'http://localhost:8080/school/admin/api-admin-user',
 		type: 'PUT',
-		dataType: 'json',
+		dataType: 'text',
 		contentType: 'application/json',
 		data: jsonToPost
 	}).done(function(data) {
@@ -194,7 +194,7 @@ $('#btnAddUserModal').on('click', function() {
 	$.ajax({
 		url: 'http://localhost:8080/school/admin/api-admin-user',
 		type: 'POST',
-		dataType: 'json',
+		dataType: 'text',
 		contentType: 'application/json',
 		data: jsonToPost
 	}).done(function(data) {
@@ -227,7 +227,7 @@ $('#btnDeleteUserModal').on('click', function() {
 	$.ajax({
 		url: 'http://localhost:8080/school/admin/api-admin-user',
 		type: 'DELETE',
-		dataType: 'json',
+		dataType: 'text',
 		contentType: 'application/json',
 		data: jsonToPost
 	}).done(function(data) {

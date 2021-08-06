@@ -1,6 +1,12 @@
 package com.school.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.school.model.CourseModel;
@@ -12,6 +18,15 @@ public class CourseEntity extends BaseEntity {
 	private String name;
 	private String code;
 	
+	@ManyToMany(mappedBy = "course")
+	private Set<UserEntity> user = new HashSet<UserEntity>();
+	
+	public Set<UserEntity> getUser() {
+		return user;
+	}
+	public void setUser(Set<UserEntity> user) {
+		this.user = user;
+	}
 	public String getName() {
 		return name;
 	}
@@ -34,6 +49,13 @@ public class CourseEntity extends BaseEntity {
 			this.setCreatedDate(model.getCreatedDate());
 			this.setModifiedBy(model.getModifiedBy());
 			this.setModifiedDate(model.getModifiedDate());
+			if (model.getUser() != null && !model.getUser().isEmpty()) {
+				model.getUser().stream().forEach(e -> {
+					UserEntity u = new UserEntity();
+					u.loadFromDTO(e);
+					this.user.add(u);
+				});
+			}
 		 }
 	}
 	

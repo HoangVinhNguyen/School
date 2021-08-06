@@ -31,9 +31,9 @@ public class AdminController {
 		return "teacher-classroom-administration";
 	}
 	
-	@RequestMapping(value= {"/inclassroom"}, method = RequestMethod.GET)
+	@RequestMapping(value= {"/userCourse"}, method = RequestMethod.GET)
 	public String getInClassroom(HttpServletRequest request) {
-		return "in-classroom-administration";
+		return "user-course-administration";
 	}
 	
 	@RequestMapping(value= {"/course"}, method = RequestMethod.GET)

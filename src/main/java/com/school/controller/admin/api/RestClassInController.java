@@ -28,12 +28,12 @@ public class RestClassInController {
 	private IClassInService classInService;
 	
 	@RequestMapping(value={"/api-admin-class"}, method=RequestMethod.GET)
-	public List<ClassInModel> getAllClassrooms(HttpServletRequest request) {
+	public List<ClassInModel> getAllClassIns(HttpServletRequest request) {
 		return classInService.findAll();
 	}
 	
 	@RequestMapping(value={"/api-admin-class"}, method=RequestMethod.POST)
-	public ResponseEntity<?> getCreateClassroom(HttpServletRequest request, @RequestBody ClassInModel classInModel) {
+	public ResponseEntity<?> getCreateClassIn(HttpServletRequest request, @RequestBody ClassInModel classInModel) {
 		Long rs = classInService.save(classInModel, SystemConstant.INSERT);
 		if (rs == SystemConstant.DUPLICATE) {
 			return new ResponseEntity<>(SystemConstant.DUPLICATE_RES.getBytes(SystemConstant.CHARSET_UTF_8), HttpStatus.NOT_ACCEPTABLE);
@@ -45,7 +45,7 @@ public class RestClassInController {
 	}
 	
 	@RequestMapping(value={"/api-admin-class"}, method=RequestMethod.PUT)
-	public ResponseEntity<?> getUpdateClassroom(HttpServletRequest request, @RequestBody ClassInModel classInModel) {
+	public ResponseEntity<?> getUpdateClassIn(HttpServletRequest request, @RequestBody ClassInModel classInModel) {
 		Long rs = classInService.save(classInModel, SystemConstant.MODIFY);
 		if (rs == SystemConstant.DUPLICATE) {
 			return new ResponseEntity<>(SystemConstant.DUPLICATE_RES.getBytes(SystemConstant.CHARSET_UTF_8), HttpStatus.NOT_ACCEPTABLE);
@@ -56,8 +56,20 @@ public class RestClassInController {
 		return new ResponseEntity<>(SystemConstant.OK_RES.getBytes(SystemConstant.CHARSET_UTF_8), HttpStatus.OK);
 	}
 	
+	@RequestMapping(value={"/api-admin-class-classroom"}, method=RequestMethod.POST)
+	public ResponseEntity<?> getUpdateClassroom(HttpServletRequest request, @RequestBody ClassInModel classInModel) {
+		Long rs = classInService.saveClassroom(classInModel, SystemConstant.MODIFY);
+		if (rs == SystemConstant.DUPLICATE) {
+			return new ResponseEntity<>(SystemConstant.DUPLICATE_RES.getBytes(SystemConstant.CHARSET_UTF_8), HttpStatus.NOT_ACCEPTABLE);
+		}
+		else if (rs == SystemConstant.ERROR) {
+			return new ResponseEntity<>(SystemConstant.ERROR_RES, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<>(SystemConstant.OK_RES.getBytes(SystemConstant.CHARSET_UTF_8), HttpStatus.OK);
+	}
+	
 	@RequestMapping(value={"/api-admin-class"}, method= RequestMethod.DELETE)
-	public ResponseEntity<?> getDeleteClassroom(HttpServletRequest request, @RequestBody ClassInModel classInModel) {
+	public ResponseEntity<?> getDeleteClassIn(HttpServletRequest request, @RequestBody ClassInModel classInModel) {
 		Long rs = classInService.delete(classInModel);
 		if (rs == SystemConstant.ERROR) {
 			return new ResponseEntity<>(SystemConstant.DELETE_FAILED_RES.getBytes(SystemConstant.CHARSET_UTF_8), HttpStatus.NOT_ACCEPTABLE);
@@ -66,7 +78,7 @@ public class RestClassInController {
 	}
 	
 	@RequestMapping(value={"/api-admin-class-file"}, method= RequestMethod.POST)
-	public Long sendFileClassroom(@RequestParam(name="file") MultipartFile file) {
+	public Long sendFileClassIn(@RequestParam(name="file") MultipartFile file) {
 		return classInService.saveList(file);
 	}
 	

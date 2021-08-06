@@ -14,6 +14,7 @@ public interface IClassInDAO {
 	public List<ClassInEntity> findAllByGreadId(GradeEntity entity);
 	public ClassInEntity findOneByNameAndCodeAndGreadId(ClassInEntity entity);
 	public Long save(ClassInEntity classInEntity);
+	public Long saveClassroom(ClassInEntity classInEntity);
 	public Long delete(ClassInEntity classInEntity);
 	public int getTotalItem();
 }

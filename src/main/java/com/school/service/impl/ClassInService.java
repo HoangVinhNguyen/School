@@ -115,6 +115,17 @@ public class ClassInService implements IClassInService {
 		}
 		return SystemConstant.ERROR;
 	}
+	
+	@Override
+	public Long saveClassroom(ClassInModel model, String method) {
+		if (model != null) {
+			model = getModifiedField(model, method);
+			ClassInEntity classInEntity = new ClassInEntity();
+			classInEntity.loadFromDTO(model);
+			return classInDAO.saveClassroom(classInEntity);
+		}
+		return SystemConstant.ERROR;
+	}
 
 	@Override
 	public List<ClassInModel> findAll() {

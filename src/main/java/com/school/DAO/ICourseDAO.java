@@ -11,6 +11,7 @@ public interface ICourseDAO {
 	public CourseEntity findOneByCode(String code);
 	public CourseEntity findOneByName(String name);
 	public Long save(CourseEntity courseEntity);
+	public Long saveUser(CourseEntity courseEntity);
 	public Long delete(CourseEntity courseEntity);
 	public int getTotalItem();
 }

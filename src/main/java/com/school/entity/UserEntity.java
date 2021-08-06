@@ -1,23 +1,24 @@
 package com.school.entity;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.school.model.RoleModel;
 import com.school.model.UserModel;
 
 @Entity
 @Table(name="user")
-public class UserEntity extends BaseEntity implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class UserEntity extends BaseEntity {
 	
 	private String email;
 	private String password;
@@ -27,13 +28,42 @@ public class UserEntity extends BaseEntity implements Serializable {
 	private String address;
 	@Column(name="refresh_token")
 	private String refreshToken;
-//	@Column(name="role_id")
-//	private Long roleId;
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "role_id", nullable = false)
 	private RoleEntity role = new RoleEntity();
-
 	
+	@ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+        name = "user_course", 
+        joinColumns = { @JoinColumn(name = "user_id") }, 
+        inverseJoinColumns = { @JoinColumn(name = "course_id") }
+    )
+	private Set<CourseEntity> course = new HashSet<CourseEntity>();
+	
+	@ManyToOne
+	@JoinColumn(name = "class_id", nullable = true)
+	private ClassInEntity clazz = new ClassInEntity();
+
+	public ClassInEntity getClazz() {
+		return clazz;
+	}
+
+
+	public void setClazz(ClassInEntity clazz) {
+		this.clazz = clazz;
+	}
+
+
+	public Set<CourseEntity> getCourse() {
+		return course;
+	}
+
+
+	public void setCourse(Set<CourseEntity> course) {
+		this.course = course;
+	}
+
+
 	public String getEmail() {
 		return email;
 	}
@@ -138,9 +168,27 @@ public class UserEntity extends BaseEntity implements Serializable {
 			this.fullname = model.getFullname();
 			this.password = model.getPassword();
 			// this.roleId = model.getRoleId();
-			RoleModel role = new RoleModel();
-			role.setId(model.getRoleId());
-			this.role.loadFromDTO(role);
+			RoleModel roleModel = new RoleModel();
+			if (model.getRoleId() != null) {
+				roleModel.setId(model.getRoleId());
+			}
+			else if (model.getRole() != null) {
+				roleModel = model.getRole();
+			}
+			this.role.loadFromDTO(roleModel);
+			if (model.getCourse() != null && !model.getCourse().isEmpty()) {
+				model.getCourse().stream().forEach(e -> {
+					CourseEntity c = new CourseEntity();
+					c.loadFromDTO(e);
+					this.course.add(c);
+				});
+
+			}
+			if (model.getClazz() != null) {
+				if (model.getClazz().getName() != null) {
+					this.clazz.loadFromDTO(model.getClazz());
+				}
+			}
 		}
 	}
 

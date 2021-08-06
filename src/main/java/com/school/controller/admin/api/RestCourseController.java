@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.school.constant.SystemConstant;
 import com.school.model.CourseModel;
+import com.school.model.UserModel;
 import com.school.service.ICourseService;
 
 @RestController
@@ -33,8 +34,8 @@ public class RestCourseController {
 	}
 	
 	@RequestMapping(value={"/api-admin-course"}, method=RequestMethod.POST)
-	public ResponseEntity<?> getCreateCourse(HttpServletRequest request, @RequestBody CourseModel classroom) {
-		Long rs = courseService.save(classroom, SystemConstant.INSERT);
+	public ResponseEntity<?> getCreateCourse(HttpServletRequest request, @RequestBody CourseModel model) {
+		Long rs = courseService.save(model, SystemConstant.INSERT);
 		if (rs == SystemConstant.DUPLICATE) {
 			return new ResponseEntity<>(SystemConstant.DUPLICATE_RES.getBytes(SystemConstant.CHARSET_UTF_8), HttpStatus.NOT_ACCEPTABLE);
 		}
@@ -45,8 +46,20 @@ public class RestCourseController {
 	}
 	
 	@RequestMapping(value={"/api-admin-course"}, method=RequestMethod.PUT)
-	public ResponseEntity<?> getUpdateCourse(HttpServletRequest request, @RequestBody CourseModel classroom) {
-		Long rs = courseService.save(classroom, SystemConstant.MODIFY);
+	public ResponseEntity<?> getUpdateCourse(HttpServletRequest request, @RequestBody CourseModel model) {
+		Long rs = courseService.save(model, SystemConstant.MODIFY);
+		if (rs == SystemConstant.DUPLICATE) {
+			return new ResponseEntity<>(SystemConstant.DUPLICATE_RES.getBytes(SystemConstant.CHARSET_UTF_8), HttpStatus.NOT_ACCEPTABLE);
+		}
+		else if (rs == SystemConstant.ERROR) {
+			return new ResponseEntity<>(SystemConstant.ERROR_RES, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<>(SystemConstant.OK_RES.getBytes(SystemConstant.CHARSET_UTF_8), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/api-admin-course-user", method=RequestMethod.POST)
+	public ResponseEntity<?> getUpdateCourseUser(@RequestBody CourseModel model) {
+		Long rs = courseService.saveUser(model,SystemConstant.MODIFY);
 		if (rs == SystemConstant.DUPLICATE) {
 			return new ResponseEntity<>(SystemConstant.DUPLICATE_RES.getBytes(SystemConstant.CHARSET_UTF_8), HttpStatus.NOT_ACCEPTABLE);
 		}
@@ -57,8 +70,8 @@ public class RestCourseController {
 	}
 	
 	@RequestMapping(value={"/api-admin-course"}, method= RequestMethod.DELETE)
-	public ResponseEntity<?> getDeleteCourse(HttpServletRequest request, @RequestBody CourseModel classroom) {
-		Long rs = courseService.delete(classroom);
+	public ResponseEntity<?> getDeleteCourse(HttpServletRequest request, @RequestBody CourseModel model) {
+		Long rs = courseService.delete(model);
 		if (rs == SystemConstant.ERROR) {
 			return new ResponseEntity<>(SystemConstant.DELETE_FAILED_RES.getBytes(SystemConstant.CHARSET_UTF_8), HttpStatus.NOT_ACCEPTABLE);
 		}

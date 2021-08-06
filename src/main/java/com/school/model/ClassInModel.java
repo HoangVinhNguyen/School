@@ -1,5 +1,8 @@
 package com.school.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.school.entity.ClassInEntity;
 
 public class ClassInModel extends BaseModel {
@@ -7,6 +10,8 @@ public class ClassInModel extends BaseModel {
 	private String name;
 	private String code;
 	private GradeModel grade = new GradeModel();
+	private Set<ClassroomModel> listClassroom = new HashSet<ClassroomModel>();
+	private Set<UserModel> user = new HashSet<UserModel>();
 
 	public String getName() {
 		return name;
@@ -32,6 +37,14 @@ public class ClassInModel extends BaseModel {
 		this.grade = grade;
 	}
 
+	public Set<UserModel> getUser() {
+		return user;
+	}
+
+	public void setUser(Set<UserModel> user) {
+		this.user = user;
+	}
+
 	public void loadFromEntity(ClassInEntity entity) {
 		if (entity != null) {
 			this.setId(entity.getId());
@@ -42,6 +55,14 @@ public class ClassInModel extends BaseModel {
 			this.setCreatedDate(entity.getCreatedDate());
 			this.setModifiedBy(entity.getModifiedBy());
 			this.setModifiedDate(entity.getModifiedDate());
-		 }
+		}
+	}
+
+	public Set<ClassroomModel> getListClassroom() {
+		return listClassroom;
+	}
+
+	public void setListClassroom(Set<ClassroomModel> listClassroom) {
+		this.listClassroom = listClassroom;
 	}
 }

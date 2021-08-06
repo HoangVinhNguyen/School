@@ -1,17 +1,24 @@
 package com.school.DAO.impl;
 
-import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.school.DAO.IUserDAO;
+import com.school.constant.SystemConstant;
+import com.school.entity.ClassInEntity;
+import com.school.entity.CourseEntity;
 import com.school.entity.UserEntity;
+import com.school.model.ClassInModel;
+import com.school.model.CourseModel;
+import com.school.service.IClassInService;
+import com.school.service.ICourseService;
 
 @Repository
 @Transactional
@@ -19,6 +26,12 @@ public class UserDAO implements IUserDAO{
 
 	@Autowired
 	private SessionFactory sessionFactory;
+	
+	@Autowired
+	private ICourseService courseService;
+	
+	@Autowired
+	private IClassInService classService;
 	
 	@Override
 	public UserEntity findByEmailAndPasswordAndStatus(String email, String password, Integer status) {
@@ -50,6 +63,7 @@ public class UserDAO implements IUserDAO{
 		//sql.append(" INNER JOIN RoleEntity r on r.id=u.roleId");
 		sql.append(" WHERE u.isDeleted=0");
 		List<UserEntity> users = sessionFactory.getCurrentSession().createQuery(sql.toString()).list();
+//		users.stream().forEach(e -> e.getCourse().stream().forEach(i -> System.out.println(i.getName())));
 		return users.isEmpty() ? null : users;
 	}
 	
@@ -58,22 +72,77 @@ public class UserDAO implements IUserDAO{
 		if (entity.getId() != null) {
 			UserEntity entityCheck = findByEmail(entity.getEmail());
 			if (entityCheck != null) {
-				String hql = "UPDATE UserEntity SET email=?0, fullname=?1, dob=?2, address=?3, "
-						+ "role=?4, modifiedBy=?5, modifiedDate=?6 WHERE id=?7";
+				String hql = "UPDATE UserEntity SET email=?0, fullname=?1, dob=?2, address=?3, phone=?4 "
+						+ "role=?5, modifiedBy=?6, modifiedDate=?7 WHERE id=?8";
 				sessionFactory.getCurrentSession().createQuery(hql)
 				.setParameter(0, entity.getEmail())
 				.setParameter(1, entity.getFullname())
 				.setParameter(2, entity.getDob())
 				.setParameter(3, entity.getAddress())
-				.setParameter(4, entity.getRole())
-				.setParameter(5, entity.getModifiedBy())
-				.setParameter(6, entity.getModifiedDate())
-				.setParameter(7, entity.getId()).executeUpdate();
+				.setParameter(4, entity.getPhone())
+				.setParameter(5, entity.getRole())
+				.setParameter(6, entity.getModifiedBy())
+				.setParameter(7, entity.getModifiedDate())
+				.setParameter(8, entity.getId()).executeUpdate();
 				return entity.getId();
 			}
 		}
 		sessionFactory.getCurrentSession().save(entity);
 		return entity.getId();
+	}
+	
+	@Override
+	public Long saveCourse(UserEntity entity) {
+		if (entity != null) {
+			UserEntity entityCheck = findByEmail(entity.getEmail());
+			if (entityCheck != null) {
+				Iterator<CourseEntity> it = entity.getCourse().iterator();
+				Set<CourseEntity> cs = new HashSet<CourseEntity>();
+				while (it.hasNext()) {
+					CourseEntity course = (CourseEntity) it.next();
+					if (course.getName() != null) {
+						CourseModel courseModel = courseService.findOneByName(course.getName());
+						if (courseModel != null) {
+							course.loadFromDTO(courseModel);
+							cs.add(course);
+						}
+						it.remove();
+					}
+				}
+				if (cs != null) {
+					entity.getCourse().addAll(cs);
+					entityCheck.setCourse(entity.getCourse());
+					entityCheck.setModifiedBy(entity.getModifiedBy());
+					entityCheck.setModifiedDate(entity.getModifiedDate());
+					UserEntity entityRs = (UserEntity) sessionFactory.getCurrentSession().merge(entityCheck);
+					return entityRs.getId();
+				}
+			}
+			return SystemConstant.ERROR;
+		}
+		return SystemConstant.ERROR;
+	}
+	
+	@Override
+	public Long saveClazz(UserEntity entity) {
+		if (entity != null) {
+			UserEntity entityCheck = findByEmail(entity.getEmail());
+			if (entityCheck != null) {
+				ClassInModel classModel = classService.findOneByName(entity.getClazz().getName());
+				if (classModel != null) {
+					ClassInEntity classEntity = new ClassInEntity();
+					classEntity.loadFromDTO(classModel);
+					entityCheck.setClazz(classEntity);
+					entityCheck.setModifiedBy(entity.getModifiedBy());
+					entityCheck.setModifiedDate(entity.getModifiedDate());
+					UserEntity entityRs = (UserEntity) sessionFactory.getCurrentSession().merge(entityCheck);
+					return entityRs.getId();
+				}
+				
+			}
+			return SystemConstant.ERROR;
+		}
+		return SystemConstant.ERROR;
 	}
 
 	@Override
@@ -112,5 +181,4 @@ public class UserDAO implements IUserDAO{
 		}
 		return user;
 	}
-	
 }

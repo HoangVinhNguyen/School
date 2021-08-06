@@ -81,6 +81,12 @@
 	        <add-attribute value="/resource/template/admin/js-data-table/level-grade-data-table.js" />
 	    </put-list-attribute>
     </definition>
+    <definition name="user-course-administration" extends="admin-base-definition">
+        <put-attribute name="body" value="/WEB-INF/views/admin/user-course/list.jsp" />
+        <put-list-attribute name="javascripts">
+	        <add-attribute value="/resource/template/admin/js-data-table/user-course-data-table.js" />
+	    </put-list-attribute>
+    </definition>
 
     <!-- Pages -->
     <definition name="login" extends="base-definition">
