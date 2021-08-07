@@ -11,7 +11,6 @@ import com.school.DAO.IUserAndCourseDAO;
 import com.school.constant.SystemConstant;
 import com.school.entity.CourseEntity;
 import com.school.entity.UserAndCourseEntity;
-import com.school.entity.UserAndCourseEntity;
 import com.school.entity.UserEntity;
 import com.school.model.CourseModel;
 import com.school.model.UserModel;
@@ -52,38 +51,36 @@ public class UserAndCourseDAO implements IUserAndCourseDAO{
 		}
 		return null;
 	}
+	
+	@Override
+	public UserAndCourseEntity findOneByID(long id) {
+		String hql = "SELECT c FROM UserAndCourseEntity c WHERE c.id=?0 AND c.isDeleted=0";
+		List list = sessionFactory.getCurrentSession().createQuery(hql)
+				.setParameter(0, id).getResultList();
+		if (!list.isEmpty()) {
+			return (UserAndCourseEntity) list.get(0);
+		}
+		return null;
+	}
 
 	@Override
-	public UserAndCourseEntity findOneByUser(String userEmail) {
+	public List<UserAndCourseEntity> findOneByUserEmail(String userEmail) {
 		UserModel userCheck = userService.findByEmail(userEmail);
 		if (userCheck != null) {
 			UserEntity userEntity = new UserEntity();
 			userEntity.loadFromDTO(userCheck);
-			String hql = "SELECT c FROM UserAndCourseEntity c WHERE c.student=?0 AND c.isDeleted=0";
-			return (UserAndCourseEntity) sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, userEntity).getSingleResult();
-		}
-		return null;
-	}
-	
-	@Override
-	public UserAndCourseEntity findOneByUserId(Long id) {
-		UserModel model = userService.findOne(id);
-		if (model != null) {
-			UserEntity userEntity = new UserEntity();
-			userEntity.loadFromDTO(model);
-			String hql = "SELECT c FROM UserAndCourseEntity c WHERE c.student=?0 AND c.isDeleted=0";
-			List results = sessionFactory.getCurrentSession().createQuery(hql)
-					.setParameter(0, userEntity).getResultList();
-			if (!results.isEmpty()) {
-				return (UserAndCourseEntity) results.get(0);
+			String hql = "SELECT c FROM UserAndCourseEntity c WHERE c.user=?0 AND c.isDeleted=0";
+			List list = sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, userEntity).getResultList();
+			if (!list.isEmpty()) {
+				return list;
 			}
 		}
 		return null;
 	}
 	
 	@Override
-	public List<UserAndCourseEntity> findOneByCourseId(long id) {
-		CourseModel model = courseService.findOne(id);
+	public List<UserAndCourseEntity> findOneByCourseName(String name) {
+		CourseModel model = courseService.findOneByName(name);
 		if (model != null) {
 			CourseEntity entity = new CourseEntity();
 			entity.loadFromDTO(model);
@@ -104,33 +101,36 @@ public class UserAndCourseDAO implements IUserAndCourseDAO{
 
 	@Override
 	public Long save(UserAndCourseEntity entity) {
-		if (entity.getUser().getId() != null && entity.getCourse().getId() != null) {
-			if (entity.getOldCourse().getId() != null) {
-				UserAndCourseEntity inClassroomModelCheck =  findOne(entity.getUser(), entity.getOldCourse());
-				if (inClassroomModelCheck != null ) {
-					UserModel user = userService.findOne(entity.getUser().getId());
-					CourseModel course = courseService.findOne(entity.getCourse().getId());
-					CourseModel oldCourse = courseService.findOne(entity.getOldCourse().getId());
-					if (user != null && course != null && oldCourse != null) {
-						String hql = "UPDATE UserAndCourseEntity SET course=?0, modifiedBy=?1, modifiedDate=?2 WHERE user=?3 AND course=?4";
-						sessionFactory.getCurrentSession().createQuery(hql)
-						.setParameter(0, entity.getCourse())
-						.setParameter(1, entity.getModifiedBy())
-						.setParameter(2, entity.getModifiedDate())
-						.setParameter(3, entity.getUser())
-						.setParameter(4, entity.getOldCourse()).executeUpdate();
-						return entity.getUser().getId();
-					}
-					return SystemConstant.ERROR;
-				}
-			}
-			else {
+		if (entity.getId() != null) {
+			UserAndCourseEntity userAndCourseEntity = findOneByID(entity.getId());
+			if (userAndCourseEntity != null) {
 				UserModel user = userService.findOne(entity.getUser().getId());
 				CourseModel course = courseService.findOne(entity.getCourse().getId());
 				if (user != null && course != null) {
-					sessionFactory.getCurrentSession().save(entity);
+					userAndCourseEntity.setCourse(entity.getCourse());
+					userAndCourseEntity.setUser(entity.getUser());
+					userAndCourseEntity.setModifiedBy(entity.getModifiedBy());
+					userAndCourseEntity.setModifiedDate(entity.getModifiedDate());
+					UserAndCourseEntity result = (UserAndCourseEntity) sessionFactory.getCurrentSession().merge(userAndCourseEntity);
+					return result.getId();
+				}
+				return SystemConstant.ERROR;
+			}
+		}
+		else {
+			UserModel user = userService.findOne(entity.getUser().getId());
+			CourseModel course = courseService.findOne(entity.getCourse().getId());
+			if (user != null && course != null) {
+				UserEntity userEntity = new UserEntity();
+				CourseEntity courseEntity = new CourseEntity();
+				userEntity.loadFromDTO(user);
+				courseEntity.loadFromDTO(course);
+				UserAndCourseEntity userAndCourseEntity = findOne(userEntity, courseEntity); // Check duplicate.
+				if (userAndCourseEntity == null) {
+					sessionFactory.getCurrentSession().persist(entity);
 					return entity.getUser().getId();
 				}
+				return SystemConstant.DUPLICATE;
 			}
 		}
 		return SystemConstant.ERROR;
@@ -138,18 +138,16 @@ public class UserAndCourseDAO implements IUserAndCourseDAO{
 
 	@Override
 	public Long delete(UserAndCourseEntity entity) {
-		UserModel user = userService.findOne(entity.getUser().getId());
-		CourseModel course = courseService.findOne(entity.getCourse().getId());
-		if (user != null && course != null) {
-			String hql = "UPDATE UserAndCourseEntity SET modifiedBy=?0, modifiedDate=?1, isDeleted=1 WHERE user=?2 AND course=?3";
-			sessionFactory.getCurrentSession().createQuery(hql)
-			.setParameter(0, entity.getModifiedBy())
-			.setParameter(1, entity.getModifiedDate())
-			.setParameter(2, entity.getUser())
-			.setParameter(3, entity.getCourse()).executeUpdate();
-			return entity.getId();
+		if (entity.getId() != null) {
+			UserAndCourseEntity userAndCourseEntity = findOneByID(entity.getId());
+			if (userAndCourseEntity != null) {
+				userAndCourseEntity.setIsDeleted((byte) 1);
+				userAndCourseEntity.setModifiedBy(entity.getModifiedBy());
+				userAndCourseEntity.setModifiedDate(entity.getModifiedDate());
+				UserAndCourseEntity result = (UserAndCourseEntity) sessionFactory.getCurrentSession().merge(userAndCourseEntity);
+				return result.getId();
+			}
 		}
 		return SystemConstant.ERROR;
 	}
-
 }

@@ -5,18 +5,26 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.school.model.UserAndCourseModel;
+import com.school.model.UserAndClazzModel;
 
 @Entity
-@Table(name = "user_course")
-public class UserAndCourseEntity extends BaseEntity {
+@Table(name = "user_class")
+public class UserAndClazzEntity extends BaseEntity {
 
+	@ManyToOne
+	@JoinColumn(name = "class_id", nullable = false)
+	private ClazzEntity clazz;
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	private UserEntity user;
-	@ManyToOne
-	@JoinColumn(name = "course_id", nullable = false)
-	private CourseEntity course;
+
+	public ClazzEntity getClazz() {
+		return clazz;
+	}
+
+	public void setClazz(ClazzEntity clazz) {
+		this.clazz = clazz;
+	}
 
 	public UserEntity getUser() {
 		return user;
@@ -26,21 +34,13 @@ public class UserAndCourseEntity extends BaseEntity {
 		this.user = user;
 	}
 
-	public CourseEntity getCourse() {
-		return course;
-	}
-
-	public void setCourse(CourseEntity course) {
-		this.course = course;
-	}
-
-	public void loadFromDTO(UserAndCourseModel model) {
+	public void loadFromDTO(UserAndClazzModel model) {
 		if (model != null) {
 			this.setId(model.getId());
+			this.clazz = new ClazzEntity();
 			this.user = new UserEntity();
-			this.course = new CourseEntity();
+			this.clazz.loadFromDTO(model.getClazzModel());
 			this.user.loadFromDTO(model.getUserModel());
-			this.course.loadFromDTO(model.getCourseModel());
 			this.setCreatedBy(model.getCreatedBy());
 			this.setCreatedDate(model.getCreatedDate());
 			this.setModifiedBy(model.getModifiedBy());

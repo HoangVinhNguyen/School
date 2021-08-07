@@ -1,10 +1,6 @@
 package com.school.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.school.model.ClassroomModel;
@@ -15,9 +11,6 @@ public class ClassroomEntity extends BaseEntity {
 
 	private String name;
 	private String code;
-
-	@ManyToMany(mappedBy = "listClassroom")
-	private Set<ClassInEntity> listClass = new HashSet<>();
 
 	public String getName() {
 		return name;
@@ -34,15 +27,7 @@ public class ClassroomEntity extends BaseEntity {
 	public void setCode(String code) {
 		this.code = code;
 	}
-
-	public Set<ClassInEntity> getListClass() {
-		return listClass;
-	}
-
-	public void setListClass(Set<ClassInEntity> listClass) {
-		this.listClass = listClass;
-	}
-
+	
 	public void loadFromDTO(ClassroomModel model) {
 		if (model != null) {
 			this.setId(model.getId());

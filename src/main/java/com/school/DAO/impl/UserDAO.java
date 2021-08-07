@@ -1,9 +1,6 @@
 package com.school.DAO.impl;
 
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.school.DAO.IUserDAO;
-import com.school.constant.SystemConstant;
-import com.school.entity.ClassInEntity;
-import com.school.entity.CourseEntity;
 import com.school.entity.UserEntity;
-import com.school.model.ClassInModel;
-import com.school.model.CourseModel;
-import com.school.service.IClassInService;
-import com.school.service.ICourseService;
 
 @Repository
 @Transactional
@@ -26,12 +16,6 @@ public class UserDAO implements IUserDAO{
 
 	@Autowired
 	private SessionFactory sessionFactory;
-	
-	@Autowired
-	private ICourseService courseService;
-	
-	@Autowired
-	private IClassInService classService;
 	
 	@Override
 	public UserEntity findByEmailAndPasswordAndStatus(String email, String password, Integer status) {
@@ -91,60 +75,6 @@ public class UserDAO implements IUserDAO{
 		return entity.getId();
 	}
 	
-	@Override
-	public Long saveCourse(UserEntity entity) {
-		if (entity != null) {
-			UserEntity entityCheck = findByEmail(entity.getEmail());
-			if (entityCheck != null) {
-				Iterator<CourseEntity> it = entity.getCourse().iterator();
-				Set<CourseEntity> cs = new HashSet<CourseEntity>();
-				while (it.hasNext()) {
-					CourseEntity course = (CourseEntity) it.next();
-					if (course.getName() != null) {
-						CourseModel courseModel = courseService.findOneByName(course.getName());
-						if (courseModel != null) {
-							course.loadFromDTO(courseModel);
-							cs.add(course);
-						}
-						it.remove();
-					}
-				}
-				if (cs != null) {
-					entity.getCourse().addAll(cs);
-					entityCheck.setCourse(entity.getCourse());
-					entityCheck.setModifiedBy(entity.getModifiedBy());
-					entityCheck.setModifiedDate(entity.getModifiedDate());
-					UserEntity entityRs = (UserEntity) sessionFactory.getCurrentSession().merge(entityCheck);
-					return entityRs.getId();
-				}
-			}
-			return SystemConstant.ERROR;
-		}
-		return SystemConstant.ERROR;
-	}
-	
-	@Override
-	public Long saveClazz(UserEntity entity) {
-		if (entity != null) {
-			UserEntity entityCheck = findByEmail(entity.getEmail());
-			if (entityCheck != null) {
-				ClassInModel classModel = classService.findOneByName(entity.getClazz().getName());
-				if (classModel != null) {
-					ClassInEntity classEntity = new ClassInEntity();
-					classEntity.loadFromDTO(classModel);
-					entityCheck.setClazz(classEntity);
-					entityCheck.setModifiedBy(entity.getModifiedBy());
-					entityCheck.setModifiedDate(entity.getModifiedDate());
-					UserEntity entityRs = (UserEntity) sessionFactory.getCurrentSession().merge(entityCheck);
-					return entityRs.getId();
-				}
-				
-			}
-			return SystemConstant.ERROR;
-		}
-		return SystemConstant.ERROR;
-	}
-
 	@Override
 	public UserEntity findOne(long id) {
 		StringBuilder sql = new StringBuilder("SELECT u FROM UserEntity u");

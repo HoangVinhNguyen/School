@@ -2,19 +2,18 @@ package com.school.DAO;
 
 import java.util.List;
 
-import com.school.entity.ClassInEntity;
+import com.school.entity.ClazzEntity;
 import com.school.entity.GradeEntity;
 
 public interface IClassInDAO {
 
-	public List<ClassInEntity> findAll();
-	public ClassInEntity findOne(long id);
-	public ClassInEntity findOneByCode(String code);
-	public ClassInEntity findOneByName(String name);
-	public List<ClassInEntity> findAllByGreadId(GradeEntity entity);
-	public ClassInEntity findOneByNameAndCodeAndGreadId(ClassInEntity entity);
-	public Long save(ClassInEntity classInEntity);
-	public Long saveClassroom(ClassInEntity classInEntity);
-	public Long delete(ClassInEntity classInEntity);
+	public List<ClazzEntity> findAll();
+	public ClazzEntity findOne(long id);
+	public ClazzEntity findOneByCode(String code);
+	public ClazzEntity findOneByName(String name);
+	public List<ClazzEntity> findAllByGreadId(GradeEntity entity);
+	public ClazzEntity findOneByNameAndCodeAndGreadId(ClazzEntity entity);
+	public Long save(ClazzEntity clazzEntity);
+	public Long delete(ClazzEntity clazzEntity);
 	public int getTotalItem();
 }

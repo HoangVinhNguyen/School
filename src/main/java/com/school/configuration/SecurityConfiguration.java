@@ -24,9 +24,6 @@ import com.school.service.impl.UserDetailsServiceImpl;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
 	@Autowired
-	private DataSource dataSource;
-	
-	@Autowired
 	private LoginSuccessHandler loginSuccessHandler;
 	
 	@Autowired

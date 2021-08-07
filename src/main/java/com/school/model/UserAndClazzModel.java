@@ -1,18 +1,18 @@
 package com.school.model;
 
-import com.school.entity.UserAndCourseEntity;
+import com.school.entity.UserAndClazzEntity;
 
-public class UserAndCourseModel extends BaseModel {
+public class UserAndClazzModel extends BaseModel {
 
+	private ClazzModel clazzModel = new ClazzModel();
 	private UserModel userModel = new UserModel();
-	private CourseModel courseModel = new CourseModel();
 
-	public CourseModel getCourseModel() {
-		return courseModel;
+	public ClazzModel getClazzModel() {
+		return clazzModel;
 	}
 
-	public void setCourseModel(CourseModel courseModel) {
-		this.courseModel = courseModel;
+	public void setClazzModel(ClazzModel clazzModel) {
+		this.clazzModel = clazzModel;
 	}
 
 	public UserModel getUserModel() {
@@ -23,11 +23,11 @@ public class UserAndCourseModel extends BaseModel {
 		this.userModel = userModel;
 	}
 
-	public void loadFromEntity(UserAndCourseEntity entity) {
+	public void loadFromEntity(UserAndClazzEntity entity) {
 		if (entity != null) {
 			this.setId(entity.getId());
 			this.userModel.loadFromEntity(entity.getUser());
-			this.courseModel.loadFromEntity(entity.getCourse());
+			this.clazzModel.loadFromEntity(entity.getClazz());
 			this.setCreatedBy(entity.getCreatedBy());
 			this.setCreatedDate(entity.getCreatedDate());
 			this.setModifiedBy(entity.getModifiedBy());

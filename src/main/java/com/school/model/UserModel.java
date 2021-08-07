@@ -17,8 +17,6 @@ public class UserModel extends BaseModel {
 	private String address;
 	private Long roleId;
 	private RoleModel role = new RoleModel();
-	private Set<CourseModel> course = new HashSet<CourseModel>();
-	private ClassInModel clazz = new ClassInModel();
 
 	public String getEmail() {
 		return email;
@@ -83,22 +81,6 @@ public class UserModel extends BaseModel {
 	public void setFullname(String fullname) {
 		this.fullname = fullname;
 	}
-	
-	public Set<CourseModel> getCourse() {
-		return course;
-	}
-
-	public void setCourse(Set<CourseModel> course) {
-		this.course = course;
-	}
-
-	public ClassInModel getClazz() {
-		return clazz;
-	}
-
-	public void setClazz(ClassInModel clazz) {
-		this.clazz = clazz;
-	}
 
 	public void loadFromEntity(UserEntity entity) {
 		if (entity != null) {
@@ -113,8 +95,6 @@ public class UserModel extends BaseModel {
 			this.email = entity.getEmail();
 			this.fullname = entity.getFullname();
 			this.role.loadFromEntity(entity.getRole());
-			this.clazz.loadFromEntity(entity.getClazz());
-			//this.course.addAll(entity.getCourse());
 			this.password = entity.getPassword();
 		}
 	}
@@ -132,14 +112,6 @@ public class UserModel extends BaseModel {
 			this.email = entity.getEmail();
 			this.fullname = entity.getFullname();
 			this.role.loadFromEntity(entity.getRole());
-			this.clazz.loadFromEntity(entity.getClazz());
-			//this.course.addAll(entity.getCourse());
-//			if (entity.getCourse() != null) {
-//				entity.getCourse().stream().forEach(e -> {
-//					CourseModel c = new CourseModel();
-//					c.loadFromEntity(e);
-//					this.course.add(c);
-//				});
 //			}
 		}
 	}

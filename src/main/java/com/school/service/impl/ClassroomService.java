@@ -12,7 +12,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,7 +44,6 @@ import com.school.model.ClassroomModel;
 import com.school.model.GradeModel;
 import com.school.service.IClassroomService;
 import com.school.service.IGradeService;
-import com.school.utils.HelpDistinctStream;
 
 @Service
 public class ClassroomService implements IClassroomService {

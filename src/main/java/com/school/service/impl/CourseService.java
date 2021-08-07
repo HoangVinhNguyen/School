@@ -102,17 +102,6 @@ public class CourseService implements ICourseService {
 		}
 		return SystemConstant.ERROR;
 	}
-	
-	@Override
-	public Long saveUser(CourseModel model, String method) {
-		if (model != null) {
-			model = getModifiedField(model, method);
-			CourseEntity userEntity = new CourseEntity();
-			userEntity.loadFromDTO(model);
-			return courseDAO.saveUser(userEntity);
-		}
-		return SystemConstant.ERROR;
-	}
 
 	@Override
 	public List<CourseModel> findAll() {

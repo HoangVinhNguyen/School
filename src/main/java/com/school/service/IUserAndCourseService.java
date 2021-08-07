@@ -10,8 +10,8 @@ public interface IUserAndCourseService {
 
 	public List<UserAndCourseModel> findAll();
 	public UserAndCourseModel findOne(UserModel user, CourseModel course);
-	public UserAndCourseModel findOneByUser(String userEmail);
-	public List<UserAndCourseModel> findOneByCourseId(long id);
+	public List<UserAndCourseModel> findOneByUser(String userEmail);
+	public List<UserAndCourseModel> findOneByCourseName(String name);
 	public Long save(UserAndCourseModel userAndCourseModel, String method);
 	public Long delete(UserAndCourseModel userAndCourseModel);
 	public int getTotalItem();

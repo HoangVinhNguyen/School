@@ -90,28 +90,6 @@ public class UserService implements IUserService {
 		}
 		return SystemConstant.ERROR;
 	}
-	
-	@Override
-	public Long saveCourse(UserModel model, String method) {
-		if (model != null) {
-			model = getModifiedField(model, method);
-			UserEntity userEntity = new UserEntity();
-			userEntity.loadFromDTO(model);
-			return userDAO.saveCourse(userEntity);
-		}
-		return SystemConstant.ERROR;
-	}
-	
-	@Override
-	public Long saveClazz(UserModel model, String method) {
-		if (model != null) {
-			model = getModifiedField(model, method);
-			UserEntity userEntity = new UserEntity();
-			userEntity.loadFromDTO(model);
-			return userDAO.saveClazz(userEntity);
-		}
-		return SystemConstant.ERROR;
-	}
 
 	@Override
 	public Long delete(UserModel model) {

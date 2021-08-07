@@ -3,15 +3,13 @@ package com.school.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.school.entity.ClassInEntity;
+import com.school.entity.ClazzEntity;
 
-public class ClassInModel extends BaseModel {
+public class ClazzModel extends BaseModel {
 
 	private String name;
 	private String code;
 	private GradeModel grade = new GradeModel();
-	private Set<ClassroomModel> listClassroom = new HashSet<ClassroomModel>();
-	private Set<UserModel> user = new HashSet<UserModel>();
 
 	public String getName() {
 		return name;
@@ -37,15 +35,7 @@ public class ClassInModel extends BaseModel {
 		this.grade = grade;
 	}
 
-	public Set<UserModel> getUser() {
-		return user;
-	}
-
-	public void setUser(Set<UserModel> user) {
-		this.user = user;
-	}
-
-	public void loadFromEntity(ClassInEntity entity) {
+	public void loadFromEntity(ClazzEntity entity) {
 		if (entity != null) {
 			this.setId(entity.getId());
 			this.code = entity.getCode();
@@ -56,13 +46,5 @@ public class ClassInModel extends BaseModel {
 			this.setModifiedBy(entity.getModifiedBy());
 			this.setModifiedDate(entity.getModifiedDate());
 		}
-	}
-
-	public Set<ClassroomModel> getListClassroom() {
-		return listClassroom;
-	}
-
-	public void setListClassroom(Set<ClassroomModel> listClassroom) {
-		this.listClassroom = listClassroom;
 	}
 }

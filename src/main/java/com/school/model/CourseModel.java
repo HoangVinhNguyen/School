@@ -1,16 +1,11 @@
 package com.school.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.school.entity.CourseEntity;
-import com.school.entity.UserEntity;
 
 public class CourseModel extends BaseModel {
 
 	private String name;
 	private String code;
-	private Set<UserModel> user = new HashSet<UserModel>();
 
 	public String getName() {
 		return name;
@@ -26,14 +21,6 @@ public class CourseModel extends BaseModel {
 
 	public void setCode(String code) {
 		this.code = code;
-	}
-
-	public Set<UserModel> getUser() {
-		return user;
-	}
-
-	public void setUser(Set<UserModel> user) {
-		this.user = user;
 	}
 
 	public void loadFromEntity(CourseEntity entity) {

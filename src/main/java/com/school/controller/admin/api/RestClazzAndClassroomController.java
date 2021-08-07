@@ -10,30 +10,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.school.constant.SystemConstant;
-import com.school.model.UserModel;
-import com.school.service.IUserService;
+import com.school.model.ClazzAndClassroomModel;
+import com.school.service.IClazzAndClassroomService;
 
 @RestController
 @RequestMapping(value= {"/admin"})
-public class RestUserController {
+public class RestClazzAndClassroomController {
 
 	@Autowired
-	private IUserService userService;
+	private IClazzAndClassroomService clazzAndClassroomService;
 	
-	@RequestMapping(value="/api-admin-user", method=RequestMethod.GET)
-	public List<UserModel> getAllUser(HttpServletRequest request) {
-		List<UserModel> users = userService.findAll();
-		return users;
+	@RequestMapping(value={"/api-admin-class-and-classroom"}, method=RequestMethod.GET)
+	public List<ClazzAndClassroomModel> getAllClassAndClassrooms(HttpServletRequest request) {
+		return clazzAndClassroomService.findAll();
 	}
 	
-	@RequestMapping(value="/api-admin-user", method=RequestMethod.POST)
-	public ResponseEntity<?> getAddUser(@RequestBody UserModel user) {
-		Long rs = userService.save(user, SystemConstant.INSERT);
+	@RequestMapping(value={"/api-admin-class-and-classroom"}, method=RequestMethod.POST)
+	public ResponseEntity<?> getCreateClassAndClassroom(HttpServletRequest request, @RequestBody ClazzAndClassroomModel model) {
+		Long rs = clazzAndClassroomService.save(model, SystemConstant.INSERT);
 		if (rs == SystemConstant.DUPLICATE) {
 			return new ResponseEntity<>(SystemConstant.DUPLICATE_RES.getBytes(SystemConstant.CHARSET_UTF_8), HttpStatus.NOT_ACCEPTABLE);
 		}
@@ -43,9 +40,9 @@ public class RestUserController {
 		return new ResponseEntity<>(SystemConstant.OK_RES.getBytes(SystemConstant.CHARSET_UTF_8), HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="/api-admin-user", method=RequestMethod.PUT)
-	public ResponseEntity<?> getUpdateUser(@RequestBody UserModel user) {
-		Long rs = userService.save(user,SystemConstant.MODIFY);
+	@RequestMapping(value={"/api-admin-class-and-classroom"}, method=RequestMethod.PUT)
+	public ResponseEntity<?> getUpdateClassAndClassroom(HttpServletRequest request, @RequestBody ClazzAndClassroomModel model) {
+		Long rs = clazzAndClassroomService.save(model, SystemConstant.MODIFY);
 		if (rs == SystemConstant.DUPLICATE) {
 			return new ResponseEntity<>(SystemConstant.DUPLICATE_RES.getBytes(SystemConstant.CHARSET_UTF_8), HttpStatus.NOT_ACCEPTABLE);
 		}
@@ -55,22 +52,12 @@ public class RestUserController {
 		return new ResponseEntity<>(SystemConstant.OK_RES.getBytes(SystemConstant.CHARSET_UTF_8), HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="/api-admin-user", method=RequestMethod.DELETE)
-	public ResponseEntity<?> getDeleteUser(@RequestBody UserModel user) {
-		Long rs = userService.delete(user);
+	@RequestMapping(value={"/api-admin-class-and-classroom"}, method= RequestMethod.DELETE)
+	public ResponseEntity<?> getDeleteClassAndClassroom(HttpServletRequest request, @RequestBody ClazzAndClassroomModel model) {
+		Long rs = clazzAndClassroomService.delete(model);
 		if (rs == SystemConstant.ERROR) {
 			return new ResponseEntity<>(SystemConstant.DELETE_FAILED_RES.getBytes(SystemConstant.CHARSET_UTF_8), HttpStatus.NOT_ACCEPTABLE);
 		}
 		return new ResponseEntity<>(SystemConstant.DELETE_OK_RES.getBytes(SystemConstant.CHARSET_UTF_8), HttpStatus.OK);
-	}
-	
-	@RequestMapping(value="/api-admin-user-file-teacher", method=RequestMethod.POST)
-	public Long getFileTeacher(@RequestParam(name="file") MultipartFile file) {
-		return userService.saveList(file, SystemConstant.ROLE_TEACHER);
-	}
-	
-	@RequestMapping(value="/api-admin-user-file-student", method=RequestMethod.POST)
-	public Long getFileStudent(@RequestParam(name="file") MultipartFile file) {
-		return userService.saveList(file, SystemConstant.ROLE_STUDENT);
 	}
 }

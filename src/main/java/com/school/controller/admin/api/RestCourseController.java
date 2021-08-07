@@ -57,18 +57,6 @@ public class RestCourseController {
 		return new ResponseEntity<>(SystemConstant.OK_RES.getBytes(SystemConstant.CHARSET_UTF_8), HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="/api-admin-course-user", method=RequestMethod.POST)
-	public ResponseEntity<?> getUpdateCourseUser(@RequestBody CourseModel model) {
-		Long rs = courseService.saveUser(model,SystemConstant.MODIFY);
-		if (rs == SystemConstant.DUPLICATE) {
-			return new ResponseEntity<>(SystemConstant.DUPLICATE_RES.getBytes(SystemConstant.CHARSET_UTF_8), HttpStatus.NOT_ACCEPTABLE);
-		}
-		else if (rs == SystemConstant.ERROR) {
-			return new ResponseEntity<>(SystemConstant.ERROR_RES, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return new ResponseEntity<>(SystemConstant.OK_RES.getBytes(SystemConstant.CHARSET_UTF_8), HttpStatus.OK);
-	}
-	
 	@RequestMapping(value={"/api-admin-course"}, method= RequestMethod.DELETE)
 	public ResponseEntity<?> getDeleteCourse(HttpServletRequest request, @RequestBody CourseModel model) {
 		Long rs = courseService.delete(model);

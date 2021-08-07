@@ -62,16 +62,24 @@ public class UserAndCourseService implements IUserAndCourseService {
 	}
 
 	@Override
-	public UserAndCourseModel findOneByUser(String userEmail) {
-		UserAndCourseModel model = new UserAndCourseModel();
-		model.loadFromEntity(userAndCourseDAO.findOneByUser(userEmail));
-		return model;
+	public List<UserAndCourseModel> findOneByUser(String userEmail) {
+		List<UserAndCourseModel> listModel = new ArrayList<>();
+		List<UserAndCourseEntity> list = userAndCourseDAO.findOneByUserEmail(userEmail);
+		if (!list.isEmpty()) {
+			list.forEach(e -> {
+				UserAndCourseModel model = new UserAndCourseModel();
+				model.loadFromEntity(e);
+				listModel.add(model);
+			});
+			return listModel;
+		}
+		return null;
 	}
 
 	@Override
-	public List<UserAndCourseModel> findOneByCourseId(long id) {
+	public List<UserAndCourseModel> findOneByCourseName(String name) {
 		List<UserAndCourseModel> inClassroomModels = new ArrayList<UserAndCourseModel>();
-		List<UserAndCourseEntity> inClassroomEntities = userAndCourseDAO.findOneByCourseId(id);
+		List<UserAndCourseEntity> inClassroomEntities = userAndCourseDAO.findOneByCourseName(name);
 		Iterator<UserAndCourseEntity> itr = inClassroomEntities.iterator();
 		while(itr.hasNext()) {
 			UserAndCourseModel model = new UserAndCourseModel();
@@ -92,12 +100,6 @@ public class UserAndCourseService implements IUserAndCourseService {
 					model.setUserModel(userModel);
 					model.setCourseModel(courseModel);
 				}
-				if (model.getOldCourse().getName() != null) {
-					CourseModel oldCourse = courseService.findOneByName(model.getOldCourse().getName());
-					if (oldCourse != null) {
-						model.setOldCourse(oldCourse);
-					}
-				}
 				UserAndCourseEntity userAndCourseEntity = new UserAndCourseEntity();
 				userAndCourseEntity.loadFromDTO(model);
 				return userAndCourseDAO.save(userAndCourseEntity);
@@ -108,17 +110,10 @@ public class UserAndCourseService implements IUserAndCourseService {
 
 	@Override
 	public Long delete(UserAndCourseModel model) {
-		if (model != null) {
-			UserModel userModel = userService.findOne(model.getUserModel().getId());
-			CourseModel courseModel = courseService.findOne(model.getCourseModel().getId());
-			if (userModel != null && courseModel != null) {
-				model.setUserModel(userModel);
-				model.setCourseModel(courseModel);
-				UserAndCourseEntity userAndCourseEntity = new UserAndCourseEntity();
-				userAndCourseEntity.loadFromDTO(model);
-				return userAndCourseDAO.delete(userAndCourseEntity);
-			}
-			return SystemConstant.ERROR;
+		if (model != null && model.getId() != null) {
+			UserAndCourseEntity userAndCourseEntity = new UserAndCourseEntity();
+			userAndCourseEntity.loadFromDTO(model);
+			return userAndCourseDAO.delete(userAndCourseEntity);
 		}
 		return SystemConstant.ERROR;
 	}

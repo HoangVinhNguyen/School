@@ -38,16 +38,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.school.DAO.IClassInDAO;
 import com.school.constant.SystemConstant;
-import com.school.entity.ClassInEntity;
+import com.school.entity.ClazzEntity;
 import com.school.entity.GradeEntity;
-import com.school.model.ClassInModel;
+import com.school.model.ClazzModel;
 import com.school.model.GradeModel;
-import com.school.service.IClassInService;
+import com.school.service.IClazzService;
 import com.school.service.IGradeService;
 import com.school.utils.GetCellValueMultiType;
 
 @Service
-public class ClassInService implements IClassInService {
+public class ClazzService implements IClazzService {
 
 	@Autowired
 	private IClassInDAO classInDAO;
@@ -56,37 +56,37 @@ public class ClassInService implements IClassInService {
 	private IGradeService gradeService;
 	
 	@Override
-	public ClassInModel findOne(long id) {
-		ClassInModel model = new ClassInModel();
+	public ClazzModel findOne(long id) {
+		ClazzModel model = new ClazzModel();
 		model.loadFromEntity(classInDAO.findOne(id));
 		return model;
 	}
 
 	@Override
-	public ClassInModel findOneByCode(String code) {
-		ClassInModel model = new ClassInModel();
+	public ClazzModel findOneByCode(String code) {
+		ClazzModel model = new ClazzModel();
 		model.loadFromEntity(classInDAO.findOneByCode(code));
 		return model;
 	}
 	
 	@Override
-	public ClassInModel findOneByName(String name) {
-		ClassInModel model = new ClassInModel();
+	public ClazzModel findOneByName(String name) {
+		ClazzModel model = new ClazzModel();
 		model.loadFromEntity(classInDAO.findOneByName(name));
 		return model;
 	}
 	
 	@Override
-	public List<ClassInModel> findAllByLevelGreadId(GradeModel gradeModel) {
+	public List<ClazzModel> findAllByLevelGreadId(GradeModel gradeModel) {
 		GradeEntity entity = new GradeEntity();
-		List<ClassInEntity> entityResult = new ArrayList<>();
-		List<ClassInModel> models = new ArrayList<>();
+		List<ClazzEntity> entityResult = new ArrayList<>();
+		List<ClazzModel> models = new ArrayList<>();
 		
 		entity.loadFromDTO(gradeModel);
 		entityResult = classInDAO.findAllByGreadId(entity);
 		if (entityResult != null) {
-			for (ClassInEntity item : entityResult) {
-				ClassInModel model = new ClassInModel();
+			for (ClazzEntity item : entityResult) {
+				ClazzModel model = new ClazzModel();
 				model.loadFromEntity(item);
 				models.add(model);
 			}
@@ -101,13 +101,13 @@ public class ClassInService implements IClassInService {
 	}
 
 	@Override
-	public Long save(ClassInModel model, String method) {
+	public Long save(ClazzModel model, String method) {
 		GradeModel gradeModel = gradeService.findOne(model.getGrade().getId());
 		if (gradeModel != null) {
 			model.setGrade(gradeModel);
 			model = getModifiedField(model, method);
 			if (validateField(model, method)) {
-				ClassInEntity gradeEntity = new ClassInEntity();
+				ClazzEntity gradeEntity = new ClazzEntity();
 				gradeEntity.loadFromDTO(model);
 				Long result = classInDAO.save(gradeEntity);
 				return result;
@@ -115,25 +115,14 @@ public class ClassInService implements IClassInService {
 		}
 		return SystemConstant.ERROR;
 	}
-	
-	@Override
-	public Long saveClassroom(ClassInModel model, String method) {
-		if (model != null) {
-			model = getModifiedField(model, method);
-			ClassInEntity classInEntity = new ClassInEntity();
-			classInEntity.loadFromDTO(model);
-			return classInDAO.saveClassroom(classInEntity);
-		}
-		return SystemConstant.ERROR;
-	}
 
 	@Override
-	public List<ClassInModel> findAll() {
-		List<ClassInModel> gradeModels = new ArrayList<ClassInModel>();
-		List<ClassInEntity> gradeEntities = classInDAO.findAll();
-		Iterator<ClassInEntity> itr = gradeEntities.iterator();
+	public List<ClazzModel> findAll() {
+		List<ClazzModel> gradeModels = new ArrayList<ClazzModel>();
+		List<ClazzEntity> gradeEntities = classInDAO.findAll();
+		Iterator<ClazzEntity> itr = gradeEntities.iterator();
 		while(itr.hasNext()) {
-			ClassInModel model = new ClassInModel();
+			ClazzModel model = new ClazzModel();
 			model.loadFromEntity(itr.next());
 			gradeModels.add(model);
 		}
@@ -141,8 +130,8 @@ public class ClassInService implements IClassInService {
 	}
 
 	@Override
-	public Long delete(ClassInModel model) {
-		ClassInEntity gradeEntity = new ClassInEntity();
+	public Long delete(ClazzModel model) {
+		ClazzEntity gradeEntity = new ClazzEntity();
 		gradeEntity.loadFromDTO(model);
 		return classInDAO.delete(gradeEntity);
 	}
@@ -188,7 +177,7 @@ public class ClassInService implements IClassInService {
 	
 	@Override
 	public Long getReport(HttpServletRequest request, HttpServletResponse response) {
-		List<ClassInModel> list = findAll();
+		List<ClazzModel> list = findAll();
 		if (list != null) {
 			XSSFWorkbook workbook = new XSSFWorkbook();
 			POIXMLProperties xmlProps = workbook.getProperties();    
@@ -250,9 +239,9 @@ public class ClassInService implements IClassInService {
 	        cellLevelGrade.setCellValue(SystemConstant.TITLE_GRADE_CLASS);
 	        cellLevelGrade.setCellStyle(style2);
 	        
-			Iterator<ClassInModel> itr = list.iterator();
+			Iterator<ClazzModel> itr = list.iterator();
 			while(itr.hasNext()) {
-				ClassInModel model = itr.next();
+				ClazzModel model = itr.next();
 				Row row = sheet.createRow(rowCount++);
 				int checkColumn = 0;
 	            for (Field field : model.getClass().getDeclaredFields()) {
@@ -301,7 +290,7 @@ public class ClassInService implements IClassInService {
 		return SystemConstant.ERROR;
 	}
 	
-	private ClassInModel getModifiedField(ClassInModel model, String method) {
+	private ClazzModel getModifiedField(ClazzModel model, String method) {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
@@ -324,7 +313,7 @@ public class ClassInService implements IClassInService {
 		return model;
 	}
 	
-	private boolean validateField(ClassInModel model, String method) {
+	private boolean validateField(ClazzModel model, String method) {
 		switch (method) {
 		case SystemConstant.INSERT:
 			if (model.getCode() == null || model.getName()  == null || model.getCreatedBy() == null 
@@ -357,7 +346,7 @@ public class ClassInService implements IClassInService {
 				for (Row row : sheet)
 				{
 					if (row.getRowNum() > 1) {
-						ClassInModel model = new ClassInModel();
+						ClazzModel model = new ClazzModel();
 						for (Cell cell : row)
 						{
 							/*
@@ -383,7 +372,7 @@ public class ClassInService implements IClassInService {
 						}
 						model = getModifiedField(model, SystemConstant.INSERT_FILE);
 						if (validateField(model, SystemConstant.INSERT_FILE)) {
-							ClassInEntity entity = new ClassInEntity();
+							ClazzEntity entity = new ClazzEntity();
 							entity.loadFromDTO(model);
 							classInDAO.save(entity);
 						}
@@ -402,7 +391,7 @@ public class ClassInService implements IClassInService {
 				for (Row row : sheet)
 				{
 					if (row.getRowNum() > 1) {
-						ClassInModel model = new ClassInModel();
+						ClazzModel model = new ClazzModel();
 						for (Cell cell : row)
 						{
 							/*
@@ -428,7 +417,7 @@ public class ClassInService implements IClassInService {
 						}
 						model = getModifiedField(model, SystemConstant.INSERT_FILE);
 						if (validateField(model, SystemConstant.INSERT_FILE)) {
-							ClassInEntity entity = new ClassInEntity();
+							ClazzEntity entity = new ClazzEntity();
 							entity.loadFromDTO(model);
 							classInDAO.save(entity);
 						}

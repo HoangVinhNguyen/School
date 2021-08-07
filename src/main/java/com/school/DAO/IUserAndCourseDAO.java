@@ -10,9 +10,9 @@ public interface IUserAndCourseDAO {
 
 	public List<UserAndCourseEntity> findAll();
 	public UserAndCourseEntity findOne(UserEntity user, CourseEntity course);
-	public UserAndCourseEntity findOneByUser(String userEmail);
-	public UserAndCourseEntity findOneByUserId(Long id);
-	public List<UserAndCourseEntity> findOneByCourseId(long id);
+	public UserAndCourseEntity findOneByID(long id);
+	public List<UserAndCourseEntity> findOneByUserEmail(String userEmail);
+	public List<UserAndCourseEntity> findOneByCourseName(String name);
 	public Long save(UserAndCourseEntity userAndCourseEntity);
 	public Long delete(UserAndCourseEntity userAndCourseEntity);
 	public int getTotalItem();
