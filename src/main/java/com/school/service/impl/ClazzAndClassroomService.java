@@ -113,6 +113,7 @@ public class ClazzAndClassroomService implements IClazzAndClassroomService {
 	@Override
 	public Long delete(ClazzAndClassroomModel model) {
 		if (model != null && model.getId() != null) {
+			model = getModifiedField(model, SystemConstant.MODIFY);
 			ClazzAndClassroomEntity entity = new ClazzAndClassroomEntity();
 			entity.loadFromDTO(model);
 			return clazzAndClassroomDAO.delete(entity);

@@ -111,6 +111,7 @@ public class UserAndClazzService implements IUserAndClazzService {
 	@Override
 	public Long delete(UserAndClazzModel model) {
 		if (model != null && model.getId() != null) {
+			model = getModifiedField(model, SystemConstant.MODIFY);
 			UserAndClazzEntity userAndClazzEntity = new UserAndClazzEntity();
 			userAndClazzEntity.loadFromDTO(model);
 			return userAndClazzDAO.delete(userAndClazzEntity);

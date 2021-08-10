@@ -10,6 +10,8 @@ public interface IUserService {
 
 	public UserModel findByEmailAndPasswordAndStatus(String email, String password, Integer status);
 	public UserModel findByEmail(String email);
+	public UserModel findByEmailCheckTeacher(String email);
+	public UserModel findByEmailCheckStudent(String email);
 	public UserModel findByUserName(String email);
 	public List<UserModel> findAll();
 	public UserModel findOne(long id);

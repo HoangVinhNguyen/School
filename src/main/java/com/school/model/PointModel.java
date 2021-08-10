@@ -6,7 +6,7 @@ public class PointModel extends BaseModel {
 
 	private UserModel teacher = new UserModel();
 	private UserModel student = new UserModel();
-	private ClassroomModel classroom = new ClassroomModel();
+	private ClazzModel clazz = new ClazzModel();
 	private CourseModel course = new CourseModel();
 	private Double point;
 
@@ -26,12 +26,12 @@ public class PointModel extends BaseModel {
 		this.student = student;
 	}
 
-	public ClassroomModel getClassroom() {
-		return classroom;
+	public ClazzModel getClazz() {
+		return clazz;
 	}
 
-	public void setClassroom(ClassroomModel classroom) {
-		this.classroom = classroom;
+	public void setClazz(ClazzModel clazz) {
+		this.clazz = clazz;
 	}
 
 	public CourseModel getCourse() {
@@ -53,12 +53,11 @@ public class PointModel extends BaseModel {
 	public void loadFromEntity(PointEntity entity) {
 		if (entity != null) {
 			this.setId(entity.getId());
-			this.classroom.loadFromEntity(entity.getClassroom());
+			this.clazz.loadFromEntity(entity.getClazz());
 			this.course.loadFromEntity(entity.getCourse());
 			this.student.loadFromEntityNotPassword(entity.getStudent());
 			this.teacher.loadFromEntityNotPassword(entity.getTeacher());
 			this.point = entity.getPoint();
-			this.setId(entity.getId());
 			this.setCreatedBy(entity.getCreatedBy());
 			this.setCreatedDate(entity.getCreatedDate());
 			this.setModifiedBy(entity.getModifiedBy());

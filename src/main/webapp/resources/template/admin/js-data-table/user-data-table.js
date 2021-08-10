@@ -9,7 +9,7 @@ var rowDataUser;
 var dataExcel = ['a'];
 
 $(document).ready(function() {
-	tableUser = $('#user-table').DataTable({
+	/*tableUser = $('#user-table').DataTable({
 		destroy: true,
 		retrieve: true,
 		"autoWidth": false,
@@ -31,8 +31,21 @@ $(document).ready(function() {
 															</button>
 														</div>`
 		}]
-	});
+	});*/
+	checkedNavItem();
 });
+
+function checkedNavItem() {
+	$('.nav-link').each(function() {
+		if (window.location.href.search($(this).attr("href")) !== -1) {
+			$(this).removeClass("active");
+			$(this).addClass("active");
+		}
+		else {
+			$(this).removeClass("active");
+		}
+	});
+};
 
 
 $('#btnGetListUser').on('click', function() {

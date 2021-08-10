@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.school.DAO.IUserDAO;
+import com.school.constant.SystemConstant;
 import com.school.entity.UserEntity;
 
 @Repository
@@ -37,6 +38,36 @@ public class UserDAO implements IUserDAO{
 		if (!list.isEmpty()) {
 			UserEntity user = (UserEntity) list.get(0);
 			return user;
+		}
+		return null;
+	}
+	
+	@Override
+	public UserEntity findByEmailCheckTeacher(String email) {
+		StringBuilder sql = new StringBuilder("SELECT u FROM UserEntity as u ");
+		sql.append(" WHERE u.email=?0 and u.isDeleted=0");
+		List list = sessionFactory.getCurrentSession().createQuery(sql.toString())
+				.setParameter(0, email).getResultList();
+		if (!list.isEmpty()) {
+			UserEntity user = (UserEntity) list.get(0);
+			if (user.getRole().getName().equals(SystemConstant.TEACHER)) {
+				return user;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public UserEntity findByEmailCheckStudent(String email) {
+		StringBuilder sql = new StringBuilder("SELECT u FROM UserEntity as u ");
+		sql.append(" WHERE u.email=?0 and u.isDeleted=0");
+		List list = sessionFactory.getCurrentSession().createQuery(sql.toString())
+				.setParameter(0, email).getResultList();
+		if (!list.isEmpty()) {
+			UserEntity user = (UserEntity) list.get(0);
+			if (user.getRole().getName().equals(SystemConstant.STUDENT)) {
+				return user;
+			}
 		}
 		return null;
 	}

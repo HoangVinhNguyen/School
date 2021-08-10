@@ -8,23 +8,22 @@ import javax.persistence.Table;
 import com.school.model.PointModel;
 
 @Entity
-@Table(name="point")
+@Table(name = "point")
 public class PointEntity extends BaseEntity {
 
 	@ManyToOne
-	@JoinColumn(name="teacher_id")
+	@JoinColumn(name = "teacher_id")
 	private UserEntity teacher;
 	@ManyToOne
-	@JoinColumn(name="student_id")
+	@JoinColumn(name = "student_id")
 	private UserEntity student;
 	@ManyToOne
-	@JoinColumn(name="classroom_id")
-	private ClassroomEntity classroom;
+	@JoinColumn(name = "class_id")
+	private ClazzEntity clazz;
 	@ManyToOne
-	@JoinColumn(name="course_id")
+	@JoinColumn(name = "course_id")
 	private CourseEntity course;
 	private Double point;
-
 
 	public UserEntity getTeacher() {
 		return teacher;
@@ -42,12 +41,12 @@ public class PointEntity extends BaseEntity {
 		this.student = student;
 	}
 
-	public ClassroomEntity getClassroom() {
-		return classroom;
+	public ClazzEntity getClazz() {
+		return clazz;
 	}
 
-	public void setClassroom(ClassroomEntity classroom) {
-		this.classroom = classroom;
+	public void setClazz(ClazzEntity clazz) {
+		this.clazz = clazz;
 	}
 
 	public CourseEntity getCourse() {
@@ -73,12 +72,16 @@ public class PointEntity extends BaseEntity {
 			this.setCreatedDate(model.getCreatedDate());
 			this.setModifiedBy(model.getModifiedBy());
 			this.setModifiedDate(model.getModifiedDate());
-			this.classroom.loadFromDTO(model.getClassroom());
+			this.clazz = new ClazzEntity();
+			this.course = new CourseEntity();
+			this.student = new UserEntity();
+			this.teacher = new UserEntity();
+			this.clazz.loadFromDTO(model.getClazz());
 			this.course.loadFromDTO(model.getCourse());
 			this.student.loadFromDTO(model.getStudent());
 			this.teacher.loadFromDTO(model.getTeacher());
 			this.point = model.getPoint();
-		 }
+		}
 	}
-	
+
 }

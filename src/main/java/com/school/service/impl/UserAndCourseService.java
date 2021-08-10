@@ -111,6 +111,7 @@ public class UserAndCourseService implements IUserAndCourseService {
 	@Override
 	public Long delete(UserAndCourseModel model) {
 		if (model != null && model.getId() != null) {
+			model = getModifiedField(model, SystemConstant.MODIFY);
 			UserAndCourseEntity userAndCourseEntity = new UserAndCourseEntity();
 			userAndCourseEntity.loadFromDTO(model);
 			return userAndCourseDAO.delete(userAndCourseEntity);

@@ -135,9 +135,13 @@ public class GradeService implements IGradeService {
 
 	@Override
 	public Long delete(GradeModel model) {
-		GradeEntity gradeEntity = new GradeEntity();
-		gradeEntity.loadFromDTO(model);
-		return gradeDAO.delete(gradeEntity);
+		if (model != null && model.getId() != null) {
+			model = getModifiedField(model, SystemConstant.MODIFY);
+			GradeEntity gradeEntity = new GradeEntity();
+			gradeEntity.loadFromDTO(model);
+			return gradeDAO.delete(gradeEntity);
+		}
+		return SystemConstant.ERROR;
 	}
 	
 	@Override

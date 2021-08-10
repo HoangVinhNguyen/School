@@ -44,35 +44,38 @@ public class TeacherClassroomService implements ITeacherClassroomService {
 
 	@Override
 	public PointModel findOneByClassroom(String classroomId) {
-		PointModel model = new PointModel();
-		model.loadFromEntity(pointDAO.findOneByClassroom(classroomId));
-		return model;
+//		PointModel model = new PointModel();
+//		model.loadFromEntity(pointDAO.findOneByClassroom(classroomId));
+//		return model;
+		return null;
 	}
 
 	@Override
 	public List<PointModel> findAllByTeacherEmail(String userEmail) {
-		List<PointModel> pointModels = new ArrayList<PointModel>();
-		List<PointEntity> pointEntities = pointDAO.findAllByTeacherEmail(userEmail);
-		Iterator<PointEntity> itr = pointEntities.iterator();
-		while(itr.hasNext()) {
-			PointModel model = new PointModel();
-			model.loadFromEntity(itr.next());
-			pointModels.add(model);
-		}
-		return pointModels;
+//		List<PointModel> pointModels = new ArrayList<PointModel>();
+//		List<PointEntity> pointEntities = pointDAO.findAllByTeacherEmail(userEmail);
+//		Iterator<PointEntity> itr = pointEntities.iterator();
+//		while(itr.hasNext()) {
+//			PointModel model = new PointModel();
+//			model.loadFromEntity(itr.next());
+//			pointModels.add(model);
+//		}
+//		return pointModels;
+		return null;
 	}
 	
 	@Override
 	public List<PointModel> findAllByStudentEmail(String userEmail) {
-		List<PointModel> pointModels = new ArrayList<PointModel>();
-		List<PointEntity> pointEntities = pointDAO.findAllByStudentEmail(userEmail);
-		Iterator<PointEntity> itr = pointEntities.iterator();
-		while(itr.hasNext()) {
-			PointModel model = new PointModel();
-			model.loadFromEntity(itr.next());
-			pointModels.add(model);
-		}
-		return pointModels;
+//		List<PointModel> pointModels = new ArrayList<PointModel>();
+//		List<PointEntity> pointEntities = pointDAO.findAllByStudentEmail(userEmail);
+//		Iterator<PointEntity> itr = pointEntities.iterator();
+//		while(itr.hasNext()) {
+//			PointModel model = new PointModel();
+//			model.loadFromEntity(itr.next());
+//			pointModels.add(model);
+//		}
+//		return pointModels;
+		return null;
 	}
 
 	@Override
@@ -104,15 +107,16 @@ public class TeacherClassroomService implements ITeacherClassroomService {
 
 	@Override
 	public List<PointModel> findAllByClassroom(String className) {
-		List<PointModel> pointModels = new ArrayList<PointModel>();
-		List<PointEntity> pointEntities = pointDAO.findAllByClassroom(className);
-		Iterator<PointEntity> itr = pointEntities.iterator();
-		while(itr.hasNext()) {
-			PointModel model = new PointModel();
-			model.loadFromEntity(itr.next());
-			pointModels.add(model);
-		}
-		return pointModels;
+//		List<PointModel> pointModels = new ArrayList<PointModel>();
+//		List<PointEntity> pointEntities = pointDAO.findAllByClassroom(className);
+//		Iterator<PointEntity> itr = pointEntities.iterator();
+//		while(itr.hasNext()) {
+//			PointModel model = new PointModel();
+//			model.loadFromEntity(itr.next());
+//			pointModels.add(model);
+//		}
+//		return pointModels;
+		return null;
 	}
 	
 	private PointModel getModifiedField(PointModel model, String method) {

@@ -139,7 +139,8 @@ public class ClassroomService implements IClassroomService {
 
 	@Override
 	public Long delete(ClassroomModel model) {
-		if (model != null) {
+		if (model != null && model.getId() != null) {
+			model = getModifiedField(model, SystemConstant.MODIFY);
 			ClassroomEntity classroomEntity = new ClassroomEntity();
 			classroomEntity.loadFromDTO(model);
 			return classroomDAO.delete(classroomEntity);

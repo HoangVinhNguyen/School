@@ -1,3 +1,44 @@
-a{
-	cursor: pointer
+body {
+	min-height: 100vh;
+	min-height: -webkit-fill-available;
+	background-color: #FAFAFA;
 }
+
+html {
+	height: -webkit-fill-available;
+}
+
+main {
+	display: flex;
+	flex-wrap: nowrap;
+	height: 100vh;
+	height: -webkit-fill-available;
+	max-height: 100vh;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+.dropdown-toggle {
+  outline: 0;
+}
+.bi {
+  vertical-align: -.125em;
+  fill: currentColor;
+}
+
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}
+
+/* HEADER */
+header {
+	background-color: #CECEF6;
+}
+/* HEADER */
+
+/* MENU */
+#menu {
+	background-color: #F5D0A9;
+}
+/* MENU */

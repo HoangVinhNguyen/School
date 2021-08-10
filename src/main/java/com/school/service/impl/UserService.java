@@ -42,20 +42,55 @@ public class UserService implements IUserService {
 	
 	@Override
 	public UserModel findByEmailAndPasswordAndStatus(String email, String password, Integer status) {
-		UserEntity userEntity = userDAO.findByEmailAndPasswordAndStatus(email, password, status);
-		UserModel model = new UserModel();
-		model.loadFromEntity(userEntity);
-		return model;
+		if (email != null && password != null && status != null) {
+			UserEntity userEntity = userDAO.findByEmailAndPasswordAndStatus(email, password, status);
+			if (userEntity != null) {
+				UserModel model = new UserModel();
+				model.loadFromEntity(userEntity);
+				return model;
+			}
+		}
+		return null;
 	}
 
 	@Override
 	public UserModel findByEmail(String email) {
-		UserModel model = new UserModel();
-		UserEntity entity = new UserEntity();
-		entity = userDAO.findByEmail(email);
-		if (entity != null) {
-			model.loadFromEntityNotPassword(entity);
-			return model;
+		if (email != null) {
+			UserEntity entity = new UserEntity();
+			entity = userDAO.findByEmail(email);
+			if (entity != null) {
+				UserModel model = new UserModel();
+				model.loadFromEntityNotPassword(entity);
+				return model;
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public UserModel findByEmailCheckTeacher(String email) {
+		if (email != null) {
+			UserEntity entity = new UserEntity();
+			entity = userDAO.findByEmailCheckTeacher(email);
+			if (entity != null) {
+				UserModel model = new UserModel();
+				model.loadFromEntityNotPassword(entity);
+				return model;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public UserModel findByEmailCheckStudent(String email) {
+		if (email != null) {
+			UserEntity entity = new UserEntity();
+			entity = userDAO.findByEmailCheckStudent(email);
+			if (entity != null) {
+				UserModel model = new UserModel();
+				model.loadFromEntityNotPassword(entity);
+				return model;
+			}
 		}
 		return null;
 	}
@@ -93,10 +128,14 @@ public class UserService implements IUserService {
 
 	@Override
 	public Long delete(UserModel model) {
-		model = getModifiedField(model, SystemConstant.MODIFY);
-		UserEntity userEntity = new UserEntity();
-		userEntity.loadFromDTO(model);
-		return userDAO.delete(userEntity);
+		if (model != null && model.getId() != null) {
+			model = getModifiedField(model, SystemConstant.MODIFY);
+			model = getModifiedField(model, SystemConstant.MODIFY);
+			UserEntity userEntity = new UserEntity();
+			userEntity.loadFromDTO(model);
+			return userDAO.delete(userEntity);
+		}
+		return SystemConstant.ERROR;
 	}
 
 	@Override
@@ -224,4 +263,5 @@ public class UserService implements IUserService {
 		}
 		return null;
 	}
+
 }

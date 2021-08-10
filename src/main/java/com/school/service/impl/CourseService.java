@@ -122,6 +122,7 @@ public class CourseService implements ICourseService {
 	@Override
 	public Long delete(CourseModel model) {
 		if (model != null) {
+			model = getModifiedField(model, SystemConstant.MODIFY);
 			CourseEntity courseEntity = new CourseEntity();
 			courseEntity.loadFromDTO(model);
 			return courseDAO.delete(courseEntity);

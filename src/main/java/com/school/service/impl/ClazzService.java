@@ -131,9 +131,13 @@ public class ClazzService implements IClazzService {
 
 	@Override
 	public Long delete(ClazzModel model) {
-		ClazzEntity gradeEntity = new ClazzEntity();
-		gradeEntity.loadFromDTO(model);
-		return classInDAO.delete(gradeEntity);
+		if (model != null && model.getId() != null) {
+			model = getModifiedField(model, SystemConstant.MODIFY);
+			ClazzEntity gradeEntity = new ClazzEntity();
+			gradeEntity.loadFromDTO(model);
+			return classInDAO.delete(gradeEntity);
+		}
+		return SystemConstant.ERROR;
 	}
 	
 	@Override

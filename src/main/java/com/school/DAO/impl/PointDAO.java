@@ -8,13 +8,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.school.DAO.IPointDAO;
-import com.school.entity.ClassroomEntity;
+import com.school.constant.SystemConstant;
+import com.school.entity.ClazzEntity;
 import com.school.entity.CourseEntity;
-import com.school.entity.InClassroomEntity;
 import com.school.entity.PointEntity;
 import com.school.entity.UserEntity;
-import com.school.model.UserModel;
 import com.school.service.IClassroomService;
+import com.school.service.IClazzService;
 import com.school.service.ICourseService;
 import com.school.service.IInClassroomService;
 import com.school.service.IUserService;
@@ -33,6 +33,9 @@ public class PointDAO implements IPointDAO{
 	private IInClassroomService inClassroomService;
 	
 	@Autowired
+	private IClazzService clazzService;
+	
+	@Autowired
 	private ICourseService courseService;
 	
 	@Autowired
@@ -42,8 +45,11 @@ public class PointDAO implements IPointDAO{
 	public List<PointEntity> findAll() {
 		String hql = "SELECT tc FROM PointEntity tc WHERE tc.isDeleted=0";
 		@SuppressWarnings("unchecked")
-		List<PointEntity> list = sessionFactory.getCurrentSession().createQuery(hql).list();
-		return list;
+		List<PointEntity> list = sessionFactory.getCurrentSession().createQuery(hql).getResultList();
+		if (!list.isEmpty()) {
+			return list;
+		}
+		return null;
 	}
 
 	@Override
@@ -55,25 +61,40 @@ public class PointDAO implements IPointDAO{
 		}
 		return null;
 	}
+	
+	@Override
+	public PointEntity findOneByUserCourseClazz(UserEntity teacher, UserEntity student, CourseEntity course,
+			ClazzEntity clazz) {
+		String hql = "SELECT p FROM PointEntity p WHERE p.teacher=?0 AND p.student=?1 "
+				+ "AND p.course=?2 AND p.clazz=?3 AND p.isDeleted = 0";
+		List list = sessionFactory.getCurrentSession().createQuery(hql)
+				.setParameter(0, teacher)
+				.setParameter(1, student)
+				.setParameter(2, course)
+				.setParameter(3, clazz).getResultList();
+		if (!list.isEmpty()) {
+			return (PointEntity) list.get(0);
+		}
+		return null;
+	}
 
 	@Override
-	public PointEntity findOneByClassroom(String classroomId) {
-		String hql = "SELECT tc FROM PointEntity tc WHERE code = ? AND tc.isDeleted = 0";
-		List results = sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, classroomId).getResultList();
-		if (!results.isEmpty()) {
-			return (PointEntity) results.get(0);
+	public List<PointEntity> findAllByCourse(CourseEntity course) {
+		if (course != null) {
+			String hql = "SELECT tc FROM PointEntity tc WHERE tc.course=?0 AND tc.isDeleted = 0";
+			List list = sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, course).getResultList();
+			if (!list.isEmpty()) {
+				return list;
+			}
 		}
 		return null;
 	}
 	
 	@Override
-	public List<PointEntity> findAllByTeacherEmail(String userEmail) {
-		UserModel model = userService.findByEmail(userEmail);
-		if (model != null) {
-			UserEntity entity = new UserEntity();
-			entity.loadFromDTO(model);
-			String hql = "SELECT tc FROM PointEntity tc WHERE tc.teacher=? AND tc.isDeleted=0";
-			List results = sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, userEmail).getResultList();
+	public List<PointEntity> findAllByClazz(ClazzEntity clazz) {
+		if (clazz != null) {
+			String hql = "SELECT tc FROM PointEntity tc WHERE tc.clazz=?0 AND tc.isDeleted=0";
+			List results = sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, clazz).getResultList();
 			if (!results.isEmpty()) {
 				return results;
 			}
@@ -83,13 +104,23 @@ public class PointDAO implements IPointDAO{
 	}
 	
 	@Override
-	public List<PointEntity> findAllByStudentEmail(String userEmail) {
-		UserModel model = userService.findByEmail(userEmail);
-		if (model != null) {
-			UserEntity entity = new UserEntity();
-			entity.loadFromDTO(model);
+	public List<PointEntity> findAllByTeacher(UserEntity teacher) {
+		if (teacher != null) {
+			String hql = "SELECT tc FROM PointEntity tc WHERE tc.teacher=? AND tc.isDeleted=0";
+			List results = sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, teacher).getResultList();
+			if (!results.isEmpty()) {
+				return results;
+			}
+			return null;
+		}
+		return null;
+	}
+	
+	@Override
+	public List<PointEntity> findAllByStudent(UserEntity student) {
+		if (student != null) {
 			String hql = "SELECT tc FROM PointEntity tc WHERE tc.student=? AND tc.isDeleted=0";
-			List results = sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, entity).getResultList();
+			List results = sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, student).getResultList();
 			if (!results.isEmpty()) {
 				return results;
 			}
@@ -106,96 +137,46 @@ public class PointDAO implements IPointDAO{
 
 	@Override
 	public Long save(PointEntity entity) {
-		PointEntity pointCheck;
-		ClassroomEntity classroomEntityCheck = new ClassroomEntity();
-		UserEntity userTeacherCheck = new UserEntity();
-		UserEntity userStudentCheck = new UserEntity();
-		CourseEntity courseCheck = new CourseEntity();
-		InClassroomEntity teacherInClass = new InClassroomEntity();
-		InClassroomEntity studentInClass = new InClassroomEntity();
-		
-		classroomEntityCheck.loadFromDTO(classroomService.findOne(entity.getClassroom().getId()));
-		userTeacherCheck.loadFromDTO(userService.findOne(entity.getTeacher().getId()));
-		userStudentCheck.loadFromDTO(userService.findOne(entity.getStudent().getId()));
-		courseCheck.loadFromDTO(courseService.findOne(entity.getCourse().getId()));
 		if (entity.getId() != null) {
-			pointCheck = findOne(entity.getId());
-			if ((pointCheck != null && pointCheck.getId() != 0)
-					&& userTeacherCheck != null && userStudentCheck != null && courseCheck != null) {
-				teacherInClass.loadFromDTO(inClassroomService.findOneByUser(userTeacherCheck.getEmail()));
-				studentInClass.loadFromDTO(inClassroomService.findOneByUser(userStudentCheck.getEmail()));
-				if (teacherInClass != null && studentInClass != null) {
-					if (teacherInClass.getClassroom().getId() == studentInClass.getClassroom().getId()) {
-						String hql = "UPDATE PointEntity "
-								+ "SET teacherEntity=?0, studentEntity=?1, classroomEntity=?2, courseEntity=?3, modifiedBy=?4, modifiedDate=?5 WHERE id=?6";
-						sessionFactory.getCurrentSession().createQuery(hql)
-						.setParameter(0, entity.getTeacher())
-						.setParameter(1, entity.getStudent())
-						.setParameter(2, entity.getClassroom())
-						.setParameter(3, entity.getCourse())
-						.setParameter(4, entity.getModifiedBy())
-						.setParameter(5, entity.getModifiedDate())
-						.setParameter(6, entity.getId()).executeUpdate();
-						return entity.getId();
-					}
-					else {
-						sessionFactory.getCurrentSession().beginTransaction().rollback();
-						return 0L;
-					}
-				}
-				else {
-					sessionFactory.getCurrentSession().beginTransaction().rollback();
-					return 0L;
-				}
-				
-			}
-			else {
-				sessionFactory.getCurrentSession().beginTransaction().rollback();
-				return 0L;
-			}
+			PointEntity updateEntity = findOne(entity.getId());
+			updateEntity.setPoint(entity.getPoint());
+			updateEntity.setTeacher(entity.getTeacher());
+			updateEntity.setStudent(entity.getStudent());
+			updateEntity.setClazz(entity.getClazz());
+			updateEntity.setCourse(entity.getCourse());
+			updateEntity.setModifiedBy(entity.getModifiedBy());
+			updateEntity.setModifiedDate(entity.getModifiedDate());
+			PointEntity result = (PointEntity) sessionFactory.getCurrentSession().merge(updateEntity);
+			return result.getId();
 		}
-		if (userTeacherCheck != null && userStudentCheck != null && courseCheck != null) {
-			sessionFactory.getCurrentSession().save(entity);
-			return entity.getId();
-		}
-		sessionFactory.getCurrentSession().beginTransaction().rollback();
-		return 0L;
+		sessionFactory.getCurrentSession().persist(entity);
+		return entity.getId();
 	}
 
 	@Override
 	public Long delete(PointEntity entity) {
-		String hql = "UPDATE PointEntity SET modifiedBy=?0, modifiedDate=?1, isDeleted=1 WHERE id=?2";
-		sessionFactory.getCurrentSession().createQuery(hql)
-		.setParameter(0, entity.getModifiedBy())
-		.setParameter(1, entity.getModifiedDate())
-		.setParameter(2, entity.getId()).executeUpdate();
-		return entity.getId();
+		if (entity != null && entity.getId() != null) {
+			PointEntity updateEntity = findOne(entity.getId());
+			updateEntity.setIsDeleted((byte) 1);
+			updateEntity.setModifiedBy(entity.getModifiedBy());
+			updateEntity.setModifiedDate(entity.getModifiedDate());
+			PointEntity result = (PointEntity) sessionFactory.getCurrentSession().merge(updateEntity);
+			return result.getId();
+		}
+		return SystemConstant.ERROR;
 	}
 
 	@Override
 	public Long savePoint(PointEntity entity) {
-		String hql = "UPDATE PointEntity SET point=?0, modifiedBy=?1, modifiedDate=?2 WHERE id=?3";
-		sessionFactory.getCurrentSession().createQuery(hql)
-		.setParameter(0, entity.getPoint())
-		.setParameter(1, entity.getModifiedBy())
-		.setParameter(2, entity.getModifiedDate())
-		.setParameter(3, entity.getId());
-		return entity.getId();
-	}
-
-	@Override
-	public List<PointEntity> findAllByClassroom(String className) {
-		ClassroomEntity classroom = new ClassroomEntity();
-		classroom.loadFromDTO(classroomService.findOneByName(className));
-		if (classroom != null) {
-			String hql = "SELECT tc FROM PointEntity tc WHERE tc.classroomId=?0 AND tc.isDeleted=0";
-			List results = sessionFactory.getCurrentSession().createQuery(hql).setParameter(0, classroom.getId()).getResultList();
-			if (!results.isEmpty()) {
-				return results;
-			}
-			return null;
+		if (entity != null) {
+			PointEntity updateEntity = findOne(entity.getId());
+			updateEntity.setPoint(entity.getPoint());
+			updateEntity.setModifiedBy(entity.getModifiedBy());
+			updateEntity.setModifiedDate(entity.getModifiedDate());
+			PointEntity result = (PointEntity) sessionFactory.getCurrentSession().merge(updateEntity);
+			return result.getId();
 		}
-		return null;
+		return SystemConstant.ERROR;
 	}
 
 }
