@@ -2,6 +2,7 @@ package com.school.common.entity;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -13,12 +14,19 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.school.common.common.ResourceGet;
 import com.school.common.common.SystemConstant;
 
 @Entity
 @Table(name = "users")
 public class User extends AbstractEntity {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6655451999701501635L;
 
 	@Column(name = "first_name", length = 45, nullable = false)
 	private String firstName;
@@ -29,19 +37,50 @@ public class User extends AbstractEntity {
 	@Column(length = 128, nullable = false, unique = true)
 	private String email;
 
+	@Column(nullable = true)
+	private String phone;
+
 	@Column(length = 64, nullable = false)
 	private String password;
 
+	@Column(nullable = true)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dob;
+	
+	@Column(nullable = true)
+	private String address;
+	
+	@Column(nullable = true)
 	private String photos;
+	
+	@Column(nullable = false)
 	private boolean enabled;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
 
+	public User() {
+
+	}
+
+	public User(String firstName, String lastName, String email, String password) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+	}
+
 	public String getFirstName() {
 		return firstName;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public void setFirstName(String firstName) {
@@ -80,6 +119,14 @@ public class User extends AbstractEntity {
 		this.dob = dob;
 	}
 
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	public String getPhotos() {
 		return photos;
 	}
@@ -94,6 +141,23 @@ public class User extends AbstractEntity {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
+	@Transient
+	public void addRole(Role role) {
+		Optional<Role> roleOp = Optional.ofNullable(role);
+		if (roleOp.isPresent()) {
+			Role r = roleOp.get().clone();
+			this.roles.add(r);
+		}
 	}
 
 	@Override
@@ -129,6 +193,24 @@ public class User extends AbstractEntity {
 		return getImagePath.getUserImagePathWithId(this.getId(), this.getPhotos());
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder printUser = new StringBuilder();
+		printUser.append("[");
+		printUser.append(getId());
+		printUser.append(", ");
+		printUser.append(getEmail());
+		printUser.append(", ");
+		printUser.append(getFirstName());
+		printUser.append(", ");
+		printUser.append(getLastName());
+		printUser.append(", ");
+		printUser.append(isEnabled());
+		printUser.append("]");
+
+		return printUser.toString();
+	}
+
 	@Transient
 	public String getFullName() {
 		StringBuilder fullname = new StringBuilder(getFirstName());
@@ -136,4 +218,23 @@ public class User extends AbstractEntity {
 		fullname.append(getLastName());
 		return fullname.toString();
 	}
+
+	@Transient
+	public User clone() {
+		User user = new User();
+		user.setId(getId());
+		user.setDob(getDob());
+		user.setEmail(getEmail());
+		user.setEnabled(isEnabled());
+		user.setFirstName(getFirstName());
+		user.setLastName(getLastName());
+		user.setPhotos(getPhotos());
+		user.setDeleted(this.isDeleted());
+		user.setCreatedBy(this.getCreatedBy());
+		user.setCreatedDate(this.getCreatedDate());
+		user.setModifiedBy(this.getModifiedBy());
+		user.setModifiedDate(this.getModifiedDate());
+		return user;
+	}
+
 }

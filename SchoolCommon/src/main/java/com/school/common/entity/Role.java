@@ -1,30 +1,36 @@
 package com.school.common.entity;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "roles")
-public class Role extends AbstractEntity implements Serializable {
+public class Role extends AbstractEntity {
 
-	private static final long serialVersionUID = -3729632593498402041L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2553421292532850624L;
 
 	@Column(length = 45, nullable = false, unique = true)
 	private String name;
 
 	@Column(length = 150, nullable = false)
-	private String decription;
+	private String description;
 
 	public Role() {
 		
 	}
-
+	
+	public Role(Integer id) {
+		this.setId(id);
+	}
+	
 	public Role(String name, String decription) {
 		this.name = name;
-		this.decription = decription;
+		this.description = decription;
 	}
 
 	public String getName() {
@@ -35,12 +41,12 @@ public class Role extends AbstractEntity implements Serializable {
 		this.name = name;
 	}
 
-	public String getDecription() {
-		return decription;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDecription(String decription) {
-		this.decription = decription;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override
@@ -72,4 +78,19 @@ public class Role extends AbstractEntity implements Serializable {
 	public String toString() {
 		return this.name;
 	}
+	
+	@Transient
+	public Role clone() {
+		Role role = new Role();
+		role.setId(this.getId());
+		role.setName(this.getName());
+		role.setDescription(this.getDescription());
+		role.setDeleted(this.isDeleted());
+		role.setCreatedBy(this.getCreatedBy());
+		role.setCreatedDate(this.getCreatedDate());
+		role.setModifiedBy(this.getModifiedBy());
+		role.setModifiedDate(this.getModifiedDate());
+		return role;
+	}
+	
 }

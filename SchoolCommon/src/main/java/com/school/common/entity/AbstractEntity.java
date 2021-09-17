@@ -1,6 +1,6 @@
 package com.school.common.entity;
 
-import java.time.LocalDate;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -10,7 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public class AbstractEntity {
+public class AbstractEntity implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5502798196050326341L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +35,22 @@ public class AbstractEntity {
 
 	@Column(name = "modified_date", nullable = true)
 	private LocalDateTime modifiedDate;
+	
+	
+
+	protected AbstractEntity() {
+		super();
+	}
+
+	protected AbstractEntity(Integer id, boolean isDeleted, String createdBy, String modifiedBy, LocalDateTime createdDate,
+			LocalDateTime modifiedDate) {
+		this.id = id;
+		this.isDeleted = isDeleted;
+		this.createdBy = createdBy;
+		this.modifiedBy = modifiedBy;
+		this.createdDate = createdDate;
+		this.modifiedDate = modifiedDate;
+	}
 
 	public Integer getId() {
 		return id;

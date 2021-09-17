@@ -9,7 +9,7 @@
 		</form>
 		<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
 			<a class="navbar-brand" th:href="@{/}">
-				<img th:src="@{/images/ShopmeAdminSmall.png}" />
+				<img th:src="@{/images/SchoolIconSmall.png}" />
 			</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
 				data-target="#topNavbar">
@@ -17,7 +17,8 @@
 			</button>
 			<div class="collapse navbar-collapse" id="topNavbar">
 				<ul class="navbar-nav">
-					<li class="nav-item" sec:authorize="hasAuthority('Admin')"><a class="nav-link" th:href="@{/users}">Users</a>
+				<!-- sec:authorize="hasAuthority('Admin')" -->
+					<li class="nav-item" ><a class="nav-link" th:href="@{/users}">Users</a>
 					</li>
 					<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
 						<li class="nav-item"><a class="nav-link" th:href="@{/categories}">Categories</a>

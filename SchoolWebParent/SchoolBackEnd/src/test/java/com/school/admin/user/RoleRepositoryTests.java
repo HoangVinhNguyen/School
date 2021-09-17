@@ -59,7 +59,7 @@ public class RoleRepositoryTests {
 			Role role = roleOpt.get();
 			role.setModifiedBy("admin-test");
 			role.setModifiedDate(modifiedDate);
-			role.setDecription("take result study and schedule");
+			role.setDescription("take result study and schedule");
 			savedRole = repo.save(role);
 		}
 		assertThat(savedRole.getId()).isEqualTo(3);
