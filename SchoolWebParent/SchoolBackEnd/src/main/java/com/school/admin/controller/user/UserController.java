@@ -135,8 +135,6 @@ public class UserController {
 			Model model) {
 		try {
 			service.deleteUser(id);
-			String uploadDir = "user-photos/" + id;
-			FileUploadUtil.cleanDir(uploadDir);
 			redirectAttributes.addFlashAttribute("message", "The user ID " + id + " has been deteled successfully");
 		} catch (UserNotFoundException e) {
 			redirectAttributes.addFlashAttribute("message", e.getMessage());

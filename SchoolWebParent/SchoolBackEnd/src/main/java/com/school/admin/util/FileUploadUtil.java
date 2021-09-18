@@ -41,9 +41,27 @@ public class FileUploadUtil {
 					}
 				}
 			});
-			Files.delete(dirPath);
 		} catch (IOException e) {
 //			LOGGER.error("Could not list directory: " + dirPath);
+			System.out.println("Could not list directory: " + dirPath);
+		}
+	}
+	
+	public static void cleanDirAndCleanPath(String dir) {
+		Path dirPath = Paths.get(dir);
+		
+		try {
+			Files.list(dirPath).forEach(file -> {
+				if (!Files.isDirectory(file)) {
+					try {
+						Files.delete(file);
+					} catch (IOException e) {
+						System.out.println("Could not delete file: " + file);
+					}
+				}
+			});
+			Files.delete(dirPath);
+		} catch (IOException e) {
 			System.out.println("Could not list directory: " + dirPath);
 		}
 	}

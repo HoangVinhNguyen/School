@@ -15,12 +15,13 @@ import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
+import com.school.common.common.SystemConstant;
 import com.school.common.entity.User;
 
 public class UserPdfExporter extends AbstractExporter {
 
 	public void export(List<User> listUsers, HttpServletResponse response) throws IOException {
-		super.setResponseHeader(response, "application/pdf", ".pdf");
+		super.setResponseHeader(response, SystemConstant.TYPE_PDF, SystemConstant.SUFFIX_PDF);
 		
 		Document document = new Document(PageSize.A4);
 		PdfWriter.getInstance(document, response.getOutputStream());
@@ -34,10 +35,10 @@ public class UserPdfExporter extends AbstractExporter {
 		paragraph.setAlignment(Paragraph.ALIGN_CENTER);
 		document.add(paragraph);
 		
-		PdfPTable table = new PdfPTable(6);
+		PdfPTable table = new PdfPTable(7);
 		table.setWidthPercentage(100f);
 		table.setSpacingBefore(10);
-		table.setWidths(new float[] {1.2f, 3.5f, 3.0f, 3.0f, 3.0f, 1.7f});
+		table.setWidths(new float[] {1.3f, 3.5f, 3.0f, 3.0f, 3.0f, 3.0f, 2.0f});
 		writeTableHeader(table);
 		writeTableData(listUsers, table);
 		
@@ -52,6 +53,7 @@ public class UserPdfExporter extends AbstractExporter {
 			table.addCell(user.getEmail());
 			table.addCell(user.getFirstName());
 			table.addCell(user.getLastName());
+			table.addCell(user.getPhone());
 			table.addCell(String.valueOf(user.getRoles()));
 			table.addCell(String.valueOf(user.isEnabled()));
 		}
@@ -72,6 +74,8 @@ public class UserPdfExporter extends AbstractExporter {
 		cell.setPhrase(new Phrase("First Name", font));
 		table.addCell(cell);
 		cell.setPhrase(new Phrase("Last Name", font));
+		table.addCell(cell);
+		cell.setPhrase(new Phrase("Phone", font));
 		table.addCell(cell);
 		cell.setPhrase(new Phrase("Roles", font));
 		table.addCell(cell);

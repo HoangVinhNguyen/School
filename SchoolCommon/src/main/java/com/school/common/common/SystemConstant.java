@@ -30,4 +30,15 @@ public class SystemConstant {
 	 */
 	public final static String PAGE_TILE = "pageTitle";
 	public final static String CREATE_NEW_USER = "Create New User";
+	
+	/*
+	 * For export.
+	 */
+	public final static String TYPE_CSV = "text/csv";
+	public final static String SUFFIX_CSV = ".csv";
+	public final static String TYPE_EXCEL = "application/octet-stream";
+	public final static String SUFFIX_EXCEL = ".xlsx";
+	public final static String TYPE_PDF = "application/pdf";
+	public final static String SUFFIX_PDF = ".pdf";
+	
 }

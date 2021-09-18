@@ -14,6 +14,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.school.common.common.SystemConstant;
 import com.school.common.entity.User;
 
 public class UserExcelExporter extends AbstractExporter {
@@ -23,6 +24,7 @@ public class UserExcelExporter extends AbstractExporter {
 	
 	public UserExcelExporter() {
 		workbook = new XSSFWorkbook();
+//		workbook.getProperties().getCoreProperties().setCreator(author);
 	}
 	
 	private void writeHeaderLine(List<User> listUsers) {
@@ -40,6 +42,11 @@ public class UserExcelExporter extends AbstractExporter {
 			createCell(row, columnIndex++, user.getEmail(), cellStyle);
 			createCell(row, columnIndex++, user.getFirstName(), cellStyle);
 			createCell(row, columnIndex++, user.getLastName(), cellStyle);
+			StringBuilder phone = new StringBuilder();
+			phone.append(user.getPhone());
+			phone.append("\t");
+			user.setPhone(phone.toString());
+			createCell(row, columnIndex++, user.getPhone(), cellStyle);
 			createCell(row, columnIndex++, user.getRoles().toString(), cellStyle);
 			createCell(row, columnIndex++, user.isEnabled(), cellStyle);
 		}
@@ -59,8 +66,9 @@ public class UserExcelExporter extends AbstractExporter {
 		createCell(row, 1, "E-mail", cellStyle);
 		createCell(row, 2, "First Name", cellStyle);
 		createCell(row, 3, "Last Name", cellStyle);
-		createCell(row, 4, "Roles", cellStyle);
-		createCell(row, 5, "Enabled", cellStyle);
+		createCell(row, 4, "Phone", cellStyle);
+		createCell(row, 5, "Roles", cellStyle);
+		createCell(row, 6, "Enabled", cellStyle);
 	}
 	
 	private void createCell(XSSFRow row, int columnIndex, Object value, CellStyle cellStyle) {
@@ -77,7 +85,7 @@ public class UserExcelExporter extends AbstractExporter {
 	}
 
 	public void export(List<User> listUsers, HttpServletResponse response) throws IOException {
-		super.setResponseHeader(response, "application/octet-stream", ".xlsx");
+		super.setResponseHeader(response, SystemConstant.TYPE_EXCEL, SystemConstant.SUFFIX_EXCEL);
 		writeHeaderLine();
 		writeHeaderLine(listUsers);
 		ServletOutputStream outputStream = response.getOutputStream();

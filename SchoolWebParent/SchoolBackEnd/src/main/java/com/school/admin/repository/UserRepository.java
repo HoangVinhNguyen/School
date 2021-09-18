@@ -16,23 +16,25 @@ import com.school.common.entity.User;
 public interface UserRepository extends JpaRepository<User, Integer>{
 	
 	
-	@Query("SELECT u FROM User u WHERE u.email = :email AND u.isDeleted = 0")
+	@Query("SELECT u FROM User u WHERE u.email = :email AND u.isDeleted = FALSE")
 	public User getUserByEmail(@Param("email") String email);
 	
-	@Query("SELECT u FROM User u WHERE u.isDeleted = 0")
+	@Query("SELECT u FROM User u WHERE u.isDeleted = FALSE")
 	public List<User> findAllUser();
 	
-	@Query("SELECT COUNT(u) FROM User u WHERE u.id = :id AND u.isDeleted = 0")
+	@Query("SELECT COUNT(u) FROM User u WHERE u.id = :id AND u.isDeleted = FALSE")
 	public Long countById(@Param("id") Integer id);
 	
-	@Query("SELECT u FROM User u WHERE u.isDeleted = 0 AND CONCAT(u.id, ' ', u.email, ' ', u.firstName, ' ', u.lastName) LIKE %?1%")
+	@Query("SELECT u FROM User u WHERE u.isDeleted = FALSE AND CONCAT(u.id, ' ', u.email, ' ', u.firstName, ' ', u.lastName) LIKE %?1%")
 	public Page<User> findAll(String keyword, Pageable pageable);
+	@Query("SELECT u FROM User u WHERE u.isDeleted = FALSE")
+	public Page<User> findAll(Pageable pageable);
 	
-	@Query("UPDATE User u SET u.enabled = ?2 WHERE u.id = ?1 AND u.isDeleted = 0")
+	@Query("UPDATE User u SET u.enabled = ?2 WHERE u.id = ?1 AND u.isDeleted = FALSE")
 	@Modifying
 	public void updateEnableStatus(Integer id, boolean enabled);
 	
-	@Query("UPDATE User u SET u.isDeleted = 1 WHERE u.id = ?1  AND u.isDeleted = 0")
+	@Query("UPDATE User u SET u.isDeleted = TRUE WHERE u.id = ?1  AND u.isDeleted = FALSE")
 	@Modifying
 	public void deleteUser(Integer id);
 }

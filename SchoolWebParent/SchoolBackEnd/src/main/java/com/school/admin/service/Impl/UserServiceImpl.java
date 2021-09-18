@@ -16,6 +16,8 @@ import com.school.admin.exception.UserNotFoundException;
 import com.school.admin.repository.RoleRepository;
 import com.school.admin.repository.UserRepository;
 import com.school.admin.service.UserService;
+import com.school.admin.util.FileUploadUtil;
+import com.school.common.common.SystemConstant;
 import com.school.common.entity.Role;
 import com.school.common.entity.User;
 
@@ -128,12 +130,16 @@ public class UserServiceImpl implements UserService {
 		if (countById == null || countById == 0) {
 			throw new UserNotFoundException("Could not find any user with ID " + id);
 		}
-		userRepo.deleteById(id);
+		userRepo.deleteUser(id);
+		StringBuilder uploadDir = new StringBuilder();
+		uploadDir.append(SystemConstant.PHOTOS_OF_USERS_FOLDER);
+		uploadDir.append(SystemConstant.FORWARD_SLASH);
+		uploadDir.append(id);
+		FileUploadUtil.cleanDir(uploadDir.toString());
 	}
 	
 	public void updateUserEnableStatus(Integer id, boolean enabled) {
 		userRepo.updateEnableStatus(id, enabled);
 	}
-	
 	
 }
