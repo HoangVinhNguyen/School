@@ -67,7 +67,7 @@ public class UserPdfExporter extends AbstractExporter {
 		Font font = FontFactory.getFont(FontFactory.HELVETICA);
 		font.setColor(Color.WHITE);
 		
-		cell.setPhrase(new Phrase("User ID", font));
+		cell.setPhrase(new Phrase("UserDto ID", font));
 		table.addCell(cell);
 		cell.setPhrase(new Phrase("E-mail", font));
 		table.addCell(cell);

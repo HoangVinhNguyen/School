@@ -1,7 +1,7 @@
 package com.school.common.common;
 
 public class SystemConstant {
-	
+
 	public static final String PHOTOS_OF_USERS_FOLDER = "user-photos";
 	public static final String FORWARD_SLASH = "/";
 	public static final String FORWARD_SLASH_2_START = "/**";
@@ -24,13 +24,39 @@ public class SystemConstant {
 	public final static String SORT_DIR = "sortDir";
 	public final static String REVERSE_SORT_DIR = "reverseSortDir";
 	public final static String KEYWORD = "keyword";
-	
+	public final static String LINK = "link";
+	public final static String NAME = "name";
+
 	/*
 	 * For User class.
 	 */
 	public final static String PAGE_TILE = "pageTitle";
-	public final static String CREATE_NEW_USER = "Create New User";
-	
+	public final static String TITLE_CREATE_NEW_USER = "Create New UserDto";
+	public final static String TITLE_EDIT_USER = "Edit UserDto ID ";
+	public final static String TITLE_LOGIN = "Login - School Admin";
+	public final static String TITLE_ACCOUNT_DETAILS = "Your Account Details";
+	public final static String TITLE_USERS = "User - School Admin";
+	public final static String TITLE_HOME = "Home - School Admin";
+	public final static String TITLE_LEVEL = "Level - School Admin";
+	public final static String NOT_FOUND_ID = "Could not find any user with ID ";
+	public final static String ATTR_MESSAGE = "message";
+	public final static String ATTR_CONTENT_USER_SAVE_SUCCESS = "The user have been saved successfully";
+	public final static String ENABLED = "enabled";
+	public final static String DISABLED = "disabled";
+	public final static String JS_FILE = "jsFiles";
+	public final static String CSS_FILE = "cssFiles";
+
+	public final static String ATTR_CONTENT_USER_EDIT_SUCCESS(Long id) {
+		StringBuilder content = new StringBuilder();
+		content.append("The user ID ").append(id).append(" has been deteled successfully");
+		return  content.toString() ;
+	}
+	public final static String ATTR_CONTENT_USER_STATUS_SUCCESS(Long id, String status) {
+		StringBuilder content = new StringBuilder();
+		content.append("The user ID ").append(id).append(" has been ").append(status);
+		return content.toString();
+	}
+
 	/*
 	 * For export.
 	 */
@@ -40,5 +66,5 @@ public class SystemConstant {
 	public final static String SUFFIX_EXCEL = ".xlsx";
 	public final static String TYPE_PDF = "application/pdf";
 	public final static String SUFFIX_PDF = ".pdf";
-	
+
 }

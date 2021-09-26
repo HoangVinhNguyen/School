@@ -18,17 +18,17 @@ public interface UserService {
 
 	public Page<User> listByPage(int pageNum, String sortField, String sortDir, String keyword);
 
-	public User save(User user);
+	public User save(User userDto);
 
 	public User updateAccount(User userInForm);
 
-	public boolean isEmailUnique(Integer id, String email);
+	public boolean isEmailUnique(Long id, String email);
 
 	public User getByEmail(String email);
 
-	public User get(Integer id) throws UserNotFoundException;
+	public User get(Long id) throws UserNotFoundException;
 
-	public void deleteUser(Integer id) throws UserNotFoundException;
+	public void deleteUser(Long id) throws UserNotFoundException;
 
-	public void updateUserEnableStatus(Integer id, boolean enabled);
+	public void updateUserEnableStatus(Long id, boolean enabled);
 }

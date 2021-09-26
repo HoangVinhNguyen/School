@@ -1,17 +1,18 @@
 package com.school.common.entity;
 
+import java.util.Optional;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.school.common.dto.RoleDto;
+
 @Entity
 @Table(name = "roles")
-public class Role extends AbstractEntity {
+public class Role extends BaseEntity {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2553421292532850624L;
 
 	@Column(length = 45, nullable = false, unique = true)
@@ -24,7 +25,7 @@ public class Role extends AbstractEntity {
 		
 	}
 	
-	public Role(Integer id) {
+	public Role(Long id) {
 		this.setId(id);
 	}
 	
@@ -91,6 +92,18 @@ public class Role extends AbstractEntity {
 		role.setModifiedBy(this.getModifiedBy());
 		role.setModifiedDate(this.getModifiedDate());
 		return role;
+	}
+	
+	@Transient
+	public static Role convertToRole(RoleDto roleDto) {
+		Optional<RoleDto> op = Optional.ofNullable(roleDto);
+		if (op.isPresent()) {
+			RoleDto r = op.get();
+			Role role = new Role();
+			role.setId(r.getId());
+			return role;
+		}
+		return null;
 	}
 	
 }

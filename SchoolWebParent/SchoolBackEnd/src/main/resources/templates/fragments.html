@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:fragment="page_head(title)">
+<head th:fragment="page_head(title, jsFiles, cssFiles)">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	
@@ -12,21 +12,27 @@
 	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
 	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/common.js}"></script>
+	<th:block th:if="${jsFiles} != null" th:each="js : ${jsFiles}">
+		<script type="text/javascript" th:src="@{'/js/' + ${js}}"></script>
+	</th:block>
+	<th:block th:if="${cssFiles} != null" th:each="css : ${cssFiles}">
+		<link rel="stylesheet" type="text/css" th:href="@{'/css/' + ${css}}" />
+	</th:block>
 </head>
 
 <body>
 
-	<th th:fragment="column_link(fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
+	<th th:fragment="column_link(link, fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
 		<a class="text-white"
-			th:href="@{'/users/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} + ${keyword != null ? '&keyword=' + keyword: ''}}">
+			th:href="@{'/' + ${link} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} + ${keyword != null ? '&keyword=' + keyword: ''}}">
 			[[${columnLabel}]]
 		</a>
 		<span th:if="${sortField == fieldName}" th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
 	</th>
 	
-	<a th:fragment="page_link(pageNum, label)"
+	<a th:fragment="page_link(link, pageNum, label)"
 		class="page-link"
-		th:href="@{'/users/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword: ''}}">
+		th:href="@{'/' + ${link} + '/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword: ''}}">
 		[[${label}]]
 	</a>
 	

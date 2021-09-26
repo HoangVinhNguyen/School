@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import com.school.common.entity.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer>{
+public interface UserRepository extends JpaRepository<User, Long>{
 	
 	
 	@Query("SELECT u FROM User u WHERE u.email = :email AND u.isDeleted = FALSE")
@@ -23,18 +23,19 @@ public interface UserRepository extends JpaRepository<User, Integer>{
 	public List<User> findAllUser();
 	
 	@Query("SELECT COUNT(u) FROM User u WHERE u.id = :id AND u.isDeleted = FALSE")
-	public Long countById(@Param("id") Integer id);
+	public Long countById(@Param("id") Long id);
 	
 	@Query("SELECT u FROM User u WHERE u.isDeleted = FALSE AND CONCAT(u.id, ' ', u.email, ' ', u.firstName, ' ', u.lastName) LIKE %?1%")
 	public Page<User> findAll(String keyword, Pageable pageable);
+	
 	@Query("SELECT u FROM User u WHERE u.isDeleted = FALSE")
 	public Page<User> findAll(Pageable pageable);
 	
 	@Query("UPDATE User u SET u.enabled = ?2 WHERE u.id = ?1 AND u.isDeleted = FALSE")
 	@Modifying
-	public void updateEnableStatus(Integer id, boolean enabled);
+	public void updateEnableStatus(Long id, boolean enabled);
 	
 	@Query("UPDATE User u SET u.isDeleted = TRUE WHERE u.id = ?1  AND u.isDeleted = FALSE")
 	@Modifying
-	public void deleteUser(Integer id);
+	public void deleteUser(Long id);
 }

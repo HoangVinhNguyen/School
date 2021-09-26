@@ -1,13 +1,18 @@
 package com.school.admin.service.Impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,25 +38,30 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
+	
 	@Override
 	public List<User> listAll() {
-		return (List<User>) userRepo.findAll(Sort.by("firstName").ascending());
+		Optional<List<User>> list = Optional.ofNullable(userRepo.findAll(Sort.by(SystemConstant.FIRST_NAME).ascending()));
+		return list.orElse(null);
 	}
 
 	@Override
 	public List<Role> listRoles() {
-		return (List<Role>) roleRepo.findAll();
+		Optional<List<Role>> list = Optional.ofNullable(roleRepo.findAll());
+		return list.orElse(null);
 	}
 	
 	@Override
 	public Page<User> listByPage(int pageNum, String sortField, String sortDir, String keyword) {
 		Sort sort = Sort.by(sortField);
-		sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
+		sort = sortDir.equals(SystemConstant.ASC) ? sort.ascending() : sort.descending();
 		Pageable pageable = PageRequest.of(pageNum-1, USER_PER_PAGE, sort);
 		
 		if (keyword != null) {
-			return userRepo.findAll(keyword, pageable);
+			Optional<Page<User>> listUser = Optional.ofNullable(userRepo.findAll(keyword, pageable));
+			if (listUser.isPresent()) {
+				return listUser.get();
+			}
 		}
 		
 		return userRepo.findAll(pageable);
@@ -60,35 +70,63 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User save(User user) {
 		boolean isUpdatingUser = (user.getId() != null);
-		if (isUpdatingUser) {
-			User exstingUser = userRepo.findById(user.getId()).get();
-			if (user.getPassword().isEmpty()) {
-				user.setPassword(exstingUser.getPassword());
+		LocalDateTime dateNow = LocalDateTime.now();
+		Optional<Authentication> auth = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication());
+		if (auth.isPresent()) {
+			StringBuilder adminControl = new StringBuilder(auth.get().getName());
+			if (isUpdatingUser) {
+				Optional<User> opExist = userRepo.findById(user.getId());
+				if (opExist.isPresent()) {
+					User exstingUser = opExist.get();
+					if (user.getPassword().isEmpty()) {
+						user.setPassword(exstingUser.getPassword());
+					} else {
+						encodePassword(user);
+					}
+					user.setCreatedDate(exstingUser.getCreatedDate());
+					user.setCreatedBy(exstingUser.getCreatedBy());
+					user.setModifiedDate(dateNow);
+					user.setModifiedBy(adminControl.toString());
+				}
+				else return null;
 			} else {
 				encodePassword(user);
+				user.setCreatedDate(dateNow);
+				user.setCreatedBy(adminControl.toString());
 			}
-		} else {
-			encodePassword(user);
+			return userRepo.save(user);
 		}
-		return userRepo.save(user);
+		return null;
 	}
 	
 	@Override
 	public User updateAccount(User userInForm) {
-		User userInDB = userRepo.findById(userInForm.getId()).get();
-		if (!userInForm.getPassword().isEmpty()) {
-			userInDB.setPassword(userInForm.getPassword());
-			encodePassword(userInDB);
+		LocalDateTime dateNow = LocalDateTime.now();
+		Optional<Authentication> auth = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication());
+		if (auth.isPresent()) {
+			StringBuilder adminControl = new StringBuilder(auth.get().getName());
+			Optional<User> opUser = userRepo.findById(userInForm.getId());
+			if (opUser.isPresent()) {
+				User userInDB = opUser.get();
+				if (!userInForm.getPassword().isEmpty()) {
+					userInDB.setPassword(userInForm.getPassword());
+					encodePassword(userInDB);
+				}
+				
+				if (userInForm.getPhotos() != null) {
+					userInDB.setPhotos(userInForm.getPhotos());
+				}
+				
+				userInDB.setFirstName(userInForm.getFirstName());
+				userInDB.setLastName(userInDB.getLastName());
+				userInDB.setModifiedDate(dateNow);
+				userInDB.setModifiedBy(adminControl.toString());
+				
+				return userRepo.save(userInDB);
+			}
+			else return null;
 		}
-		
-		if (userInForm.getPhotos() != null) {
-			userInDB.setPhotos(userInForm.getPhotos());
-		}
-		
-		userInDB.setFirstName(userInForm.getFirstName());
-		userInDB.setLastName(userInDB.getLastName());
-		
-		return userRepo.save(userInDB);
+		return null;
 	}
 
 	private void encodePassword(User user) {
@@ -97,7 +135,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean isEmailUnique(Integer id, String email) {
+	public boolean isEmailUnique(Long id, String email) {
 		User userByEmail = userRepo.getUserByEmail(email);
 		if (userByEmail == null) return true;
 		boolean isCreatingNew = (id == null);
@@ -116,29 +154,34 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User get(Integer id) throws UserNotFoundException {
+	public User get(Long id) throws UserNotFoundException {
 		try {
-			return userRepo.findById(id).get();
+			Optional<User> opUser = userRepo.findById(id);
+			return opUser.orElse(null);
 		} catch (NoSuchElementException e) {
-			throw new UserNotFoundException("Could not find any user with ID " + id);
+			StringBuilder msg = new StringBuilder();
+			msg.append(SystemConstant.NOT_FOUND_ID).append(id);
+			throw new UserNotFoundException(msg.toString());
 		}
 	}
 	
 	@Override
-	public void deleteUser(Integer id) throws UserNotFoundException {
+	public void deleteUser(Long id) throws UserNotFoundException {
 		Long countById = userRepo.countById(id);
 		if (countById == null || countById == 0) {
-			throw new UserNotFoundException("Could not find any user with ID " + id);
+			StringBuilder msg = new StringBuilder();
+			msg.append(SystemConstant.NOT_FOUND_ID).append(id);
+			throw new UserNotFoundException(msg.toString());
 		}
 		userRepo.deleteUser(id);
 		StringBuilder uploadDir = new StringBuilder();
-		uploadDir.append(SystemConstant.PHOTOS_OF_USERS_FOLDER);
-		uploadDir.append(SystemConstant.FORWARD_SLASH);
-		uploadDir.append(id);
+		uploadDir.append(SystemConstant.PHOTOS_OF_USERS_FOLDER)
+			.append(SystemConstant.FORWARD_SLASH)
+			.append(id);
 		FileUploadUtil.cleanDir(uploadDir.toString());
 	}
 	
-	public void updateUserEnableStatus(Integer id, boolean enabled) {
+	public void updateUserEnableStatus(Long id, boolean enabled) {
 		userRepo.updateEnableStatus(id, enabled);
 	}
 	

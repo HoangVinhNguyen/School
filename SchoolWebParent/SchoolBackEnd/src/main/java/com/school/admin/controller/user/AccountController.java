@@ -1,6 +1,7 @@
 package com.school.admin.controller.user;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,6 +31,9 @@ public class AccountController {
 		String email = loggedUser.getUsername();
 		User user = service.getByEmail(email);
 		model.addAttribute("user", user);
+		model.addAttribute(SystemConstant.PAGE_TILE, SystemConstant.TITLE_ACCOUNT_DETAILS);
+		model.addAttribute(SystemConstant.JS_FILE, List.of("common.js"));
+		model.addAttribute(SystemConstant.CSS_FILE, List.of("style.css"));
 		return "users/account_form";
 	}
 	

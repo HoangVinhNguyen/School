@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public class AbstractEntity implements Serializable {
+public class BaseEntity implements Serializable {
 
 	/**
 	 * 
@@ -19,7 +19,7 @@ public class AbstractEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 
 	@Column(name = "is_deleted", columnDefinition = "boolean default false", nullable = false)
 	private boolean isDeleted;
@@ -38,11 +38,11 @@ public class AbstractEntity implements Serializable {
 	
 	
 
-	protected AbstractEntity() {
-		super();
+	protected BaseEntity() {
+
 	}
 
-	protected AbstractEntity(Integer id, boolean isDeleted, String createdBy, String modifiedBy, LocalDateTime createdDate,
+	protected BaseEntity(Long id, boolean isDeleted, String createdBy, String modifiedBy, LocalDateTime createdDate,
 			LocalDateTime modifiedDate) {
 		this.id = id;
 		this.isDeleted = isDeleted;
@@ -52,11 +52,11 @@ public class AbstractEntity implements Serializable {
 		this.modifiedDate = modifiedDate;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

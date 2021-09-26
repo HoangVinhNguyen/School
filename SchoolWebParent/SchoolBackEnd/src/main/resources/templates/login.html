@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments :: page_head('Login - School Admin')"></head>
+<head th:replace="fragments :: page_head(${pageTitle}, ${jsFiles}, ${cssFiles})"></head>
 <body>
 	<div class="container-fluid text-center">
 		<div>

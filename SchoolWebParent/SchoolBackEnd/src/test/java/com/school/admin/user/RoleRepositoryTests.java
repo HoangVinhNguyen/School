@@ -2,7 +2,6 @@ package com.school.admin.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -53,7 +52,7 @@ public class RoleRepositoryTests {
 	@Test
 	public void testUpdateRole() {
 		LocalDateTime modifiedDate = LocalDateTime.now();
-		Optional<Role> roleOpt = repo.findById(3);
+		Optional<Role> roleOpt = repo.findById(3L);
 		Role savedRole = null;
 		if (roleOpt.isPresent()) {
 			Role role = roleOpt.get();

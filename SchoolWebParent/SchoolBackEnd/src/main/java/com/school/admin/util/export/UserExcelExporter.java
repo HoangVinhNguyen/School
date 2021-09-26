@@ -62,7 +62,7 @@ public class UserExcelExporter extends AbstractExporter {
 		font.setFontHeight(16);
 		cellStyle.setFont(font);
 		
-		createCell(row, 0, "User ID", cellStyle);
+		createCell(row, 0, "UserDto ID", cellStyle);
 		createCell(row, 1, "E-mail", cellStyle);
 		createCell(row, 2, "First Name", cellStyle);
 		createCell(row, 3, "Last Name", cellStyle);

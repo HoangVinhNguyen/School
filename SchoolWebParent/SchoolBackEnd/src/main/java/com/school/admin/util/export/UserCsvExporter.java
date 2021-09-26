@@ -18,7 +18,7 @@ public class UserCsvExporter extends AbstractExporter {
 		super.setResponseHeader(response, SystemConstant.TYPE_CSV, SystemConstant.SUFFIX_CSV);
 		ICsvBeanWriter csvWirter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
 		
-		String[] csvHeader = {"User ID", "E-mail", "First Name", "Last Name", "Phone", "Roles", "Enabled"};
+		String[] csvHeader = {"UserDto ID", "E-mail", "First Name", "Last Name", "Phone", "Roles", "Enabled"};
 		String[] fieldMapping = {"id", "email", "firstName", "lastName", "phone", "roles", "enabled"};
 		
 		csvWirter.writeHeader(csvHeader);

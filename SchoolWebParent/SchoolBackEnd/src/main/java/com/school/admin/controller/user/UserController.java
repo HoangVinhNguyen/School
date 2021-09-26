@@ -1,7 +1,6 @@
 package com.school.admin.controller.user;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.school.admin.exception.UserNotFoundException;
 import com.school.admin.service.UserService;
 import com.school.admin.util.FileUploadUtil;
+import com.school.admin.util.StaticUtil;
 import com.school.admin.util.export.UserCsvExporter;
 import com.school.admin.util.export.UserExcelExporter;
 import com.school.admin.util.export.UserPdfExporter;
@@ -32,13 +32,12 @@ import com.school.common.entity.User;
 @Controller
 public class UserController {
 	
-	
 	@Autowired
 	private UserService service;
 
 	@GetMapping("/users")
 	public String listFirstPage(Model model) {
-		return listByPage(1, model, SystemConstant.FIRST_NAME, "asc", null);
+		return listByPage(1, model, SystemConstant.FIRST_NAME, SystemConstant.ASC, null);
 	}
 	
 	@GetMapping("/users/page/{pageNum}")
@@ -68,44 +67,41 @@ public class UserController {
 		model.addAttribute(SystemConstant.SORT_DIR, sortDir);
 		model.addAttribute(SystemConstant.REVERSE_SORT_DIR, reverseSortDir);
 		model.addAttribute(SystemConstant.KEYWORD, keyword);
+		model.addAttribute(SystemConstant.LINK, "users");
+		StaticUtil.setTitleAndStatic(model, SystemConstant.TITLE_USERS);
 		return "users/users";
 	}
 
 	@GetMapping("/users/new")
 	public String newUser(Model model) {
-		List<Role> listRoles = service.listRoles();
+		List<Role> listRoleDtos = service.listRoles();
 		User user = new User();
-
 		user.setEnabled(true);
-
 		model.addAttribute("user", user);
-		model.addAttribute("listRoles", listRoles);
-		model.addAttribute(SystemConstant.PAGE_TILE, SystemConstant.CREATE_NEW_USER);
+		model.addAttribute("listRoles", listRoleDtos);
+		StaticUtil.setTitleAndStatic(model, SystemConstant.TITLE_CREATE_NEW_USER);
 		return "users/user_form";
 	}
 
 	@PostMapping("/users/save")
 	public String saveUser(User user, RedirectAttributes redirectAttributes, 
 			@RequestParam("image") MultipartFile multipartFile) throws IOException {
-		
-		LocalDateTime createDate = LocalDateTime.now();
-		user.setCreatedDate(createDate);
-		user.setCreatedBy("amdin-test-web");
-		
 		if (!multipartFile.isEmpty()) {
 			String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 			user.setPhotos(fileName);
 			User savedUser = service.save(user);
-			String uploadDir = "user-photos/" + savedUser.getId();
-			FileUploadUtil.cleanDir(uploadDir);
-			FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+			StringBuilder uploadDir = new StringBuilder();
+			uploadDir.append(SystemConstant.PHOTOS_OF_USERS_FOLDER)
+				.append(SystemConstant.FORWARD_SLASH)
+				.append(savedUser.getId());
+			FileUploadUtil.cleanDir(uploadDir.toString());
+			FileUploadUtil.saveFile(uploadDir.toString(), fileName, multipartFile);
 		} else {
 			if (user.getPhotos().isEmpty()) user.setPhotos(null);
 			service.save(user);
 		}
 		
-		redirectAttributes.addFlashAttribute("message", "The user have been saved successfully");
-		
+		redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, SystemConstant.ATTR_CONTENT_USER_SAVE_SUCCESS);
 		return getRedirectURLtoAffectedUser(user);
 	}
 
@@ -115,42 +111,45 @@ public class UserController {
 	}
 
 	@GetMapping("/users/edit/{id}")
-	public String editUser(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes, Model model) {
+	public String editUser(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes, Model model) {
 		try {
 			User user = service.get(id);
-			List<Role> listRoles = service.listRoles();
+			List<Role> listRoleDtos = service.listRoles();
+			StringBuilder title = new StringBuilder();
+			title.append(SystemConstant.TITLE_EDIT_USER).append(id);
 
-			model.addAttribute("listRoles", listRoles);
+			model.addAttribute("listRoles", listRoleDtos);
 			model.addAttribute("user", user);
-			model.addAttribute("pageTitle", "Edit User (ID: " + id + ")");
+			StaticUtil.setTitleAndStatic(model, title.toString());
 			return "users/user_form";
 		} catch (UserNotFoundException e) {
-			redirectAttributes.addFlashAttribute("message", e.getMessage());
+			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, e.getMessage());
 		}
 		return "redirect:/users";
 	}
 
 	@GetMapping("/users/delete/{id}")
-	public String deleteUser(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes,
+	public String deleteUser(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes,
 			Model model) {
 		try {
 			service.deleteUser(id);
-			redirectAttributes.addFlashAttribute("message", "The user ID " + id + " has been deteled successfully");
+			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE,
+					SystemConstant.ATTR_CONTENT_USER_EDIT_SUCCESS(id));
 		} catch (UserNotFoundException e) {
-			redirectAttributes.addFlashAttribute("message", e.getMessage());
+			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, e.getMessage());
 		}
 		return "redirect:/users";
 	}
 
 	@GetMapping("/users/{id}/enabled/{status}")
-	public String updateUserEnableStatus(@PathVariable(name="id") Integer id, 
+	public String updateUserEnableStatus(@PathVariable(name="id") Long id, 
 			@PathVariable(name = "status") boolean enabled, RedirectAttributes redirectAttributes) {
 		service.updateUserEnableStatus(id, enabled);
-		String status = enabled ? "enabled" : "disabled";
-		String message = "The user ID " + id + " has been " + status;
-		redirectAttributes.addFlashAttribute("message", message);
+		String status = enabled ? SystemConstant.ENABLED : SystemConstant.DISABLED;
+		redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, 
+				SystemConstant.ATTR_CONTENT_USER_STATUS_SUCCESS(id, status));
 		
-		return "redirect:/users"; 
+		return "redirect:/users";
 	}
 	
 	@GetMapping("/users/export/csv")

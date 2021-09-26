@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,14 +19,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.school.common.common.ResourceGet;
 import com.school.common.common.SystemConstant;
+import com.school.common.dto.UserDto;
 
 @Entity
 @Table(name = "users")
-public class User extends AbstractEntity {
+public class User extends BaseEntity {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 6655451999701501635L;
 
 	@Column(name = "first_name", length = 45, nullable = false)
@@ -59,7 +58,7 @@ public class User extends AbstractEntity {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
-
+	
 	public User() {
 
 	}
@@ -229,12 +228,37 @@ public class User extends AbstractEntity {
 		user.setFirstName(getFirstName());
 		user.setLastName(getLastName());
 		user.setPhotos(getPhotos());
+		user.setAddress(getAddress());
+		user.setPhone(getPhone());
+		user.setRoles(getRoles());
 		user.setDeleted(this.isDeleted());
 		user.setCreatedBy(this.getCreatedBy());
 		user.setCreatedDate(this.getCreatedDate());
 		user.setModifiedBy(this.getModifiedBy());
 		user.setModifiedDate(this.getModifiedDate());
 		return user;
+	}
+	
+	@Transient
+	public static User convertToUser(UserDto userDto) {
+		Optional<UserDto> op = Optional.ofNullable(userDto);
+		if (op.isPresent()) {
+			UserDto u = op.get();
+			User user = new User();
+			user.setId(u.getId());
+			user.firstName = u.getFirstName();
+			user.lastName = u.getLastName();
+			user.email = u.getEmail();
+			user.password = u.getPassword();
+			user.dob = u.getDob();
+			user.address = u.getAddress();
+			user.enabled = u.isEnabled();
+			user.phone = u.getPhone();
+			user.photos = u.getPhotos();
+			user.roles = u.getRoles().stream().map(Role::convertToRole).collect(Collectors.toSet());
+			return user;
+		}
+		return null;
 	}
 
 }
