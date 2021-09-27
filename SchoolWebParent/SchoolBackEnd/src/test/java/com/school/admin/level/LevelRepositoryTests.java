@@ -86,7 +86,7 @@ public class LevelRepositoryTests {
 		Optional<Level> op = Optional.ofNullable(repo.getLevelByCode("ns"));
 		if (op.isPresent()) {
 			Level lvns = op.get();
-			repo.deleteLevel(lvns.getId());
+			repo.deleteById(lvns.getId());
 		}
 	}
 	

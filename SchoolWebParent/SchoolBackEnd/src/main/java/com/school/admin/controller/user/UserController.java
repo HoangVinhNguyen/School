@@ -79,6 +79,7 @@ public class UserController {
 		user.setEnabled(true);
 		model.addAttribute("user", user);
 		model.addAttribute("listRoles", listRoleDtos);
+		model.addAttribute(SystemConstant.LINK, "users");
 		StaticUtil.setTitleAndStatic(model, SystemConstant.TITLE_CREATE_NEW_USER);
 		return "users/user_form";
 	}
@@ -120,6 +121,7 @@ public class UserController {
 
 			model.addAttribute("listRoles", listRoleDtos);
 			model.addAttribute("user", user);
+			model.addAttribute(SystemConstant.LINK, "users");
 			StaticUtil.setTitleAndStatic(model, title.toString());
 			return "users/user_form";
 		} catch (UserNotFoundException e) {
@@ -129,8 +131,7 @@ public class UserController {
 	}
 
 	@GetMapping("/users/delete/{id}")
-	public String deleteUser(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes,
-			Model model) {
+	public String deleteUser(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
 		try {
 			service.deleteUser(id);
 			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE,

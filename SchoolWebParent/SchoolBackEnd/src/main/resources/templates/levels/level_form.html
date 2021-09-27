@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head(${pageTitle}, ${jsFiles}, ${cssFiles})"></head>
+<body>
+	<div class="container-fluid">
+		<div th:replace="navigation :: menu"></div>
+		<div>
+			<h2>Manage Levels | [[${pageTitle}]]</h2>
+		</div>
+		<form th:action="@{'/' + ${link} + '/save'}" method="post" enctype="multipart/form-data"
+			style="max-width: 700px; margin: 0 auto" th:object="${level}" onsubmit="return checkNameCodeUnique(this);">
+			<input type="hidden" th:field="*{id}"/>
+			<div class="border border-secondary rounded p-3">
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">Name</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" th:field="*{name}" required />
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">Code</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" th:field="*{code}" required />
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">Description</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" th:field="*{description}" required />
+					</div>
+				</div>
+				<div class="text-center">
+					<input type="submit" value="Save" class="btn btn-primary m-3" />
+					<input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel" />
+				</div>
+			</div>
+		</form>
+		
+		<div class="modal fade text-center" id="modalDialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="modalTitle"></h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body" id="modalBody">
+						<span id="confirmText"></span>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div th:replace="fragments :: footer"></div>
+	</div>
+	<script type="text/javascript">
+		var moduleURL = "[[@{'/' + ${link}}]]";
+		function checkNameCodeUnique(form) {
+			var url = "[[@{'/' + ${link} + '/check_namcode'}]]";
+			let name = $("#name").val();
+			let code = $("#code").val();
+			let levelId = $("#id").val();
+			let csrfValue = $("input[name='_csrf']").val();
+			var params = {id: levelId, name: name, code: code, _csrf: csrfValue};
+			
+			$.post(url, params, function(respone) {
+				if (respone == "OK") {
+					form.submit();
+				} else if (respone == "Duplicated") {
+					showModalDialog("Warning", "Name and Code is used");
+				} else if (respone == "Name") {
+					showModalDialog("Warning", "Name: " + name + " is used");
+				} else if (respone == "Code") {
+					showModalDialog("Warning", "Code: " + code + " is used");
+				} else {
+					showModalDialog("Error", "Unknown respone from server");
+				}
+			}).fail(function() {
+				showModalDialog("Error", "Could not connect to the server");
+			});
+			return false;
+		}
+		
+		function showModalDialog(title, message) {
+			$("#modalTitle").text(title);
+			$("#modalBody").text(message);
+			$("#modalDialog").modal();
+		}
+	</script>
+	<script type="text/javascript" th:src="@{/js/common_form.js}"></script>
+</body>
+</html>

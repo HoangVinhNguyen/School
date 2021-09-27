@@ -17,8 +17,10 @@ public interface LevelService {
 
 	public Level save(Level level);
 
-	public boolean isNameAndCodeUnique(Long id, String name, String code);
-
+	public boolean isNameUnique(Long id, String name);
+	
+	public boolean isCodeUnique(Long id, String code);
+	
 	public Level get(Long id) throws LevelNotFoundException;
 
 	public void deleteLevel(Long id) throws LevelNotFoundException;

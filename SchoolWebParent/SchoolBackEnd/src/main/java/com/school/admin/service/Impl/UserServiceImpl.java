@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -173,7 +172,7 @@ public class UserServiceImpl implements UserService {
 			msg.append(SystemConstant.NOT_FOUND_ID).append(id);
 			throw new UserNotFoundException(msg.toString());
 		}
-		userRepo.deleteUser(id);
+		userRepo.deleteById(id);
 		StringBuilder uploadDir = new StringBuilder();
 		uploadDir.append(SystemConstant.PHOTOS_OF_USERS_FOLDER)
 			.append(SystemConstant.FORWARD_SLASH)

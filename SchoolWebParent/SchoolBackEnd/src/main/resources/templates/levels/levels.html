@@ -7,10 +7,7 @@
 		<div th:replace="navigation :: menu"></div>
 		<div>
 			<h2>Manage Level School</h2>
-			<a th:href="@{'/' + ${link} + '/new'}" class="fas fa-user-plus fa-2x icon-dark mr-2"></a>
-			<a th:href="@{'/' + ${link} + '/export/csv'}" class="fas fa-file-csv fa-2x icon-dark mr-2"></a>
-			<a th:href="@{'/' + ${link} + '/export/excel'}" class="fas fa-file-excel fa-2x icon-dark mr-2"></a>
-			<a th:href="@{'/' + ${link} + '/export/pdf'}" class="fas fa-file-pdf fa-2x icon-dark mr-2"></a>
+			<a th:href="@{'/' + ${link} + '/new'}" class="fas fa-plus-square fa-2x icon-dark mr-2"></a>
 		</div>
 		
 		<div th:if="${message != null}" class="alert alert-success text-center">

@@ -31,16 +31,19 @@ public class SystemConstant {
 	 * For User class.
 	 */
 	public final static String PAGE_TILE = "pageTitle";
-	public final static String TITLE_CREATE_NEW_USER = "Create New UserDto";
-	public final static String TITLE_EDIT_USER = "Edit UserDto ID ";
+	public final static String TITLE_CREATE_NEW_USER = "Create New User";
+	public final static String TITLE_EDIT_USER = "Edit User ID ";
 	public final static String TITLE_LOGIN = "Login - School Admin";
 	public final static String TITLE_ACCOUNT_DETAILS = "Your Account Details";
 	public final static String TITLE_USERS = "User - School Admin";
 	public final static String TITLE_HOME = "Home - School Admin";
 	public final static String TITLE_LEVEL = "Level - School Admin";
-	public final static String NOT_FOUND_ID = "Could not find any user with ID ";
+	public final static String TITLE_CREATE_NEW_LEVEL = "Create New Level";
+	public final static String TITLE_EDIT_LEVEL = "Edit Level ID ";
+	public final static String NOT_FOUND_ID = "Could not find any with ID ";
 	public final static String ATTR_MESSAGE = "message";
-	public final static String ATTR_CONTENT_USER_SAVE_SUCCESS = "The user have been saved successfully";
+	public final static String ATTR_CONTENT_USER_SAVE_SUCCESS = "The User have been saved successfully";
+	public final static String ATTR_CONTENT_LEVEL_SAVE_SUCCESS = "The Level have been saved successfully";
 	public final static String ENABLED = "enabled";
 	public final static String DISABLED = "disabled";
 	public final static String JS_FILE = "jsFiles";

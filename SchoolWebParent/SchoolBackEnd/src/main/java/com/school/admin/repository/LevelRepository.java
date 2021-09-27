@@ -1,6 +1,7 @@
 package com.school.admin.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,15 +17,18 @@ public interface LevelRepository extends JpaRepository<Level, Long>{
 	@Query("SELECT lv FROM Level lv WHERE lv.code = :code AND lv.isDeleted = FALSE")
 	public Level getLevelByCode(@Param("code") String code);
 	
-	@Query("SELECT lv FROM Level lv WHERE lv.id = :id AND lv.isDeleted = FALSE")
-	public Level getLevelById(@Param("id") Long id);
+	@Query("SELECT lv FROM Level lv WHERE lv.name = :name AND lv.isDeleted = FALSE")
+	public Level getLevelByName(@Param("name") String name);
+	
+	@Query("SELECT lv FROM Level lv WHERE lv.id = ?1 AND lv.isDeleted = FALSE")
+	public Optional<Level> findById(Long id);
 	
 	@Query("SELECT lv FROM Level lv WHERE lv.isDeleted = FALSE")
 	public List<Level> findAll();
 	
 	@Query("UPDATE Level lv SET lv.isDeleted = TRUE WHERE lv.id = ?1  AND lv.isDeleted = FALSE")
 	@Modifying
-	public void deleteLevel(Long id);
+	public void deleteById(Long id);
 	
 	/*
 	 * For paging.

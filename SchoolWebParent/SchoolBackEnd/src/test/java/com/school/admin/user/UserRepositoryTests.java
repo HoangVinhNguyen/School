@@ -133,7 +133,7 @@ public class UserRepositoryTests {
 		Optional<User> op = Optional.of(repo.getUserByEmail("vinh@gmail.com"));
 		if (op.isPresent()) {
 			User user = op.get();
-			repo.deleteUser(user.getId());
+			repo.deleteById(user.getId());
 			System.out.println(user);
 		}
 	}
