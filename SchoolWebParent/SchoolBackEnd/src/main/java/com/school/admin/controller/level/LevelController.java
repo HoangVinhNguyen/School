@@ -105,7 +105,7 @@ public class LevelController {
 		try {
 			service.deleteLevel(id);
 			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE,
-					SystemConstant.ATTR_CONTENT_USER_EDIT_SUCCESS(id));
+					SystemConstant.ATTR_CONTENT_LEVEL_DEL_SUCCESS(id));
 		} catch (EntityNotFoundException e) {
 			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, e.getMessage());
 		}

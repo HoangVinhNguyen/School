@@ -26,7 +26,7 @@ public class GradeRepositoryTests {
 	private GradeRepository repo;
 	
 	@Test
-	public void createLevel() {
+	public void createGrade() {
 		LocalDateTime time = LocalDateTime.now();
 		Grade g = new Grade("1", "1", "of high school", new Level(2L));
 		g.setCreatedDate(time);
@@ -37,7 +37,7 @@ public class GradeRepositoryTests {
 	}
 	
 	@Test
-	public void createMultiLevel() {
+	public void createMultiGrade() {
 		LocalDateTime time = LocalDateTime.now();
 		Grade g2 = new Grade("2", "Second Grade", "of high school", new Level(2L));
 		g2.setCreatedDate(time);
@@ -77,8 +77,8 @@ public class GradeRepositoryTests {
 	}
 	
 	@Test
-	public void updateLevel() {
-		Optional<Grade> op = Optional.ofNullable(repo.getLevelByCode("1"));
+	public void updateGrade() {
+		Optional<Grade> op = Optional.ofNullable(repo.getGradeByCode("1"));
 		if (op.isPresent()) {
 			Grade g = op.get();
 			LocalDateTime modified = LocalDateTime.now();
@@ -101,8 +101,8 @@ public class GradeRepositoryTests {
 	}
 	
 	@Test
-	public void deleteLevel() {
-		Optional<Grade> op = Optional.ofNullable(repo.getLevelByCode("1"));
+	public void deleteGrade() {
+		Optional<Grade> op = Optional.ofNullable(repo.getGradeByCode("1"));
 		if (op.isPresent()) {
 			Grade lvns = op.get();
 			repo.deleteById(lvns.getId());

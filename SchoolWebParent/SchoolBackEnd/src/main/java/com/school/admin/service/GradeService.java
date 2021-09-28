@@ -23,5 +23,5 @@ public interface GradeService {
 	
 	public Grade get(Long id) throws EntityNotFoundException;
 
-	public void deleteLevel(Long id) throws EntityNotFoundException;
+	public void deleteGrade(Long id) throws EntityNotFoundException;
 }

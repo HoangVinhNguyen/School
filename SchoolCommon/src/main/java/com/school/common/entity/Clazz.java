@@ -7,10 +7,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "grade")
-public class Grade extends BaseEntity {
+@Table(name="class")
+public class Clazz extends BaseEntity {
 
-	private static final long serialVersionUID = -2440888477841599137L;
+	private static final long serialVersionUID = 7262682027766723720L;
 
 	@Column(length = 50, nullable = false, unique = true)
 	private String code;
@@ -22,22 +22,22 @@ public class Grade extends BaseEntity {
 	private String description;
 
 	@OneToOne
-	@JoinColumn(name = "level_id")
-	private Level level;
+	@JoinColumn(name = "grade_id")
+	private Grade grade;
 
-	public Grade() {
-
+	public Clazz() {
+		
 	}
-
-	public Grade(Long id) {
+	
+	public Clazz(Long id) {
 		this.setId(id);
 	}
-
-	public Grade(String code, String name, String description, Level level) {
-		this.setCode(code);
-		this.setName(name);
-		this.setDescription(description);
-		this.level = level;
+	
+	public Clazz(String code, String name, String description, Grade grade) {
+		this.code = code;
+		this.name = name;
+		this.description = description;
+		this.grade = grade;
 	}
 
 	public String getCode() {
@@ -64,12 +64,12 @@ public class Grade extends BaseEntity {
 		this.description = description;
 	}
 
-	public Level getLevel() {
-		return level;
+	public Grade getGrade() {
+		return grade;
 	}
 
-	public void setLevel(Level level) {
-		this.level = level;
+	public void setGrade(Grade grade) {
+		this.grade = grade;
 	}
 
 	@Override
@@ -88,7 +88,7 @@ public class Grade extends BaseEntity {
 			return false;
 		if (this.getClass() != obj.getClass())
 			return false;
-		Grade other = (Grade) obj;
+		Clazz other = (Clazz) obj;
 		if (this.getId() == null) {
 			if (other.getId() != null)
 				return false;
@@ -101,4 +101,5 @@ public class Grade extends BaseEntity {
 	public String toString() {
 		return this.name;
 	}
+	
 }

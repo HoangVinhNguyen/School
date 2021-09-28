@@ -166,18 +166,29 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public void deleteUser(Long id) throws EntityNotFoundException {
-		Long countById = userRepo.countById(id);
-		if (countById == null || countById == 0) {
-			StringBuilder msg = new StringBuilder();
-			msg.append(SystemConstant.NOT_FOUND_ID).append(id);
-			throw new EntityNotFoundException(msg.toString());
+		LocalDateTime dateNow = LocalDateTime.now();
+		Optional<Authentication> auth = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication());
+		if (auth.isPresent()) {
+			StringBuilder adminControl = new StringBuilder(auth.get().getName());
+			Long countById = userRepo.countById(id);
+			if (countById == null || countById == 0) {
+				StringBuilder msg = new StringBuilder();
+				msg.append(SystemConstant.NOT_FOUND_ID).append(id);
+				throw new EntityNotFoundException(msg.toString());
+			}
+			Optional<User> opExist = Optional.ofNullable(userRepo.getById(id));
+			if (opExist.isPresent()) {
+				User exsting = opExist.get();
+				exsting.setModifiedDate(dateNow);
+				exsting.setModifiedBy(adminControl.toString());
+				userRepo.deleteById(id);
+				StringBuilder uploadDir = new StringBuilder();
+				uploadDir.append(SystemConstant.PHOTOS_OF_USERS_FOLDER)
+				.append(SystemConstant.FORWARD_SLASH)
+				.append(id);
+				FileUploadUtil.cleanDir(uploadDir.toString());
+			}
 		}
-		userRepo.deleteById(id);
-		StringBuilder uploadDir = new StringBuilder();
-		uploadDir.append(SystemConstant.PHOTOS_OF_USERS_FOLDER)
-			.append(SystemConstant.FORWARD_SLASH)
-			.append(id);
-		FileUploadUtil.cleanDir(uploadDir.toString());
 	}
 	
 	public void updateUserEnableStatus(Long id, boolean enabled) {

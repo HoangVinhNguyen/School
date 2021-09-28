@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import com.school.admin.exception.EntityNotFoundException;
 import com.school.admin.repository.GradeRepository;
 import com.school.admin.service.GradeService;
-import com.school.admin.service.LevelService;
 import com.school.common.common.SystemConstant;
 import com.school.common.entity.Grade;
 
@@ -40,7 +39,7 @@ public class GradeServiceImpl implements GradeService {
 	public Page<Grade> listByPage(int pageNum, String sortField, String sortDir, String keyword) {
 		Sort sort = Sort.by(sortField);
 		sort = sortDir.equals(SystemConstant.ASC) ? sort.ascending() : sort.descending();
-		Pageable pageable = PageRequest.of(pageNum-1, LevelService.LEVEL_PER_PAGE, sort);
+		Pageable pageable = PageRequest.of(pageNum-1, GradeService.GRADE_PER_PAGE, sort);
 		
 		if (keyword != null) {
 			Optional<Page<Grade>> list = Optional.ofNullable(repo.findAll(keyword, pageable));
@@ -80,7 +79,7 @@ public class GradeServiceImpl implements GradeService {
 
 	@Override
 	public boolean isNameUnique(Long id, String name) {
-		Optional<Grade> op = Optional.ofNullable(repo.getLevelByName(name));
+		Optional<Grade> op = Optional.ofNullable(repo.getGradeByName(name));
 		Grade grade = op.orElse(null);
 		if (grade == null) return true;
 		boolean isCreatingNew = (id == null);
@@ -95,7 +94,7 @@ public class GradeServiceImpl implements GradeService {
 
 	@Override
 	public boolean isCodeUnique(Long id, String code) {
-		Optional<Grade> op = Optional.ofNullable(repo.getLevelByCode(code));
+		Optional<Grade> op = Optional.ofNullable(repo.getGradeByCode(code));
 		Grade grade = op.orElse(null);
 		if (grade == null) return true;
 		boolean isCreatingNew = (id == null);
@@ -121,15 +120,25 @@ public class GradeServiceImpl implements GradeService {
 	}
 
 	@Override
-	public void deleteLevel(Long id) throws EntityNotFoundException {
-		Long countById = repo.countById(id);
-		if (countById == null || countById == 0) {
-			StringBuilder msg = new StringBuilder();
-			msg.append(SystemConstant.NOT_FOUND_ID).append(id);
-			throw new EntityNotFoundException(msg.toString());
+	public void deleteGrade(Long id) throws EntityNotFoundException {
+		LocalDateTime dateNow = LocalDateTime.now();
+		Optional<Authentication> auth = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication());
+		if (auth.isPresent()) {
+			StringBuilder adminControl = new StringBuilder(auth.get().getName());
+			Long countById = repo.countById(id);
+			if (countById == null || countById == 0) {
+				StringBuilder msg = new StringBuilder();
+				msg.append(SystemConstant.NOT_FOUND_ID).append(id);
+				throw new EntityNotFoundException(msg.toString());
+			}
+			Optional<Grade> opExist = Optional.ofNullable(repo.getById(id));
+			if (opExist.isPresent()) {
+				Grade exsting = opExist.get();
+				exsting.setModifiedDate(dateNow);
+				exsting.setModifiedBy(adminControl.toString());
+				repo.deleteById(id);
+			}
 		}
-		repo.deleteById(id);
 	}
-	
 	
 }

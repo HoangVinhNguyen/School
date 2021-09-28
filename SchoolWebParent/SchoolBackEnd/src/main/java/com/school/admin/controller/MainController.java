@@ -25,7 +25,8 @@ public class MainController {
 	}
 	
 	@GetMapping("/error")
-	public String viewErrorPage() {
+	public String viewErrorPage(Model model) {
+		StaticUtil.setTitleAndStatic(model, SystemConstant.TITLE_ERROR);
 		return "error";
 	}
 }

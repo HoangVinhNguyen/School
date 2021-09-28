@@ -33,9 +33,11 @@ public class SystemConstant {
 	public final static String PAGE_TILE = "pageTitle";
 	public final static String TITLE_CREATE_NEW_USER = "Create New User";
 	public final static String TITLE_EDIT_USER = "Edit User ID ";
-	public final static String TITLE_LOGIN = "Login - School Admin";
-	public final static String TITLE_ACCOUNT_DETAILS = "Your Account Details";
 	public final static String TITLE_USERS = "User - School Admin";
+	public final static String TITLE_ACCOUNT_DETAILS = "Your Account Details";
+	
+	public final static String TITLE_LOGIN = "Login - School Admin";
+	public final static String TITLE_ERROR = "Error - School Admin";
 	public final static String TITLE_HOME = "Home - School Admin";
 	
 	public final static String TITLE_LEVEL = "Level - School Admin";
@@ -46,24 +48,48 @@ public class SystemConstant {
 	public final static String TITLE_CREATE_NEW_GRADE = "Create New Grade";
 	public final static String TITLE_EDIT_GRADE = "Edit Grade ID ";
 	
+	public final static String TITLE_CLAZZ = "Class - School Admin";
+	public final static String TITLE_CREATE_NEW_CLAZZ = "Create New Class";
+	public final static String TITLE_EDIT_CLAZZ = "Edit Class ID ";
+	
 	public final static String NOT_FOUND_ID = "Could not find any with ID ";
 	public final static String ATTR_MESSAGE = "message";
 	public final static String ATTR_CONTENT_USER_SAVE_SUCCESS = "The User have been saved successfully";
 	public final static String ATTR_CONTENT_LEVEL_SAVE_SUCCESS = "The Level have been saved successfully";
+	public final static String ATTR_CONTENT_GRADE_SAVE_SUCCESS = "The Grade have been saved successfully";
+	public final static String ATTR_CONTENT_CLAZZ_SAVE_SUCCESS = "The Class have been saved successfully";
 	public final static String ENABLED = "enabled";
 	public final static String DISABLED = "disabled";
 	public final static String JS_FILE = "jsFiles";
 	public final static String CSS_FILE = "cssFiles";
 
-	public final static String ATTR_CONTENT_USER_EDIT_SUCCESS(Long id) {
+	public final static String ATTR_CONTENT_USER_DEL_SUCCESS(Long id) {
 		StringBuilder content = new StringBuilder();
-		content.append("The user ID ").append(id).append(" has been deteled successfully");
+		content.append("The User ID ").append(id).append(" has been deteled successfully");
 		return  content.toString() ;
 	}
 	public final static String ATTR_CONTENT_USER_STATUS_SUCCESS(Long id, String status) {
 		StringBuilder content = new StringBuilder();
-		content.append("The user ID ").append(id).append(" has been ").append(status);
+		content.append("The User ID ").append(id).append(" has been ").append(status);
 		return content.toString();
+	}
+	
+	public final static String ATTR_CONTENT_LEVEL_DEL_SUCCESS(Long id) {
+		StringBuilder content = new StringBuilder();
+		content.append("The Level ID ").append(id).append(" has been deteled successfully");
+		return  content.toString() ;
+	}
+	
+	public final static String ATTR_CONTENT_GRADE_DEL_SUCCESS(Long id) {
+		StringBuilder content = new StringBuilder();
+		content.append("The Grade ID ").append(id).append(" has been deteled successfully");
+		return  content.toString() ;
+	}
+	
+	public final static String ATTR_CONTENT_CLAZZ_DEL_SUCCESS(Long id) {
+		StringBuilder content = new StringBuilder();
+		content.append("The Class ID ").append(id).append(" has been deteled successfully");
+		return  content.toString() ;
 	}
 
 	/*
