@@ -17,34 +17,35 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.school.admin.exception.EntityNotFoundException;
-import com.school.admin.repository.LevelRepository;
+import com.school.admin.repository.GradeRepository;
+import com.school.admin.service.GradeService;
 import com.school.admin.service.LevelService;
 import com.school.common.common.SystemConstant;
-import com.school.common.entity.Level;
+import com.school.common.entity.Grade;
 
 @Service
 @Transactional
-public class LevelServiceImpl implements LevelService {
+public class GradeServiceImpl implements GradeService {
 
 	@Autowired
-	private LevelRepository repo;
+	private GradeRepository repo;
 
 	@Override
-	public List<Level> listAll() {
-		Optional<List<Level>> list = Optional.ofNullable(repo.findAll(Sort.by(SystemConstant.NAME).ascending()));
+	public List<Grade> listAll() {
+		Optional<List<Grade>> list = Optional.ofNullable(repo.findAll(Sort.by(SystemConstant.NAME).ascending()));
 		return list.orElse(null);
 	}
 
 	@Override
-	public Page<Level> listByPage(int pageNum, String sortField, String sortDir, String keyword) {
+	public Page<Grade> listByPage(int pageNum, String sortField, String sortDir, String keyword) {
 		Sort sort = Sort.by(sortField);
 		sort = sortDir.equals(SystemConstant.ASC) ? sort.ascending() : sort.descending();
 		Pageable pageable = PageRequest.of(pageNum-1, LevelService.LEVEL_PER_PAGE, sort);
 		
 		if (keyword != null) {
-			Optional<Page<Level>> listLevel = Optional.ofNullable(repo.findAll(keyword, pageable));
-			if (listLevel.isPresent()) {
-				return listLevel.get();
+			Optional<Page<Grade>> list = Optional.ofNullable(repo.findAll(keyword, pageable));
+			if (list.isPresent()) {
+				return list.get();
 			}
 		}
 		
@@ -52,41 +53,41 @@ public class LevelServiceImpl implements LevelService {
 	}
 
 	@Override
-	public Level save(Level level) {
-		boolean isUpdating = (level.getId() != null);
+	public Grade save(Grade grade) {
+		boolean isUpdating = (grade.getId() != null);
 		LocalDateTime dateNow = LocalDateTime.now();
 		Optional<Authentication> auth = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication());
 		if (auth.isPresent()) {
 			StringBuilder adminControl = new StringBuilder(auth.get().getName());
 			if (isUpdating) {
-				Optional<Level> opExist = repo.findById(level.getId());
+				Optional<Grade> opExist = repo.findById(grade.getId());
 				if (opExist.isPresent()) {
-					Level exsting = opExist.get();
-					level.setCreatedDate(exsting.getCreatedDate());
-					level.setCreatedBy(exsting.getCreatedBy());
-					level.setModifiedDate(dateNow);
-					level.setModifiedBy(adminControl.toString());
+					Grade exsting = opExist.get();
+					grade.setCreatedDate(exsting.getCreatedDate());
+					grade.setCreatedBy(exsting.getCreatedBy());
+					grade.setModifiedDate(dateNow);
+					grade.setModifiedBy(adminControl.toString());
 				}
 				else return null;
 			} else {
-				level.setCreatedDate(dateNow);
-				level.setCreatedBy(adminControl.toString());
+				grade.setCreatedDate(dateNow);
+				grade.setCreatedBy(adminControl.toString());
 			}
-			return repo.save(level);
+			return repo.save(grade);
 		}
 		return null;
 	}
 
 	@Override
 	public boolean isNameUnique(Long id, String name) {
-		Optional<Level> op = Optional.ofNullable(repo.getLevelByName(name));
-		Level level = op.orElse(null);
-		if (level == null) return true;
+		Optional<Grade> op = Optional.ofNullable(repo.getLevelByName(name));
+		Grade grade = op.orElse(null);
+		if (grade == null) return true;
 		boolean isCreatingNew = (id == null);
 		if (isCreatingNew) {
-			if (level != null) return false;
+			if (grade != null) return false;
 		} else {
-			if (level.getId() != id)
+			if (grade.getId() != id)
 				return false;
 		}
 		return true;
@@ -94,23 +95,23 @@ public class LevelServiceImpl implements LevelService {
 
 	@Override
 	public boolean isCodeUnique(Long id, String code) {
-		Optional<Level> op = Optional.ofNullable(repo.getLevelByCode(code));
-		Level level = op.orElse(null);
-		if (level == null) return true;
+		Optional<Grade> op = Optional.ofNullable(repo.getLevelByCode(code));
+		Grade grade = op.orElse(null);
+		if (grade == null) return true;
 		boolean isCreatingNew = (id == null);
 		if (isCreatingNew) {
-			if (level != null) return false;
+			if (grade != null) return false;
 		} else {
-			if (level.getId() != id)
+			if (grade.getId() != id)
 				return false;
 		}
 		return true;
 	}
 
 	@Override
-	public Level get(Long id) throws EntityNotFoundException {
+	public Grade get(Long id) throws EntityNotFoundException {
 		try {
-			Optional<Level> op = repo.findById(id);
+			Optional<Grade> op = repo.findById(id);
 			return op.orElse(null);
 		} catch (NoSuchElementException e) {
 			StringBuilder msg = new StringBuilder();

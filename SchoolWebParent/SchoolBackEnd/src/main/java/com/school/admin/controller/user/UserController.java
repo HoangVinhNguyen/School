@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.school.admin.exception.UserNotFoundException;
+import com.school.admin.exception.EntityNotFoundException;
 import com.school.admin.service.UserService;
 import com.school.admin.util.FileUploadUtil;
 import com.school.admin.util.StaticUtil;
@@ -124,7 +124,7 @@ public class UserController {
 			model.addAttribute(SystemConstant.LINK, "users");
 			StaticUtil.setTitleAndStatic(model, title.toString());
 			return "users/user_form";
-		} catch (UserNotFoundException e) {
+		} catch (EntityNotFoundException e) {
 			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, e.getMessage());
 		}
 		return "redirect:/users";
@@ -136,7 +136,7 @@ public class UserController {
 			service.deleteUser(id);
 			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE,
 					SystemConstant.ATTR_CONTENT_USER_EDIT_SUCCESS(id));
-		} catch (UserNotFoundException e) {
+		} catch (EntityNotFoundException e) {
 			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, e.getMessage());
 		}
 		return "redirect:/users";

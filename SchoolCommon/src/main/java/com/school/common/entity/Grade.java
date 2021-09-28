@@ -2,13 +2,15 @@ package com.school.common.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="level")
-public class Level extends BaseEntity {
+@Table(name = "grade")
+public class Grade extends BaseEntity {
 
-	private static final long serialVersionUID = -5021790767381766735L;
+	private static final long serialVersionUID = -2440888477841599137L;
 
 	@Column(length = 50, nullable = false, unique = true)
 	private String code;
@@ -18,19 +20,24 @@ public class Level extends BaseEntity {
 
 	@Column(length = 150, nullable = false)
 	private String description;
-	
-	public Level() {
-		
+
+	@OneToOne
+	@JoinColumn(name = "level_id")
+	private Level level;
+
+	public Grade() {
+
 	}
-	
-	public Level(Long id) {
+
+	public Grade(Long id) {
 		this.setId(id);
 	}
-	
-	public Level(String code, String name, String description) {
+
+	public Grade(String code, String name, String description, Level level) {
 		this.setCode(code);
 		this.setName(name);
 		this.setDescription(description);
+		this.level = level;
 	}
 
 	public String getCode() {
@@ -57,6 +64,14 @@ public class Level extends BaseEntity {
 		this.description = description;
 	}
 
+	public Level getLevel() {
+		return level;
+	}
+
+	public void setLevel(Level level) {
+		this.level = level;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -67,14 +82,18 @@ public class Level extends BaseEntity {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (this.getClass() != obj.getClass()) return false;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (this.getClass() != obj.getClass())
+			return false;
 		Level other = (Level) obj;
 		if (this.getId() == null) {
-			if (other.getId() != null) return false;
-		}
-		else if (!this.getId().equals(other.getId())) return false;
+			if (other.getId() != null)
+				return false;
+		} else if (!this.getId().equals(other.getId()))
+			return false;
 		return true;
 	}
 
@@ -82,5 +101,4 @@ public class Level extends BaseEntity {
 	public String toString() {
 		return this.name;
 	}
-	
 }

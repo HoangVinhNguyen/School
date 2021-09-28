@@ -37,9 +37,15 @@ public class SystemConstant {
 	public final static String TITLE_ACCOUNT_DETAILS = "Your Account Details";
 	public final static String TITLE_USERS = "User - School Admin";
 	public final static String TITLE_HOME = "Home - School Admin";
+	
 	public final static String TITLE_LEVEL = "Level - School Admin";
 	public final static String TITLE_CREATE_NEW_LEVEL = "Create New Level";
 	public final static String TITLE_EDIT_LEVEL = "Edit Level ID ";
+	
+	public final static String TITLE_GRADE = "Grade - School Admin";
+	public final static String TITLE_CREATE_NEW_GRADE = "Create New Grade";
+	public final static String TITLE_EDIT_GRADE = "Edit Grade ID ";
+	
 	public final static String NOT_FOUND_ID = "Could not find any with ID ";
 	public final static String ATTR_MESSAGE = "message";
 	public final static String ATTR_CONTENT_USER_SAVE_SUCCESS = "The User have been saved successfully";

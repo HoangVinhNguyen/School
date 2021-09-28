@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -24,7 +25,7 @@ public interface LevelRepository extends JpaRepository<Level, Long>{
 	public Optional<Level> findById(Long id);
 	
 	@Query("SELECT lv FROM Level lv WHERE lv.isDeleted = FALSE")
-	public List<Level> findAll();
+	public List<Level> findAll(Sort sort);
 	
 	@Query("UPDATE Level lv SET lv.isDeleted = TRUE WHERE lv.id = ?1  AND lv.isDeleted = FALSE")
 	@Modifying

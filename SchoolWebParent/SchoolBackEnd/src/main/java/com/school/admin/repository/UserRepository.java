@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -22,6 +23,9 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	
 	@Query("SELECT u FROM User u WHERE u.isDeleted = FALSE")
 	public List<User> findAllUser();
+	
+	@Query("SELECT u FROM User u WHERE u.isDeleted = FALSE")
+	public List<User> findAll(Sort sort);
 	
 	@Query("SELECT u FROM User u WHERE u.id = ?1 AND u.isDeleted = FALSE")
 	public Optional<User> findById(Long id);

@@ -16,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.school.admin.exception.UserNotFoundException;
+import com.school.admin.exception.EntityNotFoundException;
 import com.school.admin.repository.RoleRepository;
 import com.school.admin.repository.UserRepository;
 import com.school.admin.service.UserService;
@@ -153,24 +153,24 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User get(Long id) throws UserNotFoundException {
+	public User get(Long id) throws EntityNotFoundException {
 		try {
 			Optional<User> opUser = userRepo.findById(id);
 			return opUser.orElse(null);
 		} catch (NoSuchElementException e) {
 			StringBuilder msg = new StringBuilder();
 			msg.append(SystemConstant.NOT_FOUND_ID).append(id);
-			throw new UserNotFoundException(msg.toString());
+			throw new EntityNotFoundException(msg.toString());
 		}
 	}
 	
 	@Override
-	public void deleteUser(Long id) throws UserNotFoundException {
+	public void deleteUser(Long id) throws EntityNotFoundException {
 		Long countById = userRepo.countById(id);
 		if (countById == null || countById == 0) {
 			StringBuilder msg = new StringBuilder();
 			msg.append(SystemConstant.NOT_FOUND_ID).append(id);
-			throw new UserNotFoundException(msg.toString());
+			throw new EntityNotFoundException(msg.toString());
 		}
 		userRepo.deleteById(id);
 		StringBuilder uploadDir = new StringBuilder();

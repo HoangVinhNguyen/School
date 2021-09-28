@@ -6,10 +6,10 @@
 	<div class="container-fluid">
 		<div th:replace="navigation :: menu"></div>
 		<div>
-			<h2>Manage Levels | [[${pageTitle}]]</h2>
+			<h2>Manage Grades | [[${pageTitle}]]</h2>
 		</div>
 		<form th:action="@{'/' + ${link} + '/save'}" method="post" enctype="multipart/form-data"
-			style="max-width: 700px; margin: 0 auto" th:object="${level}" onsubmit="return checkNameCodeUnique(this);">
+			style="max-width: 700px; margin: 0 auto" th:object="${grade}" onsubmit="return checkNameCodeUnique(this);">
 			<input type="hidden" th:field="*{id}"/>
 			<div class="border border-secondary rounded p-3">
 				<div class="form-group row">
@@ -28,6 +28,16 @@
 					<label class="col-sm-4 col-form-label">Description</label>
 					<div class="col-sm-8">
 						<input type="text" class="form-control" th:field="*{description}" maxlength="150" required />
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">Levels</label>
+					<div class="col-sm-8">
+					<select th:field="*{level}">
+					    <option th:each="level:${listLevels}" th:value="${level.id}" 
+					    	th:text="${level.name} + '-' + ${level.description}">
+					    </option>
+					</select>
 					</div>
 				</div>
 				<div class="text-center">
@@ -62,9 +72,9 @@
 			var url = "[[@{'/' + ${link} + '/check_namcode'}]]";
 			let name = $("#name").val();
 			let code = $("#code").val();
-			let levelId = $("#id").val();
+			let gradeId = $("#id").val();
 			let csrfValue = $("input[name='_csrf']").val();
-			var params = {id: levelId, name: name, code: code, _csrf: csrfValue};
+			var params = {id: gradeId, name: name, code: code, _csrf: csrfValue};
 			
 			$.post(url, params, function(respone) {
 				if (respone == "OK") {

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
-import com.school.admin.exception.UserNotFoundException;
+import com.school.admin.exception.EntityNotFoundException;
 import com.school.common.entity.Role;
 import com.school.common.entity.User;
 
@@ -26,9 +26,9 @@ public interface UserService {
 
 	public User getByEmail(String email);
 
-	public User get(Long id) throws UserNotFoundException;
+	public User get(Long id) throws EntityNotFoundException;
 
-	public void deleteUser(Long id) throws UserNotFoundException;
+	public void deleteUser(Long id) throws EntityNotFoundException;
 
 	public void updateUserEnableStatus(Long id, boolean enabled);
 }
