@@ -1,4 +1,4 @@
-package com.school.admin.controller.clazz;
+package com.school.admin.controller.classroom;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.school.admin.service.GradeService;
 
 @RestController
-public class ClazzRestController {
+public class ClassroomRestController {
 
 	@Autowired
 	private GradeService service;
 	
-	@PostMapping("/clazzes/check_namcode")
+	@PostMapping("/classrooms/check_namcode")
 	public String checkDuplicateNameCode(@Param("id") Long id, @Param("name") String name, 
 			@Param("code") String code) {
 		boolean checkName = service.isNameUnique(id, name);

@@ -69,7 +69,7 @@ public class GradeController {
 	}
 	
 	@GetMapping("/grades/new")
-	public String newLevel(Model model) {
+	public String newGrade(Model model) {
 		Grade grade = new Grade();
 		Optional<List<Level>> opLevel = Optional.ofNullable(levelService.listAll());
 		if (opLevel.isPresent()) {
@@ -83,19 +83,18 @@ public class GradeController {
 	}
 	
 	@PostMapping("/grades/save")
-	public String saveLevel(Grade level, RedirectAttributes redirectAttributes) throws IOException {
-		service.save(level);
+	public String saveGrade(Grade grade, RedirectAttributes redirectAttributes) throws IOException {
+		service.save(grade);
 		redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, SystemConstant.ATTR_CONTENT_GRADE_SAVE_SUCCESS);
-		return getRedirectURLtoAffectedLevel(level);
+		return getRedirectURLtoAffectedGrade(grade);
 	}
 	
-	private String getRedirectURLtoAffectedLevel(Grade level) {
-		String name = level.getName();
-		return "redirect:/grades/page/1?sortField=id&sortDir=asc&keyword=" + name;
+	private String getRedirectURLtoAffectedGrade(Grade grade) {
+		return "redirect:/grades/page/1?sortField=id&sortDir=asc&keyword=" + grade.getName();
 	}
 	
 	@GetMapping("/grades/edit/{id}")
-	public String editLevel(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes, Model model) {
+	public String editGrade(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes, Model model) {
 		try {
 			Optional<Grade> opGrade = Optional.ofNullable(service.get(id));
 			Optional<List<Level>> opLevel = Optional.ofNullable(levelService.listAll());
@@ -117,7 +116,7 @@ public class GradeController {
 	}
 	
 	@GetMapping("/grades/delete/{id}")
-	public String deleteLevel(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
+	public String deleteGrade(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
 		try {
 			service.deleteGrade(id);
 			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE,

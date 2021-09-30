@@ -6,7 +6,7 @@
 	<div class="container-fluid">
 		<div th:replace="navigation :: menu"></div>
 		<div>
-			<h2>Manage Grade School</h2>
+			<h2>Manage Class School</h2>
 			<a th:href="@{'/' + ${link} + '/new'}" class="fas fa-plus-square fa-2x icon-dark mr-2"></a>
 		</div>
 		
@@ -39,22 +39,22 @@
 						<th th:replace="fragments :: column_link(${link}, 'code', 'Code', 'none')"></th>
 						<th th:replace="fragments :: column_link(${link}, 'name', 'Name', 'none')"></th>
 						<th>Description</th>
-						<th th:replace="fragments :: column_link(${link}, 'level', 'Level', 'none')"></th>
+						<th th:replace="fragments :: column_link(${link}, 'clazz', 'Class', 'none')"></th>
 						<th></th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="grade : ${listGrades}">
-						<td>[[${grade.id}]]</td>
-						<td>[[${grade.code}]]</td>
-						<td>[[${grade.name}]]</td>
-						<td>[[${grade.description}]]</td>
-						<td>[[${grade.level}]]</td>
+					<tr th:each="classroom : ${listClassrooms}">
+						<td>[[${classroom.id}]]</td>
+						<td>[[${classroom.code}]]</td>
+						<td>[[${classroom.name}]]</td>
+						<td>[[${classroom.description}]]</td>
+						<td>[[${classroom.clazzes}]]</td>
 						<td>
-							<a class="fas fa-edit fa-2x icon-green" th:href="@{'/' + ${link} + '/edit/' + ${grade.id}}" 
-								title="Edit this grade"></a> &nbsp;
-							<a class="fas fa-trash fa-2x icon-dark link-delete" th:href="@{'/' + ${link} + '/delete/' + ${grade.id}}"
-								th:gradeId="${grade.id}" title="Delete this grade"></a>
+							<a class="fas fa-edit fa-2x icon-green" th:href="@{'/' + ${link} + '/edit/' + ${classroom.id}}" 
+								title="Edit this classroom"></a> &nbsp;
+							<a class="fas fa-trash fa-2x icon-dark link-delete" th:href="@{'/' + ${link} + '/delete/' + ${classroom.id}}"
+								th:classroomId="${classroom.id}" title="Delete this classroom"></a>
 						</td>
 					</tr>
 				</tbody>
@@ -62,28 +62,28 @@
 		</div>
 		
 		<div class="less-details">
-			<div th:each="grade : ${listGrades}" class="row m-1">
+			<div th:each="classroom : ${listClassrooms}" class="row m-1">
 				<div class="col-8">
-					<div>[[${grade.code}]]</div>
-					<div>[[${grade.name}]]</div>
-					<div>[[${grade.description}]]</div>
-					<div>[[${grade.level}]]</div>
+					<div>[[${classroom.code}]]</div>
+					<div>[[${classroom.name}]]</div>
+					<div>[[${classroom.description}]]</div>
+					<div>[[${classroom.clazzes}]]</div>
 					<div class="mt-2">
-						<a class="fas fa-edit fa-2x icon-green" th:href="@{'/' + ${link} + '/edit/' + ${grade.id}}" 
-									title="Edit this grade"></a>
+						<a class="fas fa-edit fa-2x icon-green" th:href="@{'/' + ${link} + '/edit/' + ${classroom.id}}" 
+									title="Edit this classroom"></a>
 								&nbsp;
-						<a class="fas fa-trash fa-2x icon-dark link-delete" th:href="@{'/' + ${link} + '/delete/' + ${grade.id}}"
-									th:gradeId="${grade.id}" title="Delete this grade"></a>
+						<a class="fas fa-trash fa-2x icon-dark link-delete" th:href="@{'/' + ${link} + '/delete/' + ${classroom.id}}"
+									th:classroomId="${classroom.id}" title="Delete this classroom"></a>
 					</div>
 				</div>
 			</div>
 		</div>
 
 		<div th:if="${totalItems > 0}" class="text-center m-1">
-			<span>Showing Grades # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
+			<span>Showing Classrooms # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
 		</div>
 		<div th:unless="${totalItems > 0}" class="text-center m-1">
-			<span>No Grades found</span>
+			<span>No Classrooms found</span>
 		</div>
 
 		<div th:if="${totalPages > 1}">
@@ -134,9 +134,9 @@
 			$(".link-delete").on("click", function(e) {
 				e.preventDefault();
 				link = $(this);
-				gradeId = link.attr("gradeId");
+				classroomId = link.attr("classroomId");
 				$("#yesButton").attr("href", link.attr("href"));
-				$("#confirmText").text("Are you sure you want to delete this Grade ID " + gradeId + " ?");
+				$("#confirmText").text("Are you sure you want to delete this Classroom ID " + classroomId + " ?");
 				$("#confirmModal").modal();
 			});
 		});

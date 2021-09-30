@@ -40,7 +40,7 @@ public interface ClazzRepository extends JpaRepository<Clazz, Long>{
 	@Query("SELECT COUNT(c) FROM Clazz c WHERE c.id = :id AND c.isDeleted = FALSE")
 	public Long countById(@Param("id") Long id);
 	
-	@Query("SELECT c FROM Clazz c WHERE c.isDeleted = FALSE AND CONCAT(c.id, ' ', c.code, ' ', c.name, ' ', c.grade.name) LIKE %?1%")
+	@Query("SELECT c FROM Clazz c WHERE c.isDeleted = FALSE AND CONCAT(c.id, ' ', c.code, ' ', c.name, ' ', c.description, ' ', c.grade.name) LIKE %?1%")
 	public Page<Clazz> findAll(String keyword, Pageable pageable);
 	
 	@Query("SELECT c FROM Clazz c WHERE c.isDeleted = FALSE")

@@ -1,20 +1,22 @@
 package com.school.common.entity;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="class")
-public class Clazz extends BaseEntity {
+@Table(name="classroom")
+public class Classroom extends BaseEntity {
 
-	private static final long serialVersionUID = 7262682027766723720L;
+	private static final long serialVersionUID = -1230616448004109366L;
 
 	@Column(length = 50, nullable = false, unique = true)
 	private String code;
@@ -25,26 +27,24 @@ public class Clazz extends BaseEntity {
 	@Column(length = 150, nullable = false)
 	private String description;
 
-	@OneToOne
-	@JoinColumn(name = "grade_id")
-	private Grade grade;
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "class_classroom", 
+		joinColumns = @JoinColumn(name = "classroom_id"),
+		inverseJoinColumns = @JoinColumn(name = "class_id"))
+	private Set<Clazz> clazzes = new HashSet<>();
 	
-	@ManyToMany(mappedBy = "clazzes")
-	private Set<Classroom> classrooms;
-
-	public Clazz() {
+	public Classroom() {
 		
 	}
 	
-	public Clazz(Long id) {
+	public Classroom(Long id) {
 		this.setId(id);
 	}
-	
-	public Clazz(String code, String name, String description, Grade grade) {
+
+	public Classroom(String code, String name, String description) {
 		this.code = code;
 		this.name = name;
 		this.description = description;
-		this.grade = grade;
 	}
 
 	public String getCode() {
@@ -71,29 +71,29 @@ public class Clazz extends BaseEntity {
 		this.description = description;
 	}
 
-	public Grade getGrade() {
-		return grade;
+	public Set<Clazz> getClazzes() {
+		return clazzes;
 	}
 
-	public void setGrade(Grade grade) {
-		this.grade = grade;
+	public void setClazzes(Set<Clazz> clazzes) {
+		this.clazzes = clazzes;
+	}
+
+	public void addClass(Clazz clazz) {
+		Optional<Clazz> op = Optional.ofNullable(clazz);
+		if (op.isPresent()) this.clazzes.add(op.get());
 	}
 	
-	public Set<Classroom> getClassrooms() {
-		return classrooms;
-	}
-
-	public void setClassrooms(Set<Classroom> classrooms) {
-		this.classrooms = classrooms;
+	public String getNameAllClazz() {
+		StringBuilder name = new StringBuilder();
+		this.clazzes.forEach(c -> {
+			name.append(c.getName());
+			name.append(" ");
+		});
+		name.deleteCharAt(name.length() - 1);
+		return name.toString();
 	}
 	
-	public void addClassroom(Classroom classroom) {
-		Optional<Classroom> op = Optional.ofNullable(classroom);
-		if (op.isPresent()) {
-			this.classrooms.add(op.get());
-		}
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -110,7 +110,7 @@ public class Clazz extends BaseEntity {
 			return false;
 		if (this.getClass() != obj.getClass())
 			return false;
-		Clazz other = (Clazz) obj;
+		Classroom other = (Classroom) obj;
 		if (this.getId() == null) {
 			if (other.getId() != null)
 				return false;
@@ -123,5 +123,4 @@ public class Clazz extends BaseEntity {
 	public String toString() {
 		return this.name;
 	}
-	
 }

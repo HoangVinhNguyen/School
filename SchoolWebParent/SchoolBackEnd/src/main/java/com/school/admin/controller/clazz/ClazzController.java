@@ -31,19 +31,18 @@ public class ClazzController {
 	@Autowired
 	private GradeService gradeService;
 	
-	
-	@GetMapping("/clazzs")
+	@GetMapping("/clazzes")
 	public String listFirstPage(Model model) {
 		return listByPage(1, model, SystemConstant.NAME, SystemConstant.ASC, null);
 	}
 	
-	@GetMapping("/clazzs/page/{pageNum}")
+	@GetMapping("/clazzes/page/{pageNum}")
 	public String listByPage(@PathVariable(name="pageNum") int pageNum, Model model,
 			@Param("sortField") String sortField, @Param("sortDir") String sortDir, 
 			@Param("keyword") String keyword) {
 		
 		Page<Clazz> page = service.listByPage(pageNum, sortField, sortDir, keyword);
-		List<Clazz> listClazzs = page.getContent();
+		List<Clazz> listClazzes = page.getContent();
 		
 		long startCount = (pageNum - 1) * ClazzService.CLAZZ_PER_PAGE + 1;
 		long endCount = startCount + ClazzService.CLAZZ_PER_PAGE - 1;
@@ -59,44 +58,43 @@ public class ClazzController {
 		model.addAttribute(SystemConstant.START_COUNT, startCount);
 		model.addAttribute(SystemConstant.END_COUNT, endCount);
 		model.addAttribute(SystemConstant.TOTAL_ITEM, page.getTotalElements());
-		model.addAttribute("listClazzs", listClazzs);
+		model.addAttribute("listClazzes", listClazzes);
 		model.addAttribute(SystemConstant.SORT_FILED, sortField);
 		model.addAttribute(SystemConstant.SORT_DIR, sortDir);
 		model.addAttribute(SystemConstant.REVERSE_SORT_DIR, reverseSortDir);
 		model.addAttribute(SystemConstant.KEYWORD, keyword);
-		model.addAttribute(SystemConstant.LINK, "clazzs");
+		model.addAttribute(SystemConstant.LINK, "clazzes");
 		StaticUtil.setTitleAndStatic(model, SystemConstant.TITLE_CLAZZ);
-		return "clazzs/clazzs";
+		return "clazzes/clazzes";
 	}
 	
-	@GetMapping("/clazzs/new")
-	public String newLevel(Model model) {
+	@GetMapping("/clazzes/new")
+	public String newClazz(Model model) {
 		Clazz clazz = new Clazz();
 		Optional<List<Grade>> opGrade = Optional.ofNullable(gradeService.listAll());
 		if (opGrade.isPresent()) {
 			model.addAttribute("clazz", clazz);
 			model.addAttribute("listGrades", opGrade.get());
-			model.addAttribute(SystemConstant.LINK, "clazzs");
+			model.addAttribute(SystemConstant.LINK, "clazzes");
 			StaticUtil.setTitleAndStatic(model, SystemConstant.TITLE_CREATE_NEW_CLAZZ);
-			return "clazzs/clazz_form";
+			return "clazzes/clazz_form";
 		}
-		return "redirect:/clazzs";
+		return "redirect:/clazzes";
 	}
 	
-	@PostMapping("/clazzs/save")
-	public String saveLevel(Clazz level, RedirectAttributes redirectAttributes) throws IOException {
-		service.save(level);
+	@PostMapping("/clazzes/save")
+	public String saveClazz(Clazz clazz, RedirectAttributes redirectAttributes) throws IOException {
+		service.save(clazz);
 		redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, SystemConstant.ATTR_CONTENT_CLAZZ_SAVE_SUCCESS);
-		return getRedirectURLtoAffectedLevel(level);
+		return getRedirectURLtoAffectedLevel(clazz);
 	}
 	
-	private String getRedirectURLtoAffectedLevel(Clazz level) {
-		String name = level.getName();
-		return "redirect:/clazzs/page/1?sortField=id&sortDir=asc&keyword=" + name;
+	private String getRedirectURLtoAffectedLevel(Clazz clazz) {
+		return "redirect:/clazzes/page/1?sortField=id&sortDir=asc&keyword=" + clazz.getName();
 	}
 	
-	@GetMapping("/clazzs/edit/{id}")
-	public String editLevel(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes, Model model) {
+	@GetMapping("/clazzes/edit/{id}")
+	public String editClazz(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes, Model model) {
 		try {
 			Optional<Clazz> opClazz = Optional.ofNullable(service.get(id));
 			Optional<List<Grade>> opGrade = Optional.ofNullable(gradeService.listAll());
@@ -107,18 +105,18 @@ public class ClazzController {
 
 				model.addAttribute("clazz", opClazz.get());
 				model.addAttribute("listGrades", opGrade.get());
-				model.addAttribute(SystemConstant.LINK, "clazzs");
+				model.addAttribute(SystemConstant.LINK, "clazzes");
 				StaticUtil.setTitleAndStatic(model, title.toString());
-				return "clazzs/clazz_form";
+				return "clazzes/clazz_form";
 			}
 		} catch (EntityNotFoundException e) {
 			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, e.getMessage());
 		}
-		return "redirect:/clazzs";
+		return "redirect:/clazzes";
 	}
 	
-	@GetMapping("/clazzs/delete/{id}")
-	public String deleteLevel(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
+	@GetMapping("/clazzes/delete/{id}")
+	public String deleteClazz(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
 		try {
 			service.deleteClazz(id);
 			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE,
@@ -126,7 +124,7 @@ public class ClazzController {
 		} catch (EntityNotFoundException e) {
 			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, e.getMessage());
 		}
-		return "redirect:/clazzs";
+		return "redirect:/clazzes";
 	}
 	
 }

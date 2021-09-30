@@ -44,7 +44,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="clazz : ${listClazzs}">
+					<tr th:each="clazz : ${listClazzes}">
 						<td>[[${clazz.id}]]</td>
 						<td>[[${clazz.code}]]</td>
 						<td>[[${clazz.name}]]</td>
@@ -62,7 +62,7 @@
 		</div>
 		
 		<div class="less-details">
-			<div th:each="clazz : ${listClazzs}" class="row m-1">
+			<div th:each="clazz : ${listClazzes}" class="row m-1">
 				<div class="col-8">
 					<div>[[${clazz.code}]]</div>
 					<div>[[${clazz.name}]]</div>
@@ -80,7 +80,7 @@
 		</div>
 
 		<div th:if="${totalItems > 0}" class="text-center m-1">
-			<span>Showing levels # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
+			<span>Showing Class # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
 		</div>
 		<div th:unless="${totalItems > 0}" class="text-center m-1">
 			<span>No Grades found</span>

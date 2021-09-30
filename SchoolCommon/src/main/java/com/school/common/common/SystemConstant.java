@@ -52,12 +52,17 @@ public class SystemConstant {
 	public final static String TITLE_CREATE_NEW_CLAZZ = "Create New Class";
 	public final static String TITLE_EDIT_CLAZZ = "Edit Class ID ";
 	
+	public final static String TITLE_CLASSROOM = "Classroom - School Admin";
+	public final static String TITLE_CREATE_NEW_CLASSROOM = "Create New Classroom";
+	public final static String TITLE_EDIT_CLASSROOM = "Edit Classroom ID ";
+	
 	public final static String NOT_FOUND_ID = "Could not find any with ID ";
 	public final static String ATTR_MESSAGE = "message";
 	public final static String ATTR_CONTENT_USER_SAVE_SUCCESS = "The User have been saved successfully";
 	public final static String ATTR_CONTENT_LEVEL_SAVE_SUCCESS = "The Level have been saved successfully";
 	public final static String ATTR_CONTENT_GRADE_SAVE_SUCCESS = "The Grade have been saved successfully";
 	public final static String ATTR_CONTENT_CLAZZ_SAVE_SUCCESS = "The Class have been saved successfully";
+	public final static String ATTR_CONTENT_CLASSROOM_SAVE_SUCCESS = "The Classroom have been saved successfully";
 	public final static String ENABLED = "enabled";
 	public final static String DISABLED = "disabled";
 	public final static String JS_FILE = "jsFiles";
@@ -89,6 +94,12 @@ public class SystemConstant {
 	public final static String ATTR_CONTENT_CLAZZ_DEL_SUCCESS(Long id) {
 		StringBuilder content = new StringBuilder();
 		content.append("The Class ID ").append(id).append(" has been deteled successfully");
+		return  content.toString() ;
+	}
+	
+	public final static String ATTR_CONTENT_CLASSROOM_DEL_SUCCESS(Long id) {
+		StringBuilder content = new StringBuilder();
+		content.append("The Classroom ID ").append(id).append(" has been deteled successfully");
 		return  content.toString() ;
 	}
 

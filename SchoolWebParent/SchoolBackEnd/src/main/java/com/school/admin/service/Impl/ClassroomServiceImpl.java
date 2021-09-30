@@ -17,32 +17,32 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.school.admin.exception.EntityNotFoundException;
-import com.school.admin.repository.ClazzRepository;
-import com.school.admin.service.ClazzService;
+import com.school.admin.repository.ClassroomRepository;
+import com.school.admin.service.ClassroomService;
 import com.school.common.common.SystemConstant;
-import com.school.common.entity.Clazz;
+import com.school.common.entity.Classroom;
 
 @Service
 @Transactional
-public class ClazzServiceImpl implements ClazzService {
+public class ClassroomServiceImpl implements ClassroomService {
 
 	@Autowired
-	private ClazzRepository repo;
+	private ClassroomRepository repo;
 
 	@Override
-	public List<Clazz> listAll() {
-		Optional<List<Clazz>> list = Optional.ofNullable(repo.findAll(Sort.by(SystemConstant.NAME).ascending()));
+	public List<Classroom> listAll() {
+		Optional<List<Classroom>> list = Optional.ofNullable(repo.findAll(Sort.by(SystemConstant.NAME).ascending()));
 		return list.orElse(null);
 	}
 
 	@Override
-	public Page<Clazz> listByPage(int pageNum, String sortField, String sortDir, String keyword) {
+	public Page<Classroom> listByPage(int pageNum, String sortField, String sortDir, String keyword) {
 		Sort sort = Sort.by(sortField);
 		sort = sortDir.equals(SystemConstant.ASC) ? sort.ascending() : sort.descending();
-		Pageable pageable = PageRequest.of(pageNum-1, ClazzService.CLAZZ_PER_PAGE, sort);
+		Pageable pageable = PageRequest.of(pageNum-1, ClassroomService.CLASSROOM_PER_PAGE, sort);
 		
 		if (keyword != null) {
-			Optional<Page<Clazz>> list = Optional.ofNullable(repo.findAll(keyword, pageable));
+			Optional<Page<Classroom>> list = Optional.ofNullable(repo.findAll(keyword, pageable));
 			if (list.isPresent()) {
 				return list.get();
 			}
@@ -52,42 +52,42 @@ public class ClazzServiceImpl implements ClazzService {
 	}
 
 	@Override
-	public Clazz save(Clazz clazz) {
-		boolean isUpdating = (clazz.getId() != null);
+	public Classroom save(Classroom classroom) {
+		boolean isUpdating = (classroom.getId() != null);
 		LocalDateTime dateNow = LocalDateTime.now();
 		Optional<Authentication> auth = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication());
 		if (auth.isPresent()) {
 			StringBuilder adminControl = new StringBuilder(auth.get().getName());
 			if (isUpdating) {
-				Optional<Clazz> opExist = repo.findById(clazz.getId());
+				Optional<Classroom> opExist = repo.findById(classroom.getId());
 				if (opExist.isPresent()) {
-					Clazz exsting = opExist.get();
-					clazz.setClassrooms(exsting.getClassrooms());
-					clazz.setCreatedDate(exsting.getCreatedDate());
-					clazz.setCreatedBy(exsting.getCreatedBy());
-					clazz.setModifiedDate(dateNow);
-					clazz.setModifiedBy(adminControl.toString());
+					Classroom exsting = opExist.get();
+					classroom.setClazzes(exsting.getClazzes());
+					classroom.setCreatedDate(exsting.getCreatedDate());
+					classroom.setCreatedBy(exsting.getCreatedBy());
+					classroom.setModifiedDate(dateNow);
+					classroom.setModifiedBy(adminControl.toString());
 				}
 				else return null;
 			} else {
-				clazz.setCreatedDate(dateNow);
-				clazz.setCreatedBy(adminControl.toString());
+				classroom.setCreatedDate(dateNow);
+				classroom.setCreatedBy(adminControl.toString());
 			}
-			return repo.save(clazz);
+			return repo.save(classroom);
 		}
 		return null;
 	}
 
 	@Override
 	public boolean isNameUnique(Long id, String name) {
-		Optional<Clazz> op = Optional.ofNullable(repo.getClazzByName(name));
-		Clazz clazz = op.orElse(null);
-		if (clazz == null) return true;
+		Optional<Classroom> op = Optional.ofNullable(repo.getClassroomByName(name));
+		Classroom classroom = op.orElse(null);
+		if (classroom == null) return true;
 		boolean isCreatingNew = (id == null);
 		if (isCreatingNew) {
-			if (clazz != null) return false;
+			if (classroom != null) return false;
 		} else {
-			if (clazz.getId() != id)
+			if (classroom.getId() != id)
 				return false;
 		}
 		return true;
@@ -95,23 +95,23 @@ public class ClazzServiceImpl implements ClazzService {
 
 	@Override
 	public boolean isCodeUnique(Long id, String code) {
-		Optional<Clazz> op = Optional.ofNullable(repo.getClazzByCode(code));
-		Clazz clazz = op.orElse(null);
-		if (clazz == null) return true;
+		Optional<Classroom> op = Optional.ofNullable(repo.getClassroomByCode(code));
+		Classroom classroom = op.orElse(null);
+		if (classroom == null) return true;
 		boolean isCreatingNew = (id == null);
 		if (isCreatingNew) {
-			if (clazz != null) return false;
+			if (classroom != null) return false;
 		} else {
-			if (clazz.getId() != id)
+			if (classroom.getId() != id)
 				return false;
 		}
 		return true;
 	}
 
 	@Override
-	public Clazz get(Long id) throws EntityNotFoundException {
+	public Classroom get(Long id) throws EntityNotFoundException {
 		try {
-			Optional<Clazz> op = repo.findById(id);
+			Optional<Classroom> op = repo.findById(id);
 			return op.orElse(null);
 		} catch (NoSuchElementException e) {
 			StringBuilder msg = new StringBuilder();
@@ -121,7 +121,7 @@ public class ClazzServiceImpl implements ClazzService {
 	}
 
 	@Override
-	public void deleteClazz(Long id) throws EntityNotFoundException {
+	public void deleteClassroom(Long id) throws EntityNotFoundException {
 		LocalDateTime dateNow = LocalDateTime.now();
 		Optional<Authentication> auth = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication());
 		if (auth.isPresent()) {
@@ -132,9 +132,9 @@ public class ClazzServiceImpl implements ClazzService {
 				msg.append(SystemConstant.NOT_FOUND_ID).append(id);
 				throw new EntityNotFoundException(msg.toString());
 			}
-			Optional<Clazz> opExist = Optional.ofNullable(repo.getById(id));
+			Optional<Classroom> opExist = Optional.ofNullable(repo.getById(id));
 			if (opExist.isPresent()) {
-				Clazz exsting = opExist.get();
+				Classroom exsting = opExist.get();
 				exsting.setModifiedDate(dateNow);
 				exsting.setModifiedBy(adminControl.toString());
 				repo.deleteById(id);
