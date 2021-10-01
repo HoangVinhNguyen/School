@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.school.admin.exception.EntityNotFoundException;
+import com.school.admin.service.ClassroomService;
 import com.school.admin.service.ClazzService;
 import com.school.admin.service.GradeService;
 import com.school.admin.util.StaticUtil;
 import com.school.common.common.SystemConstant;
+import com.school.common.entity.Classroom;
 import com.school.common.entity.Clazz;
 import com.school.common.entity.Grade;
 
@@ -31,6 +33,9 @@ public class ClazzController {
 	@Autowired
 	private GradeService gradeService;
 	
+	@Autowired
+	private ClassroomService classroomService;
+
 	@GetMapping("/clazzes")
 	public String listFirstPage(Model model) {
 		return listByPage(1, model, SystemConstant.NAME, SystemConstant.ASC, null);
@@ -72,11 +77,13 @@ public class ClazzController {
 	public String newClazz(Model model) {
 		Clazz clazz = new Clazz();
 		Optional<List<Grade>> opGrade = Optional.ofNullable(gradeService.listAll());
-		if (opGrade.isPresent()) {
+		Optional<List<Classroom>> opClassroom = Optional.ofNullable(classroomService.listAll());
+		if (opGrade.isPresent() && opClassroom.isPresent()) {
 			model.addAttribute("clazz", clazz);
 			model.addAttribute("listGrades", opGrade.get());
+			model.addAttribute("listClassrooms", opClassroom.get());
 			model.addAttribute(SystemConstant.LINK, "clazzes");
-			StaticUtil.setTitleAndStatic(model, SystemConstant.TITLE_CREATE_NEW_CLAZZ);
+			StaticUtil.setTitleAndStatic(model, SystemConstant.TITLE_CREATE_NEW_CLAZZ, null, List.of("clazz_form.css"));
 			return "clazzes/clazz_form";
 		}
 		return "redirect:/clazzes";
@@ -98,15 +105,16 @@ public class ClazzController {
 		try {
 			Optional<Clazz> opClazz = Optional.ofNullable(service.get(id));
 			Optional<List<Grade>> opGrade = Optional.ofNullable(gradeService.listAll());
-			
-			if (opGrade.isPresent() && opGrade.isPresent()) {
+			Optional<List<Classroom>> opClassroom = Optional.ofNullable(classroomService.listAll());
+			if (opGrade.isPresent() && opClassroom.isPresent()) {
 				StringBuilder title = new StringBuilder();
 				title.append(SystemConstant.TITLE_EDIT_CLAZZ).append(id);
 
 				model.addAttribute("clazz", opClazz.get());
 				model.addAttribute("listGrades", opGrade.get());
+				model.addAttribute("listClassrooms", opClassroom.get());
 				model.addAttribute(SystemConstant.LINK, "clazzes");
-				StaticUtil.setTitleAndStatic(model, title.toString());
+				StaticUtil.setTitleAndStatic(model, title.toString(), null, List.of("clazz_form.css"));
 				return "clazzes/clazz_form";
 			}
 		} catch (EntityNotFoundException e) {

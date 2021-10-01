@@ -28,7 +28,7 @@ public class GradeRepositoryTests {
 	@Test
 	public void createGrade() {
 		LocalDateTime time = LocalDateTime.now();
-		Grade g = new Grade("1", "1", "of high school", new Level(2L));
+		Grade g = new Grade(1, "1", "of high school", new Level(2L));
 		g.setCreatedDate(time);
 		g.setCreatedBy("admin-test");
 		Grade saved = repo.save(g);
@@ -39,37 +39,37 @@ public class GradeRepositoryTests {
 	@Test
 	public void createMultiGrade() {
 		LocalDateTime time = LocalDateTime.now();
-		Grade g2 = new Grade("2", "Second Grade", "of high school", new Level(2L));
+		Grade g2 = new Grade(2, "Second Grade", "of high school", new Level(2L));
 		g2.setCreatedDate(time);
 		g2.setCreatedBy("admin-test");
-		Grade g3 = new Grade("3", "Third Grade", "of high school", new Level(2L));
+		Grade g3 = new Grade(3, "Third Grade", "of high school", new Level(2L));
 		g3.setCreatedDate(time);
 		g3.setCreatedBy("admin-test");
-		Grade g4 = new Grade("4", "Fourth Grade", "of high school", new Level(2L));
+		Grade g4 = new Grade(4, "Fourth Grade", "of high school", new Level(2L));
 		g4.setCreatedDate(time);
 		g4.setCreatedBy("admin-test");
-		Grade g5 = new Grade("5", "Fifth Grade", "of high school", new Level(2L));
+		Grade g5 = new Grade(5, "Fifth Grade", "of high school", new Level(2L));
 		g5.setCreatedDate(time);
 		g5.setCreatedBy("admin-test");
-		Grade g6 = new Grade("6", "Sixth Grade", "of junior high school", new Level(3L));
+		Grade g6 = new Grade(6, "Sixth Grade", "of junior high school", new Level(3L));
 		g6.setCreatedDate(time);
 		g6.setCreatedBy("admin-test");
-		Grade g7 = new Grade("7", "Seventh Grade", "of junior high school", new Level(3L));
+		Grade g7 = new Grade(7, "Seventh Grade", "of junior high school", new Level(3L));
 		g7.setCreatedDate(time);
 		g7.setCreatedBy("admin-test");
-		Grade g8 = new Grade("8", "Eighth Grade", "of junior high school", new Level(3L));
+		Grade g8 = new Grade(8, "Eighth Grade", "of junior high school", new Level(3L));
 		g8.setCreatedDate(time);
 		g8.setCreatedBy("admin-test");
-		Grade g9 = new Grade("9", "Ninth Grade", "of junior high school", new Level(3L));
+		Grade g9 = new Grade(9, "Ninth Grade", "of junior high school", new Level(3L));
 		g9.setCreatedDate(time);
 		g9.setCreatedBy("admin-test");
-		Grade g10 = new Grade("10", "Tenth Grade", "of high school", new Level(4L));
+		Grade g10 = new Grade(10, "Tenth Grade", "of high school", new Level(4L));
 		g10.setCreatedDate(time);
 		g10.setCreatedBy("admin-test");
-		Grade g11 = new Grade("11", "Eleventh Grade", "of high school", new Level(4L));
+		Grade g11 = new Grade(11, "Eleventh Grade", "of high school", new Level(4L));
 		g11.setCreatedDate(time);
 		g11.setCreatedBy("admin-test");
-		Grade g12 = new Grade("12", "Twelve Grade", "of high school", new Level(4L));
+		Grade g12 = new Grade(12, "Twelve Grade", "of high school", new Level(4L));
 		g12.setCreatedDate(time);
 		g12.setCreatedBy("admin-test");
 		
@@ -78,7 +78,7 @@ public class GradeRepositoryTests {
 	
 	@Test
 	public void updateGrade() {
-		Optional<Grade> op = Optional.ofNullable(repo.getGradeByCode("1"));
+		Optional<Grade> op = Optional.ofNullable(repo.getGradeByCode(1));
 		if (op.isPresent()) {
 			Grade g = op.get();
 			LocalDateTime modified = LocalDateTime.now();
@@ -102,7 +102,7 @@ public class GradeRepositoryTests {
 	
 	@Test
 	public void deleteGrade() {
-		Optional<Grade> op = Optional.ofNullable(repo.getGradeByCode("1"));
+		Optional<Grade> op = Optional.ofNullable(repo.getGradeByCode(1));
 		if (op.isPresent()) {
 			Grade lvns = op.get();
 			repo.deleteById(lvns.getId());

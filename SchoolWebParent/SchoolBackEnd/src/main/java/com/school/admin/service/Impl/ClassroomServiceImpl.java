@@ -62,7 +62,7 @@ public class ClassroomServiceImpl implements ClassroomService {
 				Optional<Classroom> opExist = repo.findById(classroom.getId());
 				if (opExist.isPresent()) {
 					Classroom exsting = opExist.get();
-					classroom.setClazzes(exsting.getClazzes());
+					//classroom.setClazzes(exsting.getClazzes());
 					classroom.setCreatedDate(exsting.getCreatedDate());
 					classroom.setCreatedBy(exsting.getCreatedBy());
 					classroom.setModifiedDate(dateNow);

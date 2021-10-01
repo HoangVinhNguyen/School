@@ -16,7 +16,7 @@ import com.school.common.entity.Grade;
 public interface GradeRepository extends JpaRepository<Grade, Long>{
 
 	@Query("SELECT g FROM Grade g WHERE g.code = :code AND g.isDeleted = FALSE")
-	public Grade getGradeByCode(@Param("code") String code);
+	public Grade getGradeByCode(@Param("code") Integer code);
 	
 	@Query("SELECT g FROM Grade g WHERE g.name = :name AND g.isDeleted = FALSE")
 	public Grade getGradeByName(@Param("name") String name);

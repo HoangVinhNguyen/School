@@ -5,13 +5,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.school.admin.service.GradeService;
+import com.school.admin.service.ClassroomService;
 
 @RestController
 public class ClassroomRestController {
 
 	@Autowired
-	private GradeService service;
+	private ClassroomService service;
 	
 	@PostMapping("/classrooms/check_namcode")
 	public String checkDuplicateNameCode(@Param("id") Long id, @Param("name") String name, 

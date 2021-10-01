@@ -40,6 +40,7 @@
 						<th th:replace="fragments :: column_link(${link}, 'name', 'Name', 'none')"></th>
 						<th>Description</th>
 						<th th:replace="fragments :: column_link(${link}, 'grade', 'Grade', 'none')"></th>
+						<th>Classrooms</th>
 						<th></th>
 					</tr>
 				</thead>
@@ -50,6 +51,8 @@
 						<td>[[${clazz.name}]]</td>
 						<td>[[${clazz.description}]]</td>
 						<td>[[${clazz.grade}]]</td>
+						<td th:if="${not #lists.isEmpty(clazz.classrooms)}">[[${clazz.classrooms}]]</td>
+						<td th:if="${#lists.isEmpty(clazz.classrooms)}"></td>
 						<td>
 							<a class="fas fa-edit fa-2x icon-green" th:href="@{'/' + ${link} + '/edit/' + ${clazz.id}}" 
 								title="Edit this clazz"></a> &nbsp;
@@ -64,7 +67,6 @@
 		<div class="less-details">
 			<div th:each="clazz : ${listClazzes}" class="row m-1">
 				<div class="col-8">
-					<div>[[${clazz.code}]]</div>
 					<div>[[${clazz.name}]]</div>
 					<div>[[${clazz.description}]]</div>
 					<div>[[${clazz.grade}]]</div>
@@ -83,7 +85,7 @@
 			<span>Showing Class # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
 		</div>
 		<div th:unless="${totalItems > 0}" class="text-center m-1">
-			<span>No Grades found</span>
+			<span>No Classes found</span>
 		</div>
 
 		<div th:if="${totalPages > 1}">

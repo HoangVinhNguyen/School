@@ -27,10 +27,7 @@ public class Classroom extends BaseEntity {
 	@Column(length = 150, nullable = false)
 	private String description;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "class_classroom", 
-		joinColumns = @JoinColumn(name = "classroom_id"),
-		inverseJoinColumns = @JoinColumn(name = "class_id"))
+	@ManyToMany(mappedBy = "classrooms", fetch = FetchType.LAZY)
 	private Set<Clazz> clazzes = new HashSet<>();
 	
 	public Classroom() {

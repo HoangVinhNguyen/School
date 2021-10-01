@@ -15,7 +15,7 @@ public class GradeRestController {
 	
 	@PostMapping("/grades/check_namcode")
 	public String checkDuplicateNameCode(@Param("id") Long id, @Param("name") String name, 
-			@Param("code") String code) {
+			@Param("code") Integer code) {
 		boolean checkName = service.isNameUnique(id, name);
 		boolean checkCode = service.isCodeUnique(id, code);
 		if (checkName == true && checkCode == true) {

@@ -26,6 +26,7 @@ public class SystemConstant {
 	public final static String KEYWORD = "keyword";
 	public final static String LINK = "link";
 	public final static String NAME = "name";
+	public final static String CODE = "code";
 
 	/*
 	 * For User class.

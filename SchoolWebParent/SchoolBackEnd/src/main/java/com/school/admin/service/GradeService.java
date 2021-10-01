@@ -19,7 +19,7 @@ public interface GradeService {
 
 	public boolean isNameUnique(Long id, String name);
 	
-	public boolean isCodeUnique(Long id, String code);
+	public boolean isCodeUnique(Long id, Integer code);
 	
 	public Grade get(Long id) throws EntityNotFoundException;
 

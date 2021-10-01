@@ -62,7 +62,6 @@ public class ClazzServiceImpl implements ClazzService {
 				Optional<Clazz> opExist = repo.findById(clazz.getId());
 				if (opExist.isPresent()) {
 					Clazz exsting = opExist.get();
-					clazz.setClassrooms(exsting.getClassrooms());
 					clazz.setCreatedDate(exsting.getCreatedDate());
 					clazz.setCreatedBy(exsting.getCreatedBy());
 					clazz.setModifiedDate(dateNow);

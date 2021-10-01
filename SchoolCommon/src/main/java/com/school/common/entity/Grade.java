@@ -13,7 +13,7 @@ public class Grade extends BaseEntity {
 	private static final long serialVersionUID = -2440888477841599137L;
 
 	@Column(length = 50, nullable = false, unique = true)
-	private String code;
+	private Integer code;
 
 	@Column(length = 50, nullable = false, unique = true)
 	private String name;
@@ -33,18 +33,18 @@ public class Grade extends BaseEntity {
 		this.setId(id);
 	}
 
-	public Grade(String code, String name, String description, Level level) {
+	public Grade(Integer code, String name, String description, Level level) {
 		this.setCode(code);
 		this.setName(name);
 		this.setDescription(description);
 		this.level = level;
 	}
 
-	public String getCode() {
+	public Integer getCode() {
 		return code;
 	}
 
-	public void setCode(String code) {
+	public void setCode(Integer code) {
 		this.code = code;
 	}
 

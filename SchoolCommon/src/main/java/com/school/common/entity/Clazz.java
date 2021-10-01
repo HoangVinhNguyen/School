@@ -1,11 +1,14 @@
 package com.school.common.entity;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -29,8 +32,11 @@ public class Clazz extends BaseEntity {
 	@JoinColumn(name = "grade_id")
 	private Grade grade;
 	
-	@ManyToMany(mappedBy = "clazzes")
-	private Set<Classroom> classrooms;
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "class_classroom", 
+		joinColumns = @JoinColumn(name = "class_id"),
+		inverseJoinColumns = @JoinColumn(name = "classroom_id"))
+	private Set<Classroom> classrooms = new HashSet<>();
 
 	public Clazz() {
 		

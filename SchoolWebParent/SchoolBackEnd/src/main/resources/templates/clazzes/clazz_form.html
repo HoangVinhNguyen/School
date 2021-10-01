@@ -35,9 +35,44 @@
 					<div class="col-sm-8">
 						<select class="form-control" th:field="*{grade}">
 						    <option th:each="grade:${listGrades}" th:value="${grade.id}" 
-						    	th:text="${grade.name} + '-' + ${grade.description}">
+						    	th:text="${grade.name}">
 						    </option>
 						</select>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">Classrooms</label>
+					<div class="col-sm-8">
+						<input type="text" th:if="${not #lists.isEmpty(clazz.classrooms)}" id="classroom"
+							class="form-control" th:value="*{classrooms}" disabled/>
+						<input type="text" th:if="${#lists.isEmpty(clazz.classrooms)}" id="classroom" 
+							class="form-control" th:value="NULL" disabled/>
+						<small>Edit it below</small>
+						<div class="ex3 form-control col mx-auto">
+							
+							<th:block th:each="classroom,iter:${listClassrooms}" th:with="numList=${#strings.listSplit('1,0', ',')}" >
+								
+								<div class="row m-1" th:if="${iter.index} % 2 != 0 and ${iter.count} < ${iter.size}" >
+									<div class="col-6" th:each="num : ${numList}" th:with="dataIndex=(${iter.index} - ${num})">
+										<input class="checkBox" type="checkbox" 
+										 th:field="*{classrooms}" th:text="${listClassrooms[dataIndex].name}" 
+										 th:value="${listClassrooms[dataIndex].id}" th:nameClassroom="${listClassrooms[dataIndex].name}"/>
+										 - <small>[[${listClassrooms[dataIndex].description}]]</small>
+									</div>
+								</div>
+								<div class="row m-1" th:if="${iter.index} % 2 == 0 and ${iter.count} == ${iter.size}" >
+									<div class="col-6" th:with="dataIndex=(${iter.index})">
+										<input type="checkbox" onclick="addClassroomtoClass(this)"
+											th:with="dataIndex=(${iter.index})"
+										 th:field="*{classrooms}" th:text="${listClassrooms[dataIndex].name}" 
+										 th:value="${listClassrooms[dataIndex].id}"/>
+										 - <small>[[${listClassrooms[dataIndex].description}]]</small>
+									 </div>
+								</div>
+								
+							<th:block/>
+							
+						</div>
 					</div>
 				</div>
 				<div class="text-center">
@@ -47,6 +82,7 @@
 			</div>
 		</form>
 		
+		<!-- Modal confirm delete -->
 		<div class="modal fade text-center" id="modalDialog">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -99,6 +135,54 @@
 			$("#modalBody").text(message);
 			$("#modalDialog").modal();
 		}
+		
+		/* function addClassroomtoClass(chkBox) {
+			let isChecked = chkBox.checked;
+			let valueChkBox = $(this);
+			if (isChecked) {
+				valueOfClassroomInp = $("#classroom").val();
+				console.log(valueOfClassroomInp);
+				let listRoom = valueOfClassroomInp.replace("[","").replace("]","").split(",");
+				listRoom.push("hihi");
+				console.log(valueChkBox);
+				
+			} else {
+				
+			}
+		} */
+		
+		$(".checkBox").on("click", function(e) {
+			let obj = $(this);
+			let space = " ";
+			let classroomName = obj.attr("nameClassroom");
+			let valueOfClassroomInp = $("#classroom").val();
+			let listRoom = valueOfClassroomInp.replace("[","").replace("]","").split(",");
+			listRoom = arrayRemove(listRoom, "");
+			if ($(this).is(":checked")){
+				if (listRoom.length === 0) {
+					listRoom.push(classroomName);
+					
+				} else {
+					listRoom.push(space.concat(classroomName));
+				}
+				$("#classroom").val("[" + listRoom + "]");
+			} else {
+				let result = arrayRemove(listRoom, space.concat(classroomName));
+				if (result.length === 0) {
+					$("#classroom").val("");
+				} else if (result.length === 1) {
+					$("#classroom").val("[" + result[0].split(" ").join("") + "]");
+				} else {
+					$("#classroom").val("[" + result + "]");
+				}
+			}
+		});
+		
+		function arrayRemove(arr, value) { 
+	        return arr.filter(function(ele){ 
+	            return ele !== value && ele !== value.split(" ").join(""); 
+	        });
+	    }
 	</script>
 	<script type="text/javascript" th:src="@{/js/common_form.js}"></script>
 </body>

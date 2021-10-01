@@ -31,7 +31,7 @@ public class GradeServiceImpl implements GradeService {
 
 	@Override
 	public List<Grade> listAll() {
-		Optional<List<Grade>> list = Optional.ofNullable(repo.findAll(Sort.by(SystemConstant.NAME).ascending()));
+		Optional<List<Grade>> list = Optional.ofNullable(repo.findAll(Sort.by(SystemConstant.CODE).ascending()));
 		return list.orElse(null);
 	}
 
@@ -93,7 +93,7 @@ public class GradeServiceImpl implements GradeService {
 	}
 
 	@Override
-	public boolean isCodeUnique(Long id, String code) {
+	public boolean isCodeUnique(Long id, Integer code) {
 		Optional<Grade> op = Optional.ofNullable(repo.getGradeByCode(code));
 		Grade grade = op.orElse(null);
 		if (grade == null) return true;
