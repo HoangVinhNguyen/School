@@ -49,7 +49,8 @@
 						<td>[[${classroom.code}]]</td>
 						<td>[[${classroom.name}]]</td>
 						<td>[[${classroom.description}]]</td>
-						<td>[[${classroom.clazzes}]]</td>
+						<td th:if="${not #lists.isEmpty(classroom.clazzes)}">[[${classroom.clazzes}]]</td>
+						<td th:if="${#lists.isEmpty(classroom.clazzes)}"></td>
 						<td>
 							<a class="fas fa-edit fa-2x icon-green" th:href="@{'/' + ${link} + '/edit/' + ${classroom.id}}" 
 								title="Edit this classroom"></a> &nbsp;

@@ -19,8 +19,10 @@ import org.springframework.stereotype.Service;
 import com.school.admin.exception.EntityNotFoundException;
 import com.school.admin.repository.ClassroomRepository;
 import com.school.admin.service.ClassroomService;
+import com.school.admin.service.ClazzService;
 import com.school.common.common.SystemConstant;
 import com.school.common.entity.Classroom;
+import com.school.common.entity.Clazz;
 
 @Service
 @Transactional
@@ -28,6 +30,9 @@ public class ClassroomServiceImpl implements ClassroomService {
 
 	@Autowired
 	private ClassroomRepository repo;
+	
+	@Autowired
+	private ClazzService clazzService;
 
 	@Override
 	public List<Classroom> listAll() {
@@ -62,7 +67,6 @@ public class ClassroomServiceImpl implements ClassroomService {
 				Optional<Classroom> opExist = repo.findById(classroom.getId());
 				if (opExist.isPresent()) {
 					Classroom exsting = opExist.get();
-					//classroom.setClazzes(exsting.getClazzes());
 					classroom.setCreatedDate(exsting.getCreatedDate());
 					classroom.setCreatedBy(exsting.getCreatedBy());
 					classroom.setModifiedDate(dateNow);
@@ -73,6 +77,11 @@ public class ClassroomServiceImpl implements ClassroomService {
 				classroom.setCreatedDate(dateNow);
 				classroom.setCreatedBy(adminControl.toString());
 			}
+			classroom.getClazzes().forEach(clazz -> {
+				Clazz clazzNew = clazz;
+				clazzNew.addClassroom(classroom);
+				clazzService.save(clazzNew);
+			});
 			return repo.save(classroom);
 		}
 		return null;

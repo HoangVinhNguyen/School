@@ -33,7 +33,44 @@
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Classes</label>
 					<div class="col-sm-8">
-						<input type="text" class="form-control" th:value="*{clazzes}" disabled/> 
+						<input type="text" th:if="${not #lists.isEmpty(classroom.clazzes)}" id="clazz"
+							class="form-control" th:value="*{clazzes}" disabled/>
+						<input type="text" th:if="${#lists.isEmpty(classroom.clazzes)}" id="clazz" 
+							class="form-control" th:value="NULL" disabled/>
+						<small>Edit it below</small>
+						<div class="ex3 form-control col mx-auto">
+							
+							<th:block th:each="clazz,iter:${listClazzes}" th:with="numList=${#strings.listSplit('1,0', ',')}" >
+								
+								<div class="row m-1" th:if="${iter.index} % 2 != 0 and ${iter.count} < ${iter.size}" >
+									<div class="col-6" th:each="num : ${numList}" th:with="dataIndex=(${iter.index} - ${num})">
+										<input class="checkBox" type="checkbox" 
+										 th:field="*{clazzes}" th:text="${listClazzes[dataIndex].id}" 
+										 th:value="${listClazzes[dataIndex].id}" th:nameClass="${listClazzes[dataIndex].name}"/>
+										 - <small>[[${listClazzes[dataIndex].description}]]</small>
+									</div>
+								</div>
+								<div class="row m-1" th:if="${iter.index} % 2 == 0 and ${iter.count} == ${iter.size}" >
+									<div class="col-6" th:with="dataIndex=(${iter.index})">
+										<input class="checkBox" type="checkbox"
+											th:with="dataIndex=(${iter.index})"
+										 th:field="*{clazzes}" th:text="${listClazzes[dataIndex].id}" 
+										 th:value="${listClazzes[dataIndex].id}" th:nameClass="${listClazzes[dataIndex].name}"/>
+										 - <small>[[${listClazzes[dataIndex].description}]]</small>
+									 </div>
+								</div>
+								<div class="row m-1" th:if="${iter.index} % 2 != 0 and ${iter.count} == ${iter.size}" >
+									<div class="col-6" th:each="num : ${numList}" th:with="dataIndex=(${iter.index} - ${num})">
+										<input class="checkBox" type="checkbox" 
+										 th:field="*{clazzes}" th:text="${listClazzes[dataIndex].id}" 
+										 th:value="${listClazzes[dataIndex].id}" th:nameClass="${listClazzes[dataIndex].name}"/>
+										 - <small>[[${listClazzes[dataIndex].description}]]</small>
+									</div>
+								</div>
+								
+							<th:block/>
+							
+						</div>
 					</div>
 				</div>
 				<div class="text-center">
@@ -95,6 +132,38 @@
 			$("#modalBody").text(message);
 			$("#modalDialog").modal();
 		}
+		
+		$(".checkBox").on("click", function(e) {
+			let obj = $(this);
+			let space = " ";
+			let className = obj.attr("nameClass");
+			let valueOfClassInp = $("#clazz").val();
+			let listClazz = valueOfClassInp.replace("[","").replace("]","").split(",");
+			listClazz = arrayRemove(listClazz, "");
+			if ($(this).is(":checked")){
+				if (listClazz.length === 0) {
+					listClazz.push(className);
+				} else {
+					listClazz.push(space.concat(className));
+				}
+				$("#clazz").val("[" + listClazz + "]");
+			} else {
+				let result = arrayRemove(listClazz, space.concat(className));
+				if (result.length === 0) {
+					$("#clazz").val("");
+				} else if (result.length === 1) {
+					$("#clazz").val("[" + result[0].split(" ").join("") + "]");
+				} else {
+					$("#clazz").val("[" + result + "]");
+				}
+			}
+		});
+		
+		function arrayRemove(arr, value) { 
+	        return arr.filter(function(ele){ 
+	            return ele !== value && ele !== value.split(" ").join(""); 
+	        });
+	    }
 	</script>
 	<script type="text/javascript" th:src="@{/js/common_form.js}"></script>
 </body>

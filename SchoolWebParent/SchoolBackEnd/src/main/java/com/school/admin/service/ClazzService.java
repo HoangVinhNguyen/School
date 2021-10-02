@@ -12,6 +12,8 @@ public interface ClazzService {
 	public static int CLAZZ_PER_PAGE = 5;
 
 	public List<Clazz> listAll();
+	
+	public List<Clazz> listAllByOrderGradeId();
 
 	public Page<Clazz> listByPage(int pageNum, String sortField, String sortDir, String keyword);
 

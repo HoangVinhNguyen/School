@@ -4,11 +4,10 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -27,7 +26,7 @@ public class Classroom extends BaseEntity {
 	@Column(length = 150, nullable = false)
 	private String description;
 
-	@ManyToMany(mappedBy = "classrooms", fetch = FetchType.LAZY)
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "classrooms", fetch = FetchType.LAZY)
 	private Set<Clazz> clazzes = new HashSet<>();
 	
 	public Classroom() {

@@ -62,12 +62,20 @@
 								</div>
 								<div class="row m-1" th:if="${iter.index} % 2 == 0 and ${iter.count} == ${iter.size}" >
 									<div class="col-6" th:with="dataIndex=(${iter.index})">
-										<input type="checkbox" onclick="addClassroomtoClass(this)"
+										<input class="checkBox" type="checkbox"
 											th:with="dataIndex=(${iter.index})"
 										 th:field="*{classrooms}" th:text="${listClassrooms[dataIndex].name}" 
-										 th:value="${listClassrooms[dataIndex].id}"/>
+										 th:value="${listClassrooms[dataIndex].id}" th:nameClassroom="${listClassrooms[dataIndex].name}"/>
 										 - <small>[[${listClassrooms[dataIndex].description}]]</small>
 									 </div>
+								</div>
+								<div class="row m-1" th:if="${iter.index} % 2 != 0 and ${iter.count} == ${iter.size}" >
+									<div class="col-6" th:each="num : ${numList}" th:with="dataIndex=(${iter.index} - ${num})">
+										<input class="checkBox" type="checkbox" 
+										 th:field="*{classrooms}" th:text="${listClassrooms[dataIndex].name}" 
+										 th:value="${listClassrooms[dataIndex].id}" th:nameClassroom="${listClassrooms[dataIndex].name}"/>
+										 - <small>[[${listClassrooms[dataIndex].description}]]</small>
+									</div>
 								</div>
 								
 							<th:block/>
@@ -135,21 +143,6 @@
 			$("#modalBody").text(message);
 			$("#modalDialog").modal();
 		}
-		
-		/* function addClassroomtoClass(chkBox) {
-			let isChecked = chkBox.checked;
-			let valueChkBox = $(this);
-			if (isChecked) {
-				valueOfClassroomInp = $("#classroom").val();
-				console.log(valueOfClassroomInp);
-				let listRoom = valueOfClassroomInp.replace("[","").replace("]","").split(",");
-				listRoom.push("hihi");
-				console.log(valueChkBox);
-				
-			} else {
-				
-			}
-		} */
 		
 		$(".checkBox").on("click", function(e) {
 			let obj = $(this);

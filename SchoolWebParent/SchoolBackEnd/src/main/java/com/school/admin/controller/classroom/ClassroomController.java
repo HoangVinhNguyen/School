@@ -31,7 +31,6 @@ public class ClassroomController {
 	@Autowired
 	private ClazzService clazzService;
 	
-	
 	@GetMapping("/classrooms")
 	public String listFirstPage(Model model) {
 		return listByPage(1, model, SystemConstant.NAME, SystemConstant.ASC, null);
@@ -72,12 +71,12 @@ public class ClassroomController {
 	@GetMapping("/classrooms/new")
 	public String newLevel(Model model) {
 		Classroom classroom = new Classroom();
-		Optional<List<Clazz>> opClazz = Optional.ofNullable(clazzService.listAll());
+		Optional<List<Clazz>> opClazz = Optional.ofNullable(clazzService.listAllByOrderGradeId());
 		if (opClazz.isPresent()) {
 			model.addAttribute("classroom", classroom);
-			model.addAttribute("listClazzs", opClazz.get());
+			model.addAttribute("listClazzes", opClazz.get());
 			model.addAttribute(SystemConstant.LINK, "classrooms");
-			StaticUtil.setTitleAndStatic(model, SystemConstant.TITLE_CREATE_NEW_CLASSROOM);
+			StaticUtil.setTitleAndStatic(model, SystemConstant.TITLE_CREATE_NEW_CLASSROOM, null, List.of("clazz_form.css"));
 			return "classrooms/classroom_form";
 		}
 		return "redirect:/classrooms";
@@ -99,16 +98,15 @@ public class ClassroomController {
 	public String editLevel(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes, Model model) {
 		try {
 			Optional<Classroom> opClassroom = Optional.ofNullable(service.get(id));
-			Optional<List<Clazz>> opClazz = Optional.ofNullable(clazzService.listAll());
-			
+			Optional<List<Clazz>> opClazz = Optional.ofNullable(clazzService.listAllByOrderGradeId());
 			if (opClazz.isPresent() && opClazz.isPresent()) {
 				StringBuilder title = new StringBuilder();
 				title.append(SystemConstant.TITLE_EDIT_CLAZZ).append(id);
 
 				model.addAttribute("classroom", opClassroom.get());
-				model.addAttribute("listClazzs", opClazz.get());
+				model.addAttribute("listClazzes", opClazz.get());
 				model.addAttribute(SystemConstant.LINK, "classrooms");
-				StaticUtil.setTitleAndStatic(model, title.toString());
+				StaticUtil.setTitleAndStatic(model, title.toString(), null, List.of("clazz_form.css"));
 				return "classrooms/classroom_form";
 			}
 		} catch (EntityNotFoundException e) {

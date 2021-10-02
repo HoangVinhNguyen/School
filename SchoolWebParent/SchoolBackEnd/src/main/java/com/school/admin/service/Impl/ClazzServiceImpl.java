@@ -34,6 +34,12 @@ public class ClazzServiceImpl implements ClazzService {
 		Optional<List<Clazz>> list = Optional.ofNullable(repo.findAll(Sort.by(SystemConstant.NAME).ascending()));
 		return list.orElse(null);
 	}
+	
+	@Override
+	public List<Clazz> listAllByOrderGradeId() {
+		Optional<List<Clazz>> list = Optional.ofNullable(repo.findAll(Sort.by("grade").ascending()));
+		return list.orElse(null);
+	}
 
 	@Override
 	public Page<Clazz> listByPage(int pageNum, String sortField, String sortDir, String keyword) {

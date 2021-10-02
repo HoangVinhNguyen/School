@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -33,7 +34,7 @@ public class Clazz extends BaseEntity {
 	private Grade grade;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "class_classroom", 
+	@JoinTable(name = "class_classroom",
 		joinColumns = @JoinColumn(name = "class_id"),
 		inverseJoinColumns = @JoinColumn(name = "classroom_id"))
 	private Set<Classroom> classrooms = new HashSet<>();
