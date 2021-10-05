@@ -25,7 +25,7 @@ public interface UserService {
 	public boolean isEmailUnique(Long id, String email);
 
 	public User getByEmail(String email);
-
+	
 	public User get(Long id) throws EntityNotFoundException;
 
 	public void deleteUser(Long id) throws EntityNotFoundException;

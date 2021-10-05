@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.school.common.entity.Clazz;
+import com.school.common.entity.User;
 
 public interface ClazzRepository extends JpaRepository<Clazz, Long>{
 

@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,6 +12,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="class")
@@ -34,10 +35,18 @@ public class Clazz extends BaseEntity {
 	private Grade grade;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
+	@JsonIgnore
 	@JoinTable(name = "class_classroom",
 		joinColumns = @JoinColumn(name = "class_id"),
 		inverseJoinColumns = @JoinColumn(name = "classroom_id"))
 	private Set<Classroom> classrooms = new HashSet<>();
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JsonIgnore
+	@JoinTable(name = "class_user",
+		joinColumns = @JoinColumn(name = "class_id"),
+		inverseJoinColumns = @JoinColumn(name = "user_id"))
+	private Set<User> users = new HashSet<>();
 
 	public Clazz() {
 		
@@ -94,13 +103,35 @@ public class Clazz extends BaseEntity {
 		this.classrooms = classrooms;
 	}
 	
+	public Set<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<User> users) {
+		this.users = users;
+	}
+	
 	public void addClassroom(Classroom classroom) {
 		Optional<Classroom> op = Optional.ofNullable(classroom);
 		if (op.isPresent()) {
 			this.classrooms.add(op.get());
 		}
 	}
-
+	
+	public void addUser(User user) {
+		Optional<User> op = Optional.ofNullable(user);
+		if (op.isPresent()) {
+			this.users.add(op.get());
+		}
+	}
+	
+	public void removeUser(User user) {
+		Optional<User> op = Optional.ofNullable(user);
+		if (op.isPresent()) {
+			this.users.remove(op.get());
+		}
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

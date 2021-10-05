@@ -3,6 +3,7 @@ package com.school.admin.controller.clazz;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,11 +19,14 @@ import com.school.admin.exception.EntityNotFoundException;
 import com.school.admin.service.ClassroomService;
 import com.school.admin.service.ClazzService;
 import com.school.admin.service.GradeService;
+import com.school.admin.service.UserService;
 import com.school.admin.util.StaticUtil;
 import com.school.common.common.SystemConstant;
 import com.school.common.entity.Classroom;
 import com.school.common.entity.Clazz;
 import com.school.common.entity.Grade;
+import com.school.common.entity.Role;
+import com.school.common.entity.User;
 
 @Controller
 public class ClazzController {
@@ -35,6 +39,9 @@ public class ClazzController {
 	
 	@Autowired
 	private ClassroomService classroomService;
+	
+	@Autowired
+	private UserService userService;
 
 	@GetMapping("/clazzes")
 	public String listFirstPage(Model model) {
@@ -135,4 +142,52 @@ public class ClazzController {
 		return "redirect:/clazzes";
 	}
 	
+	/*
+	 * FOR MANAGE SETUP CLASS WITH USER.
+	 */
+	
+	@GetMapping("clazzes/detail/{id}")
+	public String setupClazzWithUser(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes, Model model,
+			@Param("pageNum") int pageNum, @Param("sortField") String sortField, 
+			@Param("sortDir") String sortDir, @Param("keyword") String keyword) {
+		
+		try {
+			Optional<Clazz> opClazz = Optional.ofNullable(service.get(id));
+			Optional<List<Grade>> opGrade = Optional.ofNullable(gradeService.listAll());
+			Optional<List<Classroom>> opClassroom = Optional.ofNullable(classroomService.listAll());
+			Optional<List<User>> opUser = Optional.ofNullable(userService.listAll());
+			if (opClazz.isPresent() && opGrade.isPresent() && opClassroom.isPresent() && opUser.isPresent()) {
+				StringBuilder title = new StringBuilder();
+				title.append(SystemConstant.TITLE_EDIT_CLAZZ).append(id);
+				List<User> listTeacher = opClazz.get().getUsers().stream()
+						.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.toLowerCase().equals(SystemConstant.TEACHER)))
+						.collect(Collectors.toList());
+				List<User> listStudent = opClazz.get().getUsers().stream()
+						.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.toLowerCase().equals(SystemConstant.STUDENT)))
+						.collect(Collectors.toList());
+				model.addAttribute("clazz", opClazz.get());
+				model.addAttribute("listTeacher", listTeacher);
+				model.addAttribute("listStudent", listStudent);
+				model.addAttribute("listGrades", opGrade.get());
+				model.addAttribute("listClassrooms", opClassroom.get());
+				model.addAttribute("listUsers", opUser.get());
+				model.addAttribute("classname", opClazz.get().getName());
+				model.addAttribute(SystemConstant.LINK, "clazzes");
+				
+				StringBuilder linkGoBack = new StringBuilder();
+				linkGoBack.append(model.getAttribute(SystemConstant.LINK))
+				.append("/").append("page/").append(pageNum).append("?sortField=").append(sortField)
+				.append("&sortDir=").append(sortDir);
+				if (keyword != null) {
+					linkGoBack.append("&keyword=").append(keyword);
+				}
+				model.addAttribute(SystemConstant.LINK_GOBACK, linkGoBack);
+				StaticUtil.setTitleAndStatic(model, title.toString(), List.of("clazzes_details.js"), List.of("clazz_form.css"));
+			}
+			return "clazzes/clazzes_details";
+		} catch (EntityNotFoundException e) {
+			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, e.getMessage());
+		}
+		return "redirect:/clazzes";
+	}
 }

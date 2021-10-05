@@ -15,9 +15,6 @@ import com.school.common.entity.User;
 
 public class UserDto extends BaseDto {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7833564745684143904L;
 
 	private String firstName;
@@ -54,12 +51,12 @@ public class UserDto extends BaseDto {
 			this.enabled = entity.isEnabled();
 			this.phone = entity.getPhone();
 			this.photos = entity.getPhotos();
-			this.roles = entity.getRoles().stream().map(RoleDto::new).collect(Collectors.toSet());
-			this.setDeleted(entity.isDeleted());
-			this.setCreatedBy(entity.getCreatedBy());
-			this.setCreatedDate(entity.getCreatedDate());
-			this.setModifiedBy(entity.getModifiedBy());
-			this.setModifiedDate(entity.getModifiedDate());
+//			this.roles = entity.getRoles().stream().map(RoleDto::new).collect(Collectors.toSet());
+//			this.setDeleted(entity.isDeleted());
+//			this.setCreatedBy(entity.getCreatedBy());
+//			this.setCreatedDate(entity.getCreatedDate());
+//			this.setModifiedBy(entity.getModifiedBy());
+//			this.setModifiedDate(entity.getModifiedDate());
 		}
 	}
 	

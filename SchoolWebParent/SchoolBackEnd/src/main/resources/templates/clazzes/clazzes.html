@@ -6,7 +6,7 @@
 	<div class="container-fluid">
 		<div th:replace="navigation :: menu"></div>
 		<div>
-			<h2>Manage Class School</h2>
+			<h2>Manage Class With User School</h2>
 			<a th:href="@{'/' + ${link} + '/new'}" class="fas fa-plus-square fa-2x icon-dark mr-2"></a>
 		</div>
 		
@@ -16,10 +16,10 @@
 		
 		<div>
 			<form th:action="@{'/' + ${link} + '/page/1'}" class="form-inline m-3">
-				<input type="hidden" name="sortField" th:value="${sortField}" />
-				<input type="hidden" name="sortDir" th:value="${sortDir}" />
+				<input type="hidden" id="sortField" name="sortField" th:value="${sortField}" />
+				<input type="hidden" id="sortDir" name="sortDir" th:value="${sortDir}" />
 				Filter:&nbsp;
-				<input type="search" name="keyword" th:value="${keyword}" class="form-control" required />
+				<input type="search" id="keyword" name="keyword" th:value="${keyword}" class="form-control" required />
 				&nbsp;&nbsp;
 				<button type="submit" value="Search" class="btn btn-primary">
 					<i class="fas fa-search"></i>
@@ -54,6 +54,9 @@
 						<td th:if="${not #lists.isEmpty(clazz.classrooms)}">[[${clazz.classrooms}]]</td>
 						<td th:if="${#lists.isEmpty(clazz.classrooms)}"></td>
 						<td>
+							<a class="fas fa-info-circle fa-2x icon-green" id="goToDetails"
+								th:href="@{'/' + ${link} + '/detail/' + ${clazz.id}}" 
+								title="Info this clazz"></a> &nbsp;
 							<a class="fas fa-edit fa-2x icon-green" th:href="@{'/' + ${link} + '/edit/' + ${clazz.id}}" 
 								title="Edit this clazz"></a> &nbsp;
 							<a class="fas fa-trash fa-2x icon-dark link-delete" th:href="@{'/' + ${link} + '/delete/' + ${clazz.id}}"
@@ -71,6 +74,9 @@
 					<div>[[${clazz.description}]]</div>
 					<div>[[${clazz.grade}]]</div>
 					<div class="mt-2">
+						<a class="fas fa-info-circle fa-2x icon-green" id="goToDetails_less"
+									th:href="@{'/' + ${link} + '/detail/' + ${clazz.id}}" 
+									title="Info this clazz"></a> &nbsp;
 						<a class="fas fa-edit fa-2x icon-green" th:href="@{'/' + ${link} + '/edit/' + ${clazz.id}}" 
 									title="Edit this clazz"></a>
 								&nbsp;
@@ -146,6 +152,36 @@
 		function clearFilter() {
 			window.location = "[[@{'/' + ${link}}]]";
 		}
+		
+		$("#goToDetails").on("click", function(e) {
+			e.preventDefault();
+			let link = $(this).attr("href");
+			let sortField = $("#sortField").val();
+			let sortDir = $("#sortDir").val();
+			let keyword = $("#keyword").val();
+			let pageNum = "[[${currentPage}]]";
+			link = link + "?pageNum=" + pageNum + "&sortField=" + sortField + "&sortDir=" + sortDir;
+			if (keyword !== null && keyword !== "") {
+				console.log(keyword);
+				link = link + "&keyword=" + keyword;
+			}
+			window.location = link;
+		});
+		$("#goToDetails_less").on("click", function(e) {
+			e.preventDefault();
+			let link = $(this).attr("href");
+			let sortField = $("#sortField").val();
+			let sortDir = $("#sortDir").val();
+			let keyword = $("#keyword").val();
+			let pageNum = "[[${currentPage}]]";
+			link = link + "?pageNum=" + pageNum + "&sortField=" + sortField + "&sortDir=" + sortDir;
+			if (keyword !== null && keyword !== "") {
+				console.log(keyword);
+				link = link + "&keyword=" + keyword;
+			}
+			window.location = link;
+		});
+		
 	</script>
 </body>
 </html>

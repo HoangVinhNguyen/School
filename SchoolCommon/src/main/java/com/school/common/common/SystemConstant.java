@@ -16,6 +16,7 @@ public class SystemConstant {
 	public final static String FIRST_NAME = "firstName";
 	public final static String LAST_NAME = "lastName";
 	public final static String CURRENT_PAGE = "currentPage";
+	public final static String PAGE_NUM = "pageNum";
 	public final static String TOTAL_PAGE = "totalPages";
 	public final static String START_COUNT = "startCount";
 	public final static String END_COUNT = "endCount";
@@ -25,8 +26,16 @@ public class SystemConstant {
 	public final static String REVERSE_SORT_DIR = "reverseSortDir";
 	public final static String KEYWORD = "keyword";
 	public final static String LINK = "link";
+	public final static String LINK_GOBACK = "linkGoBack";
 	public final static String NAME = "name";
 	public final static String CODE = "code";
+	
+	/*
+	 * For Roles.
+	 */
+	public final static String TEACHER = "teacher";
+	public final static String STUDENT = "student";
+	
 
 	/*
 	 * For User class.

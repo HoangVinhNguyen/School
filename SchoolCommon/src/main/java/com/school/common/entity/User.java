@@ -45,20 +45,25 @@ public class User extends BaseEntity {
 	@Column(nullable = true)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dob;
-	
+
 	@Column(nullable = true)
 	private String address;
-	
+
 	@Column(nullable = true)
 	private String photos;
-	
+
 	@Column(nullable = false)
 	private boolean enabled;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@JoinTable(name = "users_roles", 
+	joinColumns = @JoinColumn(name = "user_id"), 
+	inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
-	
+
+	@ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+	private Set<Clazz> clazzes = new HashSet<>();
+
 	public User() {
 
 	}
@@ -150,6 +155,14 @@ public class User extends BaseEntity {
 		this.roles = roles;
 	}
 
+	public Set<Clazz> getClazzes() {
+		return clazzes;
+	}
+
+	public void setClazzes(Set<Clazz> clazzes) {
+		this.clazzes = clazzes;
+	}
+
 	@Transient
 	public void addRole(Role role) {
 		Optional<Role> roleOp = Optional.ofNullable(role);
@@ -238,7 +251,7 @@ public class User extends BaseEntity {
 		user.setModifiedDate(this.getModifiedDate());
 		return user;
 	}
-	
+
 	@Transient
 	public static User convertToUser(UserDto userDto) {
 		Optional<UserDto> op = Optional.ofNullable(userDto);

@@ -19,8 +19,12 @@ import org.springframework.stereotype.Service;
 import com.school.admin.exception.EntityNotFoundException;
 import com.school.admin.repository.ClazzRepository;
 import com.school.admin.service.ClazzService;
+import com.school.admin.service.UserService;
 import com.school.common.common.SystemConstant;
+import com.school.common.dto.UserDto;
 import com.school.common.entity.Clazz;
+import com.school.common.entity.Role;
+import com.school.common.entity.User;
 
 @Service
 @Transactional
@@ -28,6 +32,9 @@ public class ClazzServiceImpl implements ClazzService {
 
 	@Autowired
 	private ClazzRepository repo;
+	
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public List<Clazz> listAll() {
@@ -81,6 +88,59 @@ public class ClazzServiceImpl implements ClazzService {
 			return repo.save(clazz);
 		}
 		return null;
+	}
+	
+	@Override
+	public UserDto addUserToClass(Long id, String email, String role) {
+		boolean checkRole = false;
+		Optional<Clazz> opClazz = repo.findById(id);
+		Optional<User> opUser = Optional.ofNullable(userService.getByEmail(email));
+		if (opClazz.isPresent() && opUser.isPresent() && role != null) {
+			Clazz clazz = opClazz.get();
+			User user = opUser.get();
+			checkRole = checkRoleUser(user, role);
+			if (checkRole) {
+				clazz.addUser(user);
+				repo.save(clazz);
+				return new UserDto(user);
+			}
+			return null;
+		}
+		return null;
+	}
+	private boolean checkRoleUser(User user, String role) {
+		if (role != null) {
+			for (Role r : user.getRoles()) {
+				if (r.getName().toLowerCase().equals(role)) return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public UserDto deleteUserInClass(Long id, String email) {
+		Optional<Clazz> opClazz = repo.findById(id);
+		Optional<User> opUser = Optional.ofNullable(userService.getByEmail(email));
+		if (opClazz.isPresent() && opUser.isPresent()) {
+			Clazz clazz = opClazz.get();
+			User user = opUser.get();
+			clazz.removeUser(user);
+			repo.save(clazz);
+			return new UserDto(user);
+		}
+		return null;
+	}
+
+	@Override
+	public boolean checkUserInClass(Long id, String email) {
+		Optional<Clazz> opClazz = repo.findById(id);
+		Optional<User> opUser = Optional.ofNullable(userService.getByEmail(email));
+		if (opClazz.isPresent() && opUser.isPresent()) {
+			Clazz clazz = opClazz.get();
+			User user = opUser.get();
+			if (clazz.getUsers().contains(user)) return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -146,6 +206,5 @@ public class ClazzServiceImpl implements ClazzService {
 			}
 		}
 	}
-	
-	
+
 }

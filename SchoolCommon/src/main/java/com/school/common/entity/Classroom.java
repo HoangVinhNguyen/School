@@ -11,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="classroom")
 public class Classroom extends BaseEntity {
@@ -26,7 +28,7 @@ public class Classroom extends BaseEntity {
 	@Column(length = 150, nullable = false)
 	private String description;
 
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "classrooms", fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "classrooms", fetch = FetchType.LAZY)
 	private Set<Clazz> clazzes = new HashSet<>();
 	
 	public Classroom() {

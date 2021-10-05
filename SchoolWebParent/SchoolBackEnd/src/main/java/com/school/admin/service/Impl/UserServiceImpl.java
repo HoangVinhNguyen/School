@@ -151,7 +151,7 @@ public class UserServiceImpl implements UserService {
 	public User getByEmail(String email) {
 		return userRepo.getUserByEmail(email);
 	}
-
+	
 	@Override
 	public User get(Long id) throws EntityNotFoundException {
 		try {
@@ -194,5 +194,5 @@ public class UserServiceImpl implements UserService {
 	public void updateUserEnableStatus(Long id, boolean enabled) {
 		userRepo.updateEnableStatus(id, enabled);
 	}
-	
+
 }

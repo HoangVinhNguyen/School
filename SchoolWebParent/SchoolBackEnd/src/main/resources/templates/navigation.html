@@ -32,6 +32,9 @@
 					<li class="nav-item" sec:authorize="hasAuthority('Admin')">
 						<a class="nav-link" th:href="@{/classrooms}">CLASSROOM</a>
 					</li>
+					<li class="nav-item" sec:authorize="hasAuthority('Admin')">
+						<a class="nav-link" th:href="@{/clazzes/users}">CLASS-USER</a>
+					</li>
 					<th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
 						<li class="nav-item"><a class="nav-link" th:href="@{/categories}">Categories</a>
 						</li>
