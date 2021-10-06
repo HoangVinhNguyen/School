@@ -7,31 +7,10 @@
 		<div th:replace="navigation :: menu"></div>
 		<div>
 			<h2>Manage Class Detail [[${classname}]]</h2>
-			<a th:href="@{'/' + ${link} + '/new'}"
-				class="fas fa-user-plus fa-2x icon-dark mr-2"></a>
 		</div>
 
 		<div th:if="${message != null}"
 			class="alert alert-success text-center">[[${message}]]</div>
-
-		<div>
-			<form th:action="@{'/' + ${link} + '/page/1'}"
-				class="form-inline m-3">
-				<input type="hidden" name="sortField" th:value="${sortField}" /> <input
-					type="hidden" name="sortDir" th:value="${sortDir}" />
-				Filter:&nbsp; <input type="search" name="keyword"
-					th:value="${keyword}" class="form-control" required />
-				&nbsp;&nbsp;
-				<button type="submit" value="Search" class="btn btn-primary">
-					<i class="fas fa-search"></i>
-				</button>
-				&nbsp;&nbsp;
-				<button type="button" value="Clear" class="btn btn-secondary"
-					onclick="clearFilter()">
-					<i class="fas fa-eraser"></i>
-				</button>
-			</form>
-		</div>
 
 		<div>
 			<input type="button" class="btn btn-primary" id="gobackButton"
@@ -67,11 +46,11 @@
 				<div id="collapseTableTeacher" class="collapse"
 					aria-labelledby="headingOne" data-parent="#accordion_teacher">
 					<div class="full-details">
-						<h5 class="text-center">Teacher [[${classname}]]</h5>
 						<table id="data_table_teacher"
 							class="table table-bordered table-striped table-hover table-responsive-xl">
 							<thead class="thead-dark">
 								<tr>
+									<th>ID</th>
 									<th>FullName</th>
 									<th>Email</th>
 									<th>Course</th>
@@ -81,11 +60,16 @@
 							<tbody>
 								<th:block th:each="user, start : ${listTeacher}">
 									<tr th:id="'row_teacher' + ${start.index}">
+										<td th:id="'id_teacher' + ${start.index}">[[@{${user.id}}]]</td>
 										<td th:id="'fullname_teacher' + ${start.index}">[[@{${user.fullName}}]]</td>
 										<td th:id="'email_teacher' + ${start.index}">[[@{${user.email}}]]</td>
 										<td th:id="'course_teacher' + ${start.index}"></td>
 										<td>
-											<button class="delete btn btn-danger m-1"
+											<a class="btn btn-info m-1"
+												th:href="@{'/users/edit/' + ${user.id}}" target="_blank">
+												<i class="fas fa-user-circle"></i>
+											</a>
+											<button class="btn btn-danger m-1"
 												th:onclick="|delete_row('${start.index}','@{${user.email}}', 'teacher');|">
 												<i class="fas fa-trash"></i>
 											</button>
@@ -93,9 +77,10 @@
 									</tr>
 								</th:block>
 								<tr>
-									<td><input type="text" id="new_fullname_teacher" disabled /></td>
+									<td></td>
+									<td></td>
 									<td><input type="text" id="new_email_teacher" /></td>
-									<td><input type="text" id="new_course_teacher" disabled /></td>
+									<td></td>
 									<td>
 										<button class="add btn btn-primary m-1"
 											onclick="check_unique_email_inClass('teacher');">
@@ -107,11 +92,47 @@
 
 							</tbody>
 						</table>
-					</div>
+					</div> <!-- full detail -->
+
+					<div class="less-details">
+						<div id="data_less_teacher" >
+							<div th:each="user, start : ${listTeacher}" class="row m-1 border" th:id="'data_row_less_teacher' + ${start.index}">
+								<div class="col-8" th:id="'data_col_less_teacher' + ${start.index}">
+									<div th:id="'fullname_less_teacher' + ${start.index}">[[@{${user.fullName}}]]</div>
+									<div th:id="'email_less_teacher' + ${start.index}">[[@{${user.email}}]]</div>
+									<div th:id="'course_less_teacher' + ${start.index}"></div>
+									<div class="mt-2">
+										<a class="btn btn-info m-1"
+											th:href="@{'/users/edit/' + ${user.id}}" target="_blank">
+											<i class="fas fa-user-circle"></i>
+										</a>
+										<button class="btn btn-danger m-1"
+											th:onclick="|delete_row('${start.index}','@{${user.email}}', 'teacher');|">
+											<i class="fas fa-trash"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row m-1">
+							<div class="input-group m-1">
+								<input type="text" id="new_email_less_teacher" class="form-control"/>
+								<div class="input-group-append">
+									<button type="button" class="btn btn-primary"
+											onclick="check_unique_email_inClass('teacher');">
+											<i class="fas fa-plus"></i>
+									</button>
+  								</div>
+							</div>
+						</div>
+					</div> <!-- less detail -->
+
 				</div>
 			</div>
 		</div>
+		<br>
 		<div id="accordion_student">
+			<div class="card">
 				<div class="card-header" id="headingTwo">
 					<button class="btn btn-info" data-toggle="collapse"
 							data-target="#collapseTableStudent" aria-expanded="false"
@@ -120,11 +141,11 @@
 				<div id="collapseTableStudent" class="collapse"
 					aria-labelledby="headingTwo" data-parent="#accordion_student">
 					<div class="full-details">
-						<h5 class="text-center">Student [[${classname}]]</h5>
 						<table id="data_table_student"
 							class="table table-bordered table-striped table-hover table-responsive-xl">
 							<thead class="thead-dark">
 								<tr>
+									<th>ID</th>
 									<th>FullName</th>
 									<th>Email</th>
 									<th>Course</th>
@@ -134,11 +155,16 @@
 							<tbody>
 								<th:block th:each="user, start : ${listStudent}">
 									<tr th:id="'row_student' + ${start.index}">
+										<td th:id="'id_student' + ${start.index}">[[@{${user.id}}]]</td>
 										<td th:id="'fullname_student' + ${start.index}">[[@{${user.fullName}}]]</td>
 										<td th:id="'email_student' + ${start.index}">[[@{${user.email}}]]</td>
 										<td th:id="'course_student' + ${start.index}"></td>
 										<td>
-											<button class="delete btn btn-danger m-1"
+											<a class="btn btn-info m-1"
+													th:href="@{'/users/edit/' + ${user.id}}" target="_blank">
+												<i class="fas fa-user-circle"></i>
+											</a>
+											<button class="btn btn-danger m-1"
 												th:onclick="|delete_row('${start.index}','@{${user.email}}', 'student');|">
 												<i class="fas fa-trash"></i>
 											</button>
@@ -146,9 +172,10 @@
 									</tr>
 								</th:block>
 								<tr>
-									<td><input type="text" id="new_fullname_student" disabled /></td>
+									<td></td>
+									<td></td>
 									<td><input type="text" id="new_email_student" /></td>
-									<td><input type="text" id="new_course_student" disabled /></td>
+									<td></td>
 									<td>
 										<button class="add btn btn-primary m-1"
 											onclick="check_unique_email_inClass('student');">
@@ -160,40 +187,41 @@
 
 							</tbody>
 						</table>
-					</div>
+					</div> <!-- full details -->
+					<div class="less-details">
+						<div id="data_less_student" >
+							<div th:each="user, start : ${listStudent}" class="row m-1 border" th:id="'data_row_less_student' + ${start.index}">
+								<div class="col-8" th:id="'data_col_less_student' + ${start.index}">
+									<div th:id="'fullname_less_student' + ${start.index}">[[@{${user.fullName}}]]</div>
+									<div th:id="'email_less_student' + ${start.index}">[[@{${user.email}}]]</div>
+									<div th:id="'course_less_student' + ${start.index}"></div>
+									<div class="mt-2">
+										<a class="btn btn-info m-1"
+											th:href="@{'/users/edit/' + ${user.id}}" target="_blank">
+											<i class="fas fa-user-circle"></i>
+										</a>
+										<button class="btn btn-danger m-1"
+											th:onclick="|delete_row('${start.index}','@{${user.email}}', 'student');|">
+											<i class="fas fa-trash"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row m-1">
+							<div class="input-group m-1">
+								<input type="text" id="new_email_less_student" class="form-control"/>
+								<div class="input-group-append">
+									<button type="button" class="btn btn-primary"
+										onclick="check_unique_email_inClass('student');">
+										<i class="fas fa-plus"></i>
+									</button>
+  								</div>
+							</div>
+						</div>
+					</div> <!-- less detail -->
 					
 				</div>
-		</div>
-
-
-	<div class="less-details">
-			<div th:each="clazz : ${listClazzes}" class="row m-1">
-				<h5 class="text-center">Teacher [[${classname}]]</h5>
-				<table id="data_table"
-					class="table table-bordered table-striped table-hover table-responsive-xl">
-					<thead class="thead-dark">
-						<tr>
-							<th>FullName</th>
-							<th>Email</th>
-							<th>Course</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><input type="text" id="new_fullname" disabled /></td>
-							<td><input type="text" id="new_email" /></td>
-							<td><input type="text" id="new_course" disabled /></td>
-							<td>
-								<button class="add btn btn-primary m-1" onclick="add_row();">
-									<i class="fas fa-plus"></i>
-								</button>
-							</td>
-
-						</tr>
-
-					</tbody>
-				</table>
 			</div>
 		</div>
 

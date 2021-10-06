@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import com.school.admin.exception.EntityNotFoundException;
 import com.school.common.dto.UserDto;
 import com.school.common.entity.Clazz;
+import com.school.common.entity.User;
 
 public interface ClazzService {
 
@@ -20,7 +21,9 @@ public interface ClazzService {
 
 	public Clazz save(Clazz level);
 	
-	public UserDto addUserToClass(Long id, String email, String role);
+	public UserDto addUserToClass(Long id, String email);
+	public UserDto addTeacherToClass(Long id, String email);
+	public UserDto addStudentToClass(Long id, String email);
 	
 	public UserDto deleteUserInClass(Long id, String email);
 

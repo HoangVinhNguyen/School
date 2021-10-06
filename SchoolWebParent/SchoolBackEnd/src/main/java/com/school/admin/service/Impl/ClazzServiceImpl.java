@@ -91,20 +91,53 @@ public class ClazzServiceImpl implements ClazzService {
 	}
 	
 	@Override
-	public UserDto addUserToClass(Long id, String email, String role) {
-		boolean checkRole = false;
+	public UserDto addUserToClass(Long id, String email) {
 		Optional<Clazz> opClazz = repo.findById(id);
 		Optional<User> opUser = Optional.ofNullable(userService.getByEmail(email));
-		if (opClazz.isPresent() && opUser.isPresent() && role != null) {
+		if (opClazz.isPresent() && opUser.isPresent()) {
 			Clazz clazz = opClazz.get();
 			User user = opUser.get();
-			checkRole = checkRoleUser(user, role);
-			if (checkRole) {
+			clazz.addUser(user);
+			repo.save(clazz);
+			return new UserDto(user);
+		}
+		return null;
+	}
+	
+	@Override
+	public UserDto addTeacherToClass(Long id, String email) {
+		Optional<Clazz> opClazz = repo.findById(id);
+		Optional<User> opUser = Optional.ofNullable(userService.getByEmail(email));
+		if (opClazz.isPresent() && opUser.isPresent()) {
+			Clazz clazz = opClazz.get();
+			User user = opUser.get();
+			if (checkRoleUser(user, SystemConstant.TEACHER)) {
+				if (clazz.getUsers().contains(user)) {
+					return null;
+				}
 				clazz.addUser(user);
 				repo.save(clazz);
 				return new UserDto(user);
 			}
-			return null;
+		}
+		return null;
+	}
+
+	@Override
+	public UserDto addStudentToClass(Long id, String email) {
+		Optional<Clazz> opClazz = repo.findById(id);
+		Optional<User> opUser = Optional.ofNullable(userService.getByEmail(email));
+		if (opClazz.isPresent() && opUser.isPresent()) {
+			Clazz clazz = opClazz.get();
+			User user = opUser.get();
+			if (checkRoleUser(user, SystemConstant.STUDENT)) {
+				if (clazz.getUsers().contains(user)) {
+					return null;
+				}
+				clazz.addUser(user);
+				repo.save(clazz);
+				return new UserDto(user);
+			}
 		}
 		return null;
 	}

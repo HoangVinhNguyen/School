@@ -36,9 +36,13 @@ public class ClazzRestController {
 		return null;
 	}
 	
-	@PostMapping("/clazzes/add_user")
-	public UserDto addUserToClass(@Param("id") Long id, @Param("email") String email, @Param("role") String role) {
-		return service.addUserToClass(id, email, role);
+	@PostMapping("/clazzes/add_teacher")
+	public UserDto addTeacherToClass(@Param("id") Long id, @Param("email") String email) {
+		return service.addTeacherToClass(id, email);
+	}
+	@PostMapping("/clazzes/add_student")
+	public UserDto addStudentToClass(@Param("id") Long id, @Param("email") String email) {
+		return service.addStudentToClass(id, email);
 	}
 
 	@PostMapping("/clazzes/delete_user")
@@ -46,7 +50,7 @@ public class ClazzRestController {
 		return service.deleteUserInClass(id, email);
 	}
 
-	@PostMapping("/clazzes/check_user_inClass")
+	@PostMapping("/clazzes/check_user_inclass")
 	public boolean checkUserInClass(@Param("id") Long id, @Param("email") String email) {
 		return service.checkUserInClass(id, email);
 	}

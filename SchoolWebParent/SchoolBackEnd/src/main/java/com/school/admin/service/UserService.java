@@ -15,7 +15,7 @@ public interface UserService {
 	public List<User> listAll();
 
 	public List<Role> listRoles();
-
+	
 	public Page<User> listByPage(int pageNum, String sortField, String sortDir, String keyword);
 
 	public User save(User userDto);

@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
 		Optional<List<Role>> list = Optional.ofNullable(roleRepo.findAll());
 		return list.orElse(null);
 	}
-	
+
 	@Override
 	public Page<User> listByPage(int pageNum, String sortField, String sortDir, String keyword) {
 		Sort sort = Sort.by(sortField);
