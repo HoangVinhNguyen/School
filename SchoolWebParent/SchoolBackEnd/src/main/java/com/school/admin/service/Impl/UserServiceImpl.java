@@ -82,6 +82,8 @@ public class UserServiceImpl implements UserService {
 					} else {
 						encodePassword(user);
 					}
+					user.setClazzes(exstingUser.getClazzes());
+					user.setCourses(exstingUser.getCourses());
 					user.setCreatedDate(exstingUser.getCreatedDate());
 					user.setCreatedBy(exstingUser.getCreatedBy());
 					user.setModifiedDate(dateNow);

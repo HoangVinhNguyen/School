@@ -41,11 +41,12 @@ public class SystemConstant {
 	 * For User class.
 	 */
 	public final static String PAGE_TILE = "pageTitle";
+	
 	public final static String TITLE_CREATE_NEW_USER = "Create New User";
 	public final static String TITLE_EDIT_USER = "Edit User ID ";
 	public final static String TITLE_USERS = "User - School Admin";
 	public final static String TITLE_ACCOUNT_DETAILS = "Your Account Details";
-	
+
 	public final static String TITLE_LOGIN = "Login - School Admin";
 	public final static String TITLE_ERROR = "Error - School Admin";
 	public final static String TITLE_HOME = "Home - School Admin";
@@ -65,14 +66,20 @@ public class SystemConstant {
 	public final static String TITLE_CLASSROOM = "Classroom - School Admin";
 	public final static String TITLE_CREATE_NEW_CLASSROOM = "Create New Classroom";
 	public final static String TITLE_EDIT_CLASSROOM = "Edit Classroom ID ";
+
+	public final static String TITLE_COURSE = "Course - School Admin";
+	public final static String TITLE_CREATE_NEW_COURSE = "Create New Course";
+	public final static String TITLE_EDIT_COURSE = "Edit Course ID ";
 	
 	public final static String NOT_FOUND_ID = "Could not find any with ID ";
 	public final static String ATTR_MESSAGE = "message";
 	public final static String ATTR_CONTENT_USER_SAVE_SUCCESS = "The User have been saved successfully";
+	public final static String ATTR_CONTENT_TEACHER_SAVE_SUCCESS = "The Teacher have been saved successfully";
 	public final static String ATTR_CONTENT_LEVEL_SAVE_SUCCESS = "The Level have been saved successfully";
 	public final static String ATTR_CONTENT_GRADE_SAVE_SUCCESS = "The Grade have been saved successfully";
 	public final static String ATTR_CONTENT_CLAZZ_SAVE_SUCCESS = "The Class have been saved successfully";
 	public final static String ATTR_CONTENT_CLASSROOM_SAVE_SUCCESS = "The Classroom have been saved successfully";
+	public final static String ATTR_CONTENT_COURSE_SAVE_SUCCESS = "The Course have been saved successfully";
 	public final static String ENABLED = "enabled";
 	public final static String DISABLED = "disabled";
 	public final static String JS_FILE = "jsFiles";
@@ -86,6 +93,12 @@ public class SystemConstant {
 	public final static String ATTR_CONTENT_USER_STATUS_SUCCESS(Long id, String status) {
 		StringBuilder content = new StringBuilder();
 		content.append("The User ID ").append(id).append(" has been ").append(status);
+		return content.toString();
+	}
+
+	public final static String ATTR_CONTENT_TEACHER_STATUS_SUCCESS(Long id, String status) {
+		StringBuilder content = new StringBuilder();
+		content.append("The Teacher ID ").append(id).append(" has been ").append(status);
 		return content.toString();
 	}
 	
@@ -110,6 +123,12 @@ public class SystemConstant {
 	public final static String ATTR_CONTENT_CLASSROOM_DEL_SUCCESS(Long id) {
 		StringBuilder content = new StringBuilder();
 		content.append("The Classroom ID ").append(id).append(" has been deteled successfully");
+		return  content.toString() ;
+	}
+	
+	public final static String ATTR_CONTENT_COURSE_DEL_SUCCESS(Long id) {
+		StringBuilder content = new StringBuilder();
+		content.append("The Course ID ").append(id).append(" has been deteled successfully");
 		return  content.toString() ;
 	}
 

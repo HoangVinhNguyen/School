@@ -64,6 +64,12 @@ public class User extends BaseEntity {
 	@ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
 	private Set<Clazz> clazzes = new HashSet<>();
 
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "users_courses", 
+	joinColumns = @JoinColumn(name = "user_id"), 
+	inverseJoinColumns = @JoinColumn(name = "course_id"))
+	private Set<Course> courses = new HashSet<>();
+
 	public User() {
 
 	}
@@ -163,12 +169,28 @@ public class User extends BaseEntity {
 		this.clazzes = clazzes;
 	}
 
+	public Set<Course> getCourses() {
+		return courses;
+	}
+
+	public void setCourses(Set<Course> courses) {
+		this.courses = courses;
+	}
+
 	@Transient
 	public void addRole(Role role) {
 		Optional<Role> roleOp = Optional.ofNullable(role);
 		if (roleOp.isPresent()) {
 			Role r = roleOp.get().clone();
 			this.roles.add(r);
+		}
+	}
+	
+	@Transient
+	public void addCourse(Course course) {
+		Optional<Course> op = Optional.ofNullable(course);
+		if (op.isPresent()) {
+			this.courses.add(op.get());
 		}
 	}
 

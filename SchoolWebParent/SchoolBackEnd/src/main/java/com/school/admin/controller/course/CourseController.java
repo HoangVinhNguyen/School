@@ -1,4 +1,4 @@
-package com.school.admin.controller.classroom;
+package com.school.admin.controller.course;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,36 +16,33 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.school.admin.exception.EntityNotFoundException;
 import com.school.admin.service.ClassroomService;
-import com.school.admin.service.ClazzService;
+import com.school.admin.service.CourseService;
 import com.school.admin.util.StaticUtil;
 import com.school.common.common.SystemConstant;
-import com.school.common.entity.Classroom;
+import com.school.common.entity.Course;
 import com.school.common.entity.Clazz;
 
 @Controller
-public class ClassroomController {
+public class CourseController {
 
 	@Autowired
-	private ClassroomService service;
-
-	@Autowired
-	private ClazzService clazzService;
+	private CourseService service;
 	
-	@GetMapping("/classrooms")
+	@GetMapping("/courses")
 	public String listFirstPage(Model model) {
 		return listByPage(1, model, SystemConstant.NAME, SystemConstant.ASC, null);
 	}
 	
-	@GetMapping("/classrooms/page/{pageNum}")
+	@GetMapping("/courses/page/{pageNum}")
 	public String listByPage(@PathVariable(name="pageNum") int pageNum, Model model,
 			@Param("sortField") String sortField, @Param("sortDir") String sortDir, 
 			@Param("keyword") String keyword) {
 		
-		Page<Classroom> page = service.listByPage(pageNum, sortField, sortDir, keyword);
-		List<Classroom> listClassrooms = page.getContent();
+		Page<Course> page = service.listByPage(pageNum, sortField, sortDir, keyword);
+		List<Course> listCourses = page.getContent();
 		
-		long startCount = (pageNum - 1) * ClassroomService.CLASSROOM_PER_PAGE + 1;
-		long endCount = startCount + ClassroomService.CLASSROOM_PER_PAGE - 1;
+		long startCount = (pageNum - 1) * CourseService.COURSE_PER_PAGE + 1;
+		long endCount = startCount + CourseService.COURSE_PER_PAGE - 1;
 		
 		if (endCount > page.getTotalElements()) {
 			endCount = page.getTotalElements();
@@ -58,73 +55,66 @@ public class ClassroomController {
 		model.addAttribute(SystemConstant.START_COUNT, startCount);
 		model.addAttribute(SystemConstant.END_COUNT, endCount);
 		model.addAttribute(SystemConstant.TOTAL_ITEM, page.getTotalElements());
-		model.addAttribute("listClassrooms", listClassrooms);
+		model.addAttribute("listCourses", listCourses);
 		model.addAttribute(SystemConstant.SORT_FILED, sortField);
 		model.addAttribute(SystemConstant.SORT_DIR, sortDir);
 		model.addAttribute(SystemConstant.REVERSE_SORT_DIR, reverseSortDir);
 		model.addAttribute(SystemConstant.KEYWORD, keyword);
-		model.addAttribute(SystemConstant.LINK, "classrooms");
-		StaticUtil.setTitleAndStatic(model, SystemConstant.TITLE_CLASSROOM);
-		return "classrooms/classrooms";
+		model.addAttribute(SystemConstant.LINK, "courses");
+		StaticUtil.setTitleAndStatic(model, SystemConstant.TITLE_COURSE);
+		return "courses/courses";
 	}
 	
-	@GetMapping("/classrooms/new")
+	@GetMapping("/courses/new")
 	public String newLevel(Model model) {
-		Classroom classroom = new Classroom();
-		Optional<List<Clazz>> opClazz = Optional.ofNullable(clazzService.listAllByOrderGradeId());
-		if (opClazz.isPresent()) {
-			model.addAttribute("classroom", classroom);
-			model.addAttribute("listClazzes", opClazz.get());
-			model.addAttribute(SystemConstant.LINK, "classrooms");
-			StaticUtil.setTitleAndStatic(model, SystemConstant.TITLE_CREATE_NEW_CLASSROOM, null, List.of("clazz_form.css"));
-			return "classrooms/classroom_form";
-		}
-		return "redirect:/classrooms";
+		Course course = new Course();
+		model.addAttribute("course", course);
+		model.addAttribute(SystemConstant.LINK, "courses");
+		StaticUtil.setTitleAndStatic(model, SystemConstant.TITLE_CREATE_NEW_COURSE);
+		return "courses/course_form";
 	}
 	
-	@PostMapping("/classrooms/save")
-	public String saveClassroom(Classroom classroom, RedirectAttributes redirectAttributes) throws IOException {
-		service.save(classroom);
+	@PostMapping("/courses/save")
+	public String saveClassroom(Course course, RedirectAttributes redirectAttributes) throws IOException {
+		service.save(course);
 		redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, 
-				SystemConstant.ATTR_CONTENT_CLASSROOM_SAVE_SUCCESS);
-		return getRedirectURLtoAffectedClassroom(classroom);
+				SystemConstant.ATTR_CONTENT_COURSE_SAVE_SUCCESS);
+		return getRedirectURLtoAffectedClassroom(course);
 	}
 	
-	private String getRedirectURLtoAffectedClassroom(Classroom classroom) {
-		return "redirect:/classrooms/page/1?sortField=id&sortDir=asc&keyword=" + classroom.getName();
+	private String getRedirectURLtoAffectedClassroom(Course course) {
+		return "redirect:/courses/page/1?sortField=id&sortDir=asc&keyword=" + course.getName();
 	}
 	
-	@GetMapping("/classrooms/edit/{id}")
+	@GetMapping("/courses/edit/{id}")
 	public String editLevel(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes, Model model) {
 		try {
-			Optional<Classroom> opClassroom = Optional.ofNullable(service.get(id));
-			Optional<List<Clazz>> opClazz = Optional.ofNullable(clazzService.listAllByOrderGradeId());
-			if (opClazz.isPresent() && opClazz.isPresent()) {
+			Optional<Course> opCourse = Optional.ofNullable(service.get(id));
+			if (opCourse.isPresent()) {
 				StringBuilder title = new StringBuilder();
-				title.append(SystemConstant.TITLE_EDIT_CLASSROOM).append(id);
+				title.append(SystemConstant.TITLE_EDIT_COURSE).append(id);
 
-				model.addAttribute("classroom", opClassroom.get());
-				model.addAttribute("listClazzes", opClazz.get());
-				model.addAttribute(SystemConstant.LINK, "classrooms");
-				StaticUtil.setTitleAndStatic(model, title.toString(), null, List.of("clazz_form.css"));
-				return "classrooms/classroom_form";
+				model.addAttribute("course", opCourse.get());
+				model.addAttribute(SystemConstant.LINK, "courses");
+				StaticUtil.setTitleAndStatic(model, title.toString());
+				return "courses/course_form";
 			}
 		} catch (EntityNotFoundException e) {
 			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, e.getMessage());
 		}
-		return "redirect:/classrooms";
+		return "redirect:/courses";
 	}
 	
-	@GetMapping("/classrooms/delete/{id}")
+	@GetMapping("/courses/delete/{id}")
 	public String deleteClassroom(@PathVariable(name = "id") Long id, RedirectAttributes redirectAttributes) {
 		try {
-			service.deleteClassroom(id);
+			service.deleteCourse(id);
 			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE,
-					SystemConstant.ATTR_CONTENT_CLASSROOM_DEL_SUCCESS(id));
+					SystemConstant.ATTR_CONTENT_COURSE_DEL_SUCCESS(id));
 		} catch (EntityNotFoundException e) {
 			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, e.getMessage());
 		}
-		return "redirect:/classrooms";
+		return "redirect:/courses";
 	}
 	
 }
