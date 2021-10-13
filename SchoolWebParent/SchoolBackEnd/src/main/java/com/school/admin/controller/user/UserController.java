@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.school.admin.exception.EntityNotFoundException;
+import com.school.admin.service.CourseService;
 import com.school.admin.service.UserService;
 import com.school.admin.util.FileUploadUtil;
 import com.school.admin.util.StaticUtil;
@@ -26,6 +27,7 @@ import com.school.admin.util.export.UserCsvExporter;
 import com.school.admin.util.export.UserExcelExporter;
 import com.school.admin.util.export.UserPdfExporter;
 import com.school.common.common.SystemConstant;
+import com.school.common.entity.Course;
 import com.school.common.entity.Role;
 import com.school.common.entity.User;
 
@@ -34,6 +36,9 @@ public class UserController {
 	
 	@Autowired
 	private UserService service;
+	
+	@Autowired
+	private CourseService courseService;
 
 	@GetMapping("/users")
 	public String listFirstPage(Model model) {
@@ -74,13 +79,13 @@ public class UserController {
 
 	@GetMapping("/users/new")
 	public String newUser(Model model) {
-		List<Role> listRoleDtos = service.listRoles();
+		List<Course> listCourse =  courseService.listAll();
 		User user = new User();
 		user.setEnabled(true);
 		model.addAttribute("user", user);
-		model.addAttribute("listRoles", listRoleDtos);
+		model.addAttribute("listCourse", listCourse);
 		model.addAttribute(SystemConstant.LINK, "users");
-		StaticUtil.setTitleAndStatic(model, SystemConstant.TITLE_CREATE_NEW_USER);
+		StaticUtil.setTitleAndStatic(model, SystemConstant.TITLE_CREATE_NEW_USER, null, List.of("user_form.css"));
 		return "users/user_form";
 	}
 
@@ -116,13 +121,15 @@ public class UserController {
 		try {
 			User user = service.get(id);
 			List<Role> listRoleDtos = service.listRoles();
+			List<Course> listCourse =  courseService.listAll();
 			StringBuilder title = new StringBuilder();
 			title.append(SystemConstant.TITLE_EDIT_USER).append(id);
 
 			model.addAttribute("listRoles", listRoleDtos);
 			model.addAttribute("user", user);
+			model.addAttribute("listCourse", listCourse);
 			model.addAttribute(SystemConstant.LINK, "users");
-			StaticUtil.setTitleAndStatic(model, title.toString());
+			StaticUtil.setTitleAndStatic(model, title.toString(), null, List.of("user_form.css"));
 			return "users/user_form";
 		} catch (EntityNotFoundException e) {
 			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, e.getMessage());

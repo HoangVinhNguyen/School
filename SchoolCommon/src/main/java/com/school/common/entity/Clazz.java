@@ -41,7 +41,7 @@ public class Clazz extends BaseEntity {
 		inverseJoinColumns = @JoinColumn(name = "classroom_id"))
 	private Set<Classroom> classrooms = new HashSet<>();
 	
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JsonIgnore
 	@JoinTable(name = "class_user",
 		joinColumns = @JoinColumn(name = "class_id"),

@@ -41,6 +41,12 @@ public class ClassroomServiceImpl implements ClassroomService {
 	}
 
 	@Override
+	public List<Classroom> searchKeyWord(String keyword) {
+		Optional<List<Classroom>> list = Optional.ofNullable(repo.searchKeyWord(keyword));
+		return list.orElse(null);
+	}
+
+	@Override
 	public Page<Classroom> listByPage(int pageNum, String sortField, String sortDir, String keyword) {
 		Sort sort = Sort.by(sortField);
 		sort = sortDir.equals(SystemConstant.ASC) ? sort.ascending() : sort.descending();

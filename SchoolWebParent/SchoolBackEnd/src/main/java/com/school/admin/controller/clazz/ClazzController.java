@@ -113,10 +113,18 @@ public class ClazzController {
 			Optional<Clazz> opClazz = Optional.ofNullable(service.get(id));
 			Optional<List<Grade>> opGrade = Optional.ofNullable(gradeService.listAll());
 			Optional<List<Classroom>> opClassroom = Optional.ofNullable(classroomService.listAll());
-			if (opGrade.isPresent() && opClassroom.isPresent()) {
+			if (opGrade.isPresent() && opClassroom.isPresent() && opClazz.isPresent()) {
+				List<User> listTeacher = opClazz.get().getUsers().stream()
+						.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.toLowerCase().equals(SystemConstant.TEACHER)))
+						.collect(Collectors.toList());
+				List<User> listStudent = opClazz.get().getUsers().stream()
+						.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.toLowerCase().equals(SystemConstant.STUDENT)))
+						.collect(Collectors.toList());
 				StringBuilder title = new StringBuilder();
 				title.append(SystemConstant.TITLE_EDIT_CLAZZ).append(id);
 
+				model.addAttribute("listTeacher", listTeacher);
+				model.addAttribute("listStudent", listStudent);
 				model.addAttribute("clazz", opClazz.get());
 				model.addAttribute("listGrades", opGrade.get());
 				model.addAttribute("listClassrooms", opClassroom.get());
@@ -189,5 +197,112 @@ public class ClazzController {
 			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, e.getMessage());
 		}
 		return "redirect:/clazzes";
+	}
+	
+	@GetMapping("clazzes/edit/{id}/classroom")
+	public String editClassroom(@PathVariable(name="id") Long id, Model model, RedirectAttributes redirectAttributes) {
+		try {
+			Clazz clazz = service.get(id);
+			List<Classroom> classrooms = classroomService.listAll();
+			StringBuilder title = new StringBuilder();
+			title.append(SystemConstant.TITLE_EDIT_CLAZZ_CLASSROOM).append(id);
+			List<User> listTeacher = clazz.getUsers().stream()
+					.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.toLowerCase().equals(SystemConstant.TEACHER)))
+					.collect(Collectors.toList());
+			List<User> listStudent = clazz.getUsers().stream()
+					.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.toLowerCase().equals(SystemConstant.STUDENT)))
+					.collect(Collectors.toList());
+			model.addAttribute("clazz", clazz);
+			model.addAttribute("listClassroom", classrooms);
+			model.addAttribute("classname", clazz.getName());
+			model.addAttribute("listTeacher", listTeacher);
+			model.addAttribute("listStudent", listStudent);
+			model.addAttribute(SystemConstant.LINK, "clazzes");
+			model.addAttribute(SystemConstant.LINK_GOBACK,  new StringBuilder("clazzes/edit/").append(id));
+			StaticUtil.setTitleAndStatic(model, title.toString(), null, List.of("clazz_form.css"));
+			return "clazzes/edit_classroom";
+		} catch (EntityNotFoundException e) {
+			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, e.getMessage());
+		}
+		return "redirect:/clazzes";
+	}
+	@PostMapping("/clazzes/save-classroom")
+	public String saveClassroom(Clazz clazz, RedirectAttributes redirectAttributes, Model model) throws IOException {
+		service.saveClassroom(clazz);
+		StringBuilder link = new StringBuilder();
+		link.append("redirect:/clazzes/edit/").append(clazz.getId()).append("/classroom");
+		return link.toString();
+	}
+	
+	@GetMapping("clazzes/edit/{id}/teacher")
+	public String editTeacher(@PathVariable(name="id") Long id, Model model, RedirectAttributes redirectAttributes) {
+		return listByPageTeacher(id, 1, model, SystemConstant.FIRST_NAME, SystemConstant.ASC, null, redirectAttributes);
+	}
+	
+	@GetMapping("/clazzes/edit/{id}/teacher/page/{pageNum}")
+	public String listByPageTeacher(@PathVariable(name="id") Long id, @PathVariable(name="pageNum") int pageNum, 
+			Model model, @Param("sortField") String sortField, @Param("sortDir") String sortDir, 
+			@Param("keyword") String keyword, RedirectAttributes redirectAttributes) {
+		try {
+			Page<User> page = service.listByPageTeacher(id, pageNum, sortField, sortDir, keyword);
+			List<User> listTeachers = page.getContent();
+			
+			long startCount = (pageNum - 1) * ClazzService.CLAZZ_PER_PAGE + 1;
+			long endCount = startCount + ClazzService.CLAZZ_PER_PAGE - 1;
+			
+			if (endCount > page.getTotalElements()) {
+				endCount = page.getTotalElements();
+			}
+			
+			String reverseSortDir = sortDir.equals(SystemConstant.ASC) ? SystemConstant.DESC : SystemConstant.ASC;
+			
+			model.addAttribute(SystemConstant.CURRENT_PAGE, pageNum);
+			model.addAttribute(SystemConstant.TOTAL_PAGE, page.getTotalPages());
+			model.addAttribute(SystemConstant.START_COUNT, startCount);
+			model.addAttribute(SystemConstant.END_COUNT, endCount);
+			model.addAttribute(SystemConstant.TOTAL_ITEM, page.getTotalElements());
+			model.addAttribute("listTeachers", listTeachers);
+			model.addAttribute(SystemConstant.SORT_FILED, sortField);
+			model.addAttribute(SystemConstant.SORT_DIR, sortDir);
+			model.addAttribute(SystemConstant.REVERSE_SORT_DIR, reverseSortDir);
+			model.addAttribute(SystemConstant.KEYWORD, keyword);
+			
+			Clazz clazz = service.get(id);
+			StringBuilder title = new StringBuilder();
+			title.append(SystemConstant.TITLE_EDIT_CLAZZ_TEACHER).append(id);
+			List<User> listTeacher = clazz.getUsers().stream()
+					.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.toLowerCase().equals(SystemConstant.TEACHER)))
+					.collect(Collectors.toList());
+			List<User> listStudent = clazz.getUsers().stream()
+					.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.toLowerCase().equals(SystemConstant.STUDENT)))
+					.collect(Collectors.toList());
+			model.addAttribute("clazz", clazz);
+			model.addAttribute("classname", clazz.getName());
+			model.addAttribute("listTeacher", listTeacher);
+			model.addAttribute("listStudent", listStudent);
+			model.addAttribute(SystemConstant.LINK, "clazzes");
+			model.addAttribute(SystemConstant.LINK_GOBACK,  new StringBuilder("clazzes/edit/").append(id));
+			StaticUtil.setTitleAndStatic(model, title.toString(), null, List.of("clazz_form.css"));
+			return "clazzes/edit_teacher";
+		} catch (EntityNotFoundException e) {
+			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, e.getMessage());
+		}
+		return "redirect:/clazzes";
+	}
+	@PostMapping("/clazzes/add-teacher")
+	public String addTeacher(Long id, Long idTeacher, RedirectAttributes redirectAttributes, 
+			Model model) throws IOException {
+		service.addTeacher(id, idTeacher);
+		StringBuilder link = new StringBuilder();
+		link.append("redirect:/clazzes/edit/").append(id).append("/teacher");
+		return link.toString();
+	}
+	@GetMapping("/clazzes/{id}/delete-teacher/{idTeacher}")
+	public String deleteTeacher(@PathVariable("id") Long id, @PathVariable("idTeacher") Long idTeacher, RedirectAttributes redirectAttributes, 
+			Model model) throws IOException {
+		service.deleteTeacher(id, idTeacher);
+		StringBuilder link = new StringBuilder();
+		link.append("redirect:/clazzes/edit/").append(id).append("/teacher");
+		return link.toString();
 	}
 }

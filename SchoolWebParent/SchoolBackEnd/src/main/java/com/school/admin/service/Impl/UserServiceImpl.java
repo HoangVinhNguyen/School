@@ -22,6 +22,7 @@ import com.school.admin.repository.UserRepository;
 import com.school.admin.service.UserService;
 import com.school.admin.util.FileUploadUtil;
 import com.school.common.common.SystemConstant;
+import com.school.common.dto.UserDto;
 import com.school.common.entity.Role;
 import com.school.common.entity.User;
 
@@ -41,6 +42,18 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> listAll() {
 		Optional<List<User>> list = Optional.ofNullable(userRepo.findAll(Sort.by(SystemConstant.FIRST_NAME).ascending()));
+		return list.orElse(null);
+	}
+
+	@Override
+	public List<User> listAllTeacher() {
+		Optional<List<User>> list = Optional.ofNullable(userRepo.findAllTeacher(Sort.by(SystemConstant.FIRST_NAME).ascending()));
+		return list.orElse(null);
+	}
+
+	@Override
+	public List<User> listAllStudent() {
+		Optional<List<User>> list = Optional.ofNullable(userRepo.findAllStudent(Sort.by(SystemConstant.FIRST_NAME).ascending()));
 		return list.orElse(null);
 	}
 
@@ -65,7 +78,7 @@ public class UserServiceImpl implements UserService {
 		
 		return userRepo.findAll(pageable);
 	}
-
+	
 	@Override
 	public User save(User user) {
 		boolean isUpdatingUser = (user.getId() != null);
@@ -83,7 +96,6 @@ public class UserServiceImpl implements UserService {
 						encodePassword(user);
 					}
 					user.setClazzes(exstingUser.getClazzes());
-					user.setCourses(exstingUser.getCourses());
 					user.setCreatedDate(exstingUser.getCreatedDate());
 					user.setCreatedBy(exstingUser.getCreatedBy());
 					user.setModifiedDate(dateNow);
@@ -137,7 +149,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean isEmailUnique(Long id, String email) {
-		User userByEmail = userRepo.getUserByEmail(email);
+		User userByEmail = userRepo.findUserByEmail(email);
 		if (userByEmail == null) return true;
 		boolean isCreatingNew = (id == null);
 		if (isCreatingNew) {
@@ -151,9 +163,45 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public User getByEmail(String email) {
-		return userRepo.getUserByEmail(email);
+		Optional<User> op = Optional.ofNullable(userRepo.findUserByEmail(email));
+		return op.orElse(null);
+	}
+	@Override
+	public User getById(Long id) {
+		Optional<User> op = Optional.ofNullable(userRepo.findUserById(id));
+		return op.orElse(null);
 	}
 	
+	@Override
+	public UserDto getByEmailRest(String email) {
+		Optional<User> op = Optional.ofNullable(userRepo.findUserByEmail(email));
+		return new UserDto(op.orElse(null));
+	}
+
+	@Override
+	public UserDto getByIdRest(Long id) throws EntityNotFoundException {
+		try {
+			Optional<User> op = Optional.ofNullable(userRepo.findUserById(id));
+			return new UserDto(op.orElse(null));
+		} catch (NoSuchElementException e) {
+			StringBuilder msg = new StringBuilder();
+			msg.append(SystemConstant.NOT_FOUND_ID).append(id);
+			throw new EntityNotFoundException(msg.toString());
+		}
+	}
+
+	@Override
+	public UserDto getByIdTeacherRest(Long id) throws EntityNotFoundException {
+		try {
+			Optional<User> op = Optional.ofNullable(userRepo.findByIdTeacherRest(id));
+			return new UserDto(op.orElse(null));
+		} catch (NoSuchElementException e) {
+			StringBuilder msg = new StringBuilder();
+			msg.append(SystemConstant.NOT_FOUND_ID).append(id);
+			throw new EntityNotFoundException(msg.toString());
+		}
+	}
+
 	@Override
 	public User get(Long id) throws EntityNotFoundException {
 		try {

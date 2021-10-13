@@ -152,7 +152,7 @@
 				if (result.length === 0) {
 					$("#clazz").val("");
 				} else if (result.length === 1) {
-					$("#clazz").val("[" + result[0].split(" ").join("") + "]");
+					$("#clazz").val("[" + $.trim(result[0]) + "]");
 				} else {
 					$("#clazz").val("[" + result + "]");
 				}
@@ -161,7 +161,7 @@
 		
 		function arrayRemove(arr, value) { 
 	        return arr.filter(function(ele){ 
-	            return ele !== value && ele !== value.split(" ").join(""); 
+	            return ele !== value && ele !== $.trim(value); 
 	        });
 	    }
 	</script>

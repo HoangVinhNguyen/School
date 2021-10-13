@@ -97,7 +97,7 @@ public class Course extends BaseEntity {
 			return false;
 		if (this.getClass() != obj.getClass())
 			return false;
-		Classroom other = (Classroom) obj;
+		Course other = (Course) obj;
 		if (this.getId() == null) {
 			if (other.getId() != null)
 				return false;

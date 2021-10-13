@@ -43,6 +43,9 @@ public interface ClassroomRepository extends JpaRepository<Classroom, Long>{
 	@Query("SELECT c FROM Classroom c WHERE c.isDeleted = FALSE AND CONCAT(c.id, ' ', c.code, ' ', c.name, ' ', c.description) LIKE %?1%")
 	public Page<Classroom> findAll(String keyword, Pageable pageable);
 	
+	@Query("SELECT c FROM Classroom c WHERE c.isDeleted = FALSE AND c.name LIKE %?1%")
+	public List<Classroom> searchKeyWord(String keyword);
+	
 	@Query("SELECT c FROM Classroom c WHERE c.isDeleted = FALSE")
 	public Page<Classroom> findAll(Pageable pageable);
 }

@@ -19,10 +19,24 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	
 	
 	@Query("SELECT u FROM User u WHERE u.email = :email AND u.isDeleted = FALSE")
-	public User getUserByEmail(@Param("email") String email);
+	public User findUserByEmail(@Param("email") String email);
 	
+	@Query("SELECT u FROM User u WHERE u.id = :id AND u.isDeleted = FALSE")
+	public User findUserById(@Param("id") Long id);
+
+	@Query("SELECT u FROM User u JOIN u.roles r WHERE u.id = :id AND u.isDeleted = FALSE AND r.name LIKE 'Teacher'")
+	public User findByIdTeacherRest(Long id);
+
 	@Query("SELECT u FROM User u WHERE u.isDeleted = FALSE")
 	public List<User> findAllUser();
+	@Query("SELECT u FROM User u JOIN u.roles usr WHERE u.isDeleted = FALSE AND usr.name LIKE 'Teacher'")
+	public List<User> findAllTeacher();
+	@Query("SELECT u FROM User u JOIN u.roles usr WHERE u.isDeleted = FALSE AND usr.name LIKE 'Teacher'")
+	public List<User> findAllTeacher(Sort sort);
+	@Query("SELECT u FROM User u JOIN u.roles usr WHERE u.isDeleted = FALSE AND usr.name LIKE 'Student'")
+	public List<User> findAllStudent();
+	@Query("SELECT u FROM User u JOIN u.roles usr WHERE u.isDeleted = FALSE AND usr.name LIKE 'Student'")
+	public List<User> findAllStudent(Sort sort);
 	
 	@Query("SELECT u FROM User u WHERE u.isDeleted = FALSE")
 	public List<User> findAll(Sort sort);
@@ -46,4 +60,6 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	@Query("UPDATE User u SET u.isDeleted = TRUE WHERE u.id = ?1  AND u.isDeleted = FALSE")
 	@Modifying
 	public void deleteById(Long id);
+
+
 }

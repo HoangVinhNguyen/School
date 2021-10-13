@@ -18,8 +18,13 @@ public interface ClazzService {
 	public List<Clazz> listAllByOrderGradeId();
 
 	public Page<Clazz> listByPage(int pageNum, String sortField, String sortDir, String keyword);
+	public Page<User> listByPageTeacher(Long id, int pageNum, String sortField, String sortDir, String keyword);
 
-	public Clazz save(Clazz level);
+	public Clazz save(Clazz clazz);
+	public Clazz saveClassroom(Clazz clazz);
+	
+	public Clazz addTeacher(Long idClazz, Long idTeacher);
+	public Clazz deleteTeacher(Long idClazz, Long idTeacher);
 	
 	public UserDto addUserToClass(Long id, String email);
 	public UserDto addTeacherToClass(Long id, String email);
@@ -36,4 +41,6 @@ public interface ClazzService {
 	public Clazz get(Long id) throws EntityNotFoundException;
 
 	public void deleteClazz(Long id) throws EntityNotFoundException;
+
+
 }

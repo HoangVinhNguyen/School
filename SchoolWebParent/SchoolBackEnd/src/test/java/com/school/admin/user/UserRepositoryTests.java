@@ -11,9 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 
 import com.school.admin.repository.UserRepository;
+import com.school.common.common.SystemConstant;
 import com.school.common.entity.Role;
 import com.school.common.entity.User;
 
@@ -58,8 +60,23 @@ public class UserRepositoryTests {
 	}
 	
 	@Test
-	public void testListAllUSer() {
+	public void testListAllUser() {
 		Iterable<User> listUsers = repo.findAllUser();
+		listUsers.forEach(u -> System.out.println(u));
+	}
+	@Test
+	public void testListAllTeacher() {
+		Iterable<User> listUsers = repo.findAllTeacher();
+		listUsers.forEach(u -> System.out.println(u));
+	}
+	@Test
+	public void testListAllTeacherSort() {
+		Iterable<User> listUsers = repo.findAllTeacher(Sort.by(SystemConstant.FIRST_NAME).ascending());
+		listUsers.forEach(u -> System.out.println(u));
+	}
+	@Test
+	public void testListAllStudent() {
+		Iterable<User> listUsers = repo.findAllStudent();
 		listUsers.forEach(u -> System.out.println(u));
 	}
 	
@@ -102,7 +119,7 @@ public class UserRepositoryTests {
 	
 	@Test
 	public void testGetUserByEmail() {
-		Optional<User> op = Optional.of(repo.getUserByEmail("vinh@gmail.com"));
+		Optional<User> op = Optional.of(repo.findUserByEmail("vinh@gmail.com"));
 		if (op.isPresent()) {
 			User user = op.get();
 			System.out.println(user);
@@ -121,7 +138,7 @@ public class UserRepositoryTests {
 	
 	@Test
 	public void testEnableUser() {
-		Optional<User> op = Optional.of(repo.getUserByEmail("vinh@gmail.com"));
+		Optional<User> op = Optional.of(repo.findUserByEmail("vinh@gmail.com"));
 		if (op.isPresent()) {
 			User user = op.get();
 			repo.updateEnableStatus(user.getId(), true);
@@ -130,7 +147,7 @@ public class UserRepositoryTests {
 	
 	@Test
 	public void testDeleteUser() {
-		Optional<User> op = Optional.of(repo.getUserByEmail("vinh@gmail.com"));
+		Optional<User> op = Optional.of(repo.findUserByEmail("vinh@gmail.com"));
 		if (op.isPresent()) {
 			User user = op.get();
 			repo.deleteById(user.getId());

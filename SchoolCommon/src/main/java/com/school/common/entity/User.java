@@ -42,7 +42,7 @@ public class User extends BaseEntity {
 	@Column(length = 64, nullable = false)
 	private String password;
 
-	@Column(nullable = true)
+	@Column(nullable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dob;
 
@@ -247,9 +247,9 @@ public class User extends BaseEntity {
 
 	@Transient
 	public String getFullName() {
-		StringBuilder fullname = new StringBuilder(getFirstName());
+		StringBuilder fullname = new StringBuilder(getLastName());
 		fullname.append(" ");
-		fullname.append(getLastName());
+		fullname.append(getFirstName());
 		return fullname.toString();
 	}
 

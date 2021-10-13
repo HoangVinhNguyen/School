@@ -43,44 +43,35 @@
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Classrooms</label>
 					<div class="col-sm-8">
-						<input type="text" th:if="${not #lists.isEmpty(clazz.classrooms)}" id="classroom"
-							class="form-control" th:value="*{classrooms}" disabled/>
-						<input type="text" th:if="${#lists.isEmpty(clazz.classrooms)}" id="classroom" 
-							class="form-control" th:value="NULL" disabled/>
-						<small>Edit it below</small>
 						<div class="ex3 form-control col mx-auto">
-							
-							<th:block th:each="classroom,iter:${listClassrooms}" th:with="numList=${#strings.listSplit('1,0', ',')}" >
-								
-								<div class="row m-1" th:if="${iter.index} % 2 != 0 and ${iter.count} < ${iter.size}" >
-									<div class="col-6" th:each="num : ${numList}" th:with="dataIndex=(${iter.index} - ${num})">
-										<input class="checkBox" type="checkbox" 
-										 th:field="*{classrooms}" th:text="${listClassrooms[dataIndex].name}" 
-										 th:value="${listClassrooms[dataIndex].id}" th:nameClassroom="${listClassrooms[dataIndex].name}"/>
-										 - <small>[[${listClassrooms[dataIndex].description}]]</small>
-									</div>
-								</div>
-								<div class="row m-1" th:if="${iter.index} % 2 == 0 and ${iter.count} == ${iter.size}" >
-									<div class="col-6" th:with="dataIndex=(${iter.index})">
-										<input class="checkBox" type="checkbox"
-											th:with="dataIndex=(${iter.index})"
-										 th:field="*{classrooms}" th:text="${listClassrooms[dataIndex].name}" 
-										 th:value="${listClassrooms[dataIndex].id}" th:nameClassroom="${listClassrooms[dataIndex].name}"/>
-										 - <small>[[${listClassrooms[dataIndex].description}]]</small>
-									 </div>
-								</div>
-								<div class="row m-1" th:if="${iter.index} % 2 != 0 and ${iter.count} == ${iter.size}" >
-									<div class="col-6" th:each="num : ${numList}" th:with="dataIndex=(${iter.index} - ${num})">
-										<input class="checkBox" type="checkbox" 
-										 th:field="*{classrooms}" th:text="${listClassrooms[dataIndex].name}" 
-										 th:value="${listClassrooms[dataIndex].id}" th:nameClassroom="${listClassrooms[dataIndex].name}"/>
-										 - <small>[[${listClassrooms[dataIndex].description}]]</small>
-									</div>
-								</div>
-								
-							<th:block/>
-							
+							<input type="text" class="form-control" placeholder="Search room" />
+							<a th:each="classroom : ${clazz.classrooms}" class="btn btn-light m-1" 
+								th:href="@{${'/classrooms/edit/' + classroom.id}}">
+								[[${classroom.name}]]
+							</a>
 						</div>
+						<a type="button" class="btn btn-primary col" 
+							th:href="@{${'/' + link + '/edit/' + clazz.id + '/classroom'}}">Edit</a>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">Teacher</label>
+					<div class="col-sm-8">
+						<div class="ex3 form-control col mx-auto">
+							<a th:each="user : ${listTeacher}" class="btn btn-light m-1" 
+								th:href="@{${'/users/edit/' + user.id}}">[[${user.id}]] </a>
+						</div>
+						<a type="button" class="btn btn-primary col" 
+							th:href="@{${'/' + link + '/edit/' + clazz.id + '/teacher'}}">Edit</a>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">Student</label>
+					<div class="col-sm-8">
+						<div class="ex3 form-control col mx-auto">
+							<a th:each="classroom : ${clazz.classrooms}" class="btn btn-light m-1" href="">[[${classroom.name}]] </a>
+						</div>
+						<a type="button" class="btn btn-primary col" href="">Edit</a>
 					</div>
 				</div>
 				<div class="text-center">
@@ -164,7 +155,7 @@
 				if (result.length === 0) {
 					$("#classroom").val("");
 				} else if (result.length === 1) {
-					$("#classroom").val("[" + result[0].split(" ").join("") + "]");
+					$("#classroom").val("[" + $.trim(result[0]) + "]");
 				} else {
 					$("#classroom").val("[" + result + "]");
 				}
@@ -173,7 +164,7 @@
 		
 		function arrayRemove(arr, value) { 
 	        return arr.filter(function(ele){ 
-	            return ele !== value && ele !== value.split(" ").join(""); 
+	            return ele !== value && ele !== $.trim(value); 
 	        });
 	    }
 	</script>

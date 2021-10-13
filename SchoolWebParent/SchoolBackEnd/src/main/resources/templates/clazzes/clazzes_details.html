@@ -63,7 +63,7 @@
 										<td th:id="'id_teacher' + ${start.index}">[[@{${user.id}}]]</td>
 										<td th:id="'fullname_teacher' + ${start.index}">[[@{${user.fullName}}]]</td>
 										<td th:id="'email_teacher' + ${start.index}">[[@{${user.email}}]]</td>
-										<td th:id="'course_teacher' + ${start.index}"></td>
+										<td th:id="'course_teacher' + ${start.index}">[[@{${user.courses}}]]</td>
 										<td>
 											<a class="btn btn-info m-1"
 												th:href="@{'/users/edit/' + ${user.id}}" target="_blank">
@@ -100,7 +100,7 @@
 								<div class="col-8" th:id="'data_col_less_teacher' + ${start.index}">
 									<div th:id="'fullname_less_teacher' + ${start.index}">[[@{${user.fullName}}]]</div>
 									<div th:id="'email_less_teacher' + ${start.index}">[[@{${user.email}}]]</div>
-									<div th:id="'course_less_teacher' + ${start.index}"></div>
+									<div th:id="'course_less_teacher' + ${start.index}">[[@{${user.courses}}]]</div>
 									<div class="mt-2">
 										<a class="btn btn-info m-1"
 											th:href="@{'/users/edit/' + ${user.id}}" target="_blank">
@@ -158,7 +158,7 @@
 										<td th:id="'id_student' + ${start.index}">[[@{${user.id}}]]</td>
 										<td th:id="'fullname_student' + ${start.index}">[[@{${user.fullName}}]]</td>
 										<td th:id="'email_student' + ${start.index}">[[@{${user.email}}]]</td>
-										<td th:id="'course_student' + ${start.index}"></td>
+										<td th:id="'course_student' + ${start.index}">[[@{${user.courses}}]]</td>
 										<td>
 											<a class="btn btn-info m-1"
 													th:href="@{'/users/edit/' + ${user.id}}" target="_blank">
@@ -194,7 +194,7 @@
 								<div class="col-8" th:id="'data_col_less_student' + ${start.index}">
 									<div th:id="'fullname_less_student' + ${start.index}">[[@{${user.fullName}}]]</div>
 									<div th:id="'email_less_student' + ${start.index}">[[@{${user.email}}]]</div>
-									<div th:id="'course_less_student' + ${start.index}"></div>
+									<div th:id="'course_less_student' + ${start.index}">[[@{${user.courses}}]]</div>
 									<div class="mt-2">
 										<a class="btn btn-info m-1"
 											th:href="@{'/users/edit/' + ${user.id}}" target="_blank">

@@ -32,7 +32,7 @@ public class ClazzServiceImpl implements ClazzService {
 
 	@Autowired
 	private ClazzRepository repo;
-	
+
 	@Autowired
 	private UserService userService;
 
@@ -41,7 +41,7 @@ public class ClazzServiceImpl implements ClazzService {
 		Optional<List<Clazz>> list = Optional.ofNullable(repo.findAll(Sort.by(SystemConstant.NAME).ascending()));
 		return list.orElse(null);
 	}
-	
+
 	@Override
 	public List<Clazz> listAllByOrderGradeId() {
 		Optional<List<Clazz>> list = Optional.ofNullable(repo.findAll(Sort.by("grade").ascending()));
@@ -52,16 +52,32 @@ public class ClazzServiceImpl implements ClazzService {
 	public Page<Clazz> listByPage(int pageNum, String sortField, String sortDir, String keyword) {
 		Sort sort = Sort.by(sortField);
 		sort = sortDir.equals(SystemConstant.ASC) ? sort.ascending() : sort.descending();
-		Pageable pageable = PageRequest.of(pageNum-1, ClazzService.CLAZZ_PER_PAGE, sort);
-		
+		Pageable pageable = PageRequest.of(pageNum - 1, ClazzService.CLAZZ_PER_PAGE, sort);
+
 		if (keyword != null) {
 			Optional<Page<Clazz>> list = Optional.ofNullable(repo.findAll(keyword, pageable));
 			if (list.isPresent()) {
 				return list.get();
 			}
 		}
-		
+
 		return repo.findAll(pageable);
+	}
+
+	@Override
+	public Page<User> listByPageTeacher(Long id, int pageNum, String sortField, String sortDir, String keyword) {
+		Sort sort = Sort.by(sortField);
+		sort = sortDir.equals(SystemConstant.ASC) ? sort.ascending() : sort.descending();
+		Pageable pageable = PageRequest.of(pageNum - 1, ClazzService.CLAZZ_PER_PAGE, sort);
+
+		if (keyword != null) {
+			Optional<Page<User>> list = Optional.ofNullable(repo.findAllTeacher(id, keyword, pageable));
+			if (list.isPresent()) {
+				return list.get();
+			}
+		}
+
+		return repo.findAllTeacher(id, pageable);
 	}
 
 	@Override
@@ -79,8 +95,8 @@ public class ClazzServiceImpl implements ClazzService {
 					clazz.setCreatedBy(exsting.getCreatedBy());
 					clazz.setModifiedDate(dateNow);
 					clazz.setModifiedBy(adminControl.toString());
-				}
-				else return null;
+				} else
+					return null;
 			} else {
 				clazz.setCreatedDate(dateNow);
 				clazz.setCreatedBy(adminControl.toString());
@@ -89,7 +105,75 @@ public class ClazzServiceImpl implements ClazzService {
 		}
 		return null;
 	}
-	
+
+	@Override
+	public Clazz saveClassroom(Clazz clazz) {
+		boolean isUpdating = (clazz.getId() != null);
+		LocalDateTime dateNow = LocalDateTime.now();
+		Optional<Authentication> auth = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication());
+		if (auth.isPresent() && !clazz.getClassrooms().isEmpty()) {
+			StringBuilder adminControl = new StringBuilder(auth.get().getName());
+			if (isUpdating) {
+				Optional<Clazz> opExist = repo.findById(clazz.getId());
+				if (opExist.isPresent()) {
+					Clazz exsting = opExist.get();
+					exsting.setModifiedDate(dateNow);
+					exsting.setModifiedBy(adminControl.toString());
+					exsting.setClassrooms(clazz.getClassrooms());
+					return repo.save(exsting);
+				} else
+					return null;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public Clazz addTeacher(Long idClazz, Long idTeacher) {
+		boolean isUpdating = (idClazz != null && idTeacher!= null);
+		LocalDateTime dateNow = LocalDateTime.now();
+		Optional<Authentication> auth = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication());
+		if (auth.isPresent() && idClazz != null) {
+			StringBuilder adminControl = new StringBuilder(auth.get().getName());
+			if (isUpdating) {
+				Optional<Clazz> opExist = repo.findById(idClazz);
+				Optional<User> opUser = Optional.ofNullable(userService.getById(idTeacher));
+				if (opExist.isPresent() && opUser.isPresent()) {
+					Clazz exsting = opExist.get();
+					exsting.setModifiedDate(dateNow);
+					exsting.setModifiedBy(adminControl.toString());
+					exsting.addUser(opUser.get());
+					return repo.save(exsting);
+				} else
+					return null;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public Clazz deleteTeacher(Long idClazz, Long idTeacher) {
+		boolean isUpdating = (idClazz != null && idTeacher!= null);
+		LocalDateTime dateNow = LocalDateTime.now();
+		Optional<Authentication> auth = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication());
+		if (auth.isPresent() && idClazz != null) {
+			StringBuilder adminControl = new StringBuilder(auth.get().getName());
+			if (isUpdating) {
+				Optional<Clazz> opExist = repo.findById(idClazz);
+				Optional<User> opUser = Optional.ofNullable(userService.getById(idTeacher));
+				if (opExist.isPresent() && opUser.isPresent()) {
+					Clazz exsting = opExist.get();
+					exsting.setModifiedDate(dateNow);
+					exsting.setModifiedBy(adminControl.toString());
+					exsting.getUsers().remove(opUser.get());
+					return repo.save(exsting);
+				} else
+					return null;
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public UserDto addUserToClass(Long id, String email) {
 		Optional<Clazz> opClazz = repo.findById(id);
@@ -103,7 +187,7 @@ public class ClazzServiceImpl implements ClazzService {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public UserDto addTeacherToClass(Long id, String email) {
 		Optional<Clazz> opClazz = repo.findById(id);
@@ -141,15 +225,17 @@ public class ClazzServiceImpl implements ClazzService {
 		}
 		return null;
 	}
+
 	private boolean checkRoleUser(User user, String role) {
 		if (role != null) {
 			for (Role r : user.getRoles()) {
-				if (r.getName().toLowerCase().equals(role)) return true;
+				if (r.getName().toLowerCase().equals(role))
+					return true;
 			}
 		}
 		return false;
 	}
-	
+
 	@Override
 	public UserDto deleteUserInClass(Long id, String email) {
 		Optional<Clazz> opClazz = repo.findById(id);
@@ -171,7 +257,8 @@ public class ClazzServiceImpl implements ClazzService {
 		if (opClazz.isPresent() && opUser.isPresent()) {
 			Clazz clazz = opClazz.get();
 			User user = opUser.get();
-			if (clazz.getUsers().contains(user)) return true;
+			if (clazz.getUsers().contains(user))
+				return true;
 		}
 		return false;
 	}
@@ -180,10 +267,12 @@ public class ClazzServiceImpl implements ClazzService {
 	public boolean isNameUnique(Long id, String name) {
 		Optional<Clazz> op = Optional.ofNullable(repo.getClazzByName(name));
 		Clazz clazz = op.orElse(null);
-		if (clazz == null) return true;
+		if (clazz == null)
+			return true;
 		boolean isCreatingNew = (id == null);
 		if (isCreatingNew) {
-			if (clazz != null) return false;
+			if (clazz != null)
+				return false;
 		} else {
 			if (clazz.getId() != id)
 				return false;
@@ -195,10 +284,12 @@ public class ClazzServiceImpl implements ClazzService {
 	public boolean isCodeUnique(Long id, String code) {
 		Optional<Clazz> op = Optional.ofNullable(repo.getClazzByCode(code));
 		Clazz clazz = op.orElse(null);
-		if (clazz == null) return true;
+		if (clazz == null)
+			return true;
 		boolean isCreatingNew = (id == null);
 		if (isCreatingNew) {
-			if (clazz != null) return false;
+			if (clazz != null)
+				return false;
 		} else {
 			if (clazz.getId() != id)
 				return false;
