@@ -9,11 +9,6 @@
 			<h2>Manage Classroom of class [[${classname}]]</h2>
 		</div>
 
-		<div>
-			<input type="button" class="btn btn-primary" id="gobackButton"
-				th:link="${linkGoBack}" value="Go back" />
-		</div>
-
 		<div th:object="${clazz}">
 			<div class="row">
 				<div class="col">
@@ -59,7 +54,8 @@
 				</div>
 				<div class="text-center">
 					<input type="submit" value="Save" class="btn btn-primary m-3" />
-					<input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel" />
+					<input type="button" value="Cancel" class="btn btn-secondary" th:link="${linkGoBack}" 
+						id="buttonCancel" />
 				</div>
 		</form>
 			</div>
@@ -95,10 +91,22 @@
 				$("#confirmModal").modal();
 			});
 			
-			$("#gobackButton").on("click", function() {
+			$("#buttonCancel").on("click", function() {
 				let linkb = $(this).attr("link");
 				let linkOrg = "[[@{/}]]" + linkb;
 				window.location = linkOrg;
+			});
+			
+			$("#keyword").on("input", function() {
+				let keyword = $("#keyword").val().toLowerCase();
+				$("#table-classroom label").filter(function() {
+					let a = $(this).text().toLowerCase();
+					if (a.search(keyword) == -1) {
+						$(this).hide();
+					} else {
+						$(this).show();
+					}
+				});
 			});
 		});
 	
@@ -114,15 +122,6 @@
 				$("#"+id).removeClass("btn-light").addClass("btn-success active");
 			}
 		}
-		
-		$("#keyword").on("input", function() {
-			let keyword = $("#keyword").val();
-			if (keyword) {
-				$("#table-classroom").find("label:not(:contains('"+keyword+"'))").hide();
-			} else {
-				$("#table-classroom").find("label").show();
-			}
-		});
 	</script>
 </body>
 </html>

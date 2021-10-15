@@ -31,7 +31,7 @@
 					</div>
 				</div>
 				<div class="form-group row">
-					<label class="col-sm-4 col-form-label">Levels</label>
+					<label class="col-sm-4 col-form-label">Grade</label>
 					<div class="col-sm-8">
 						<select class="form-control" th:field="*{grade}">
 						    <option th:each="grade:${listGrades}" th:value="${grade.id}" 
@@ -43,8 +43,8 @@
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Classrooms</label>
 					<div class="col-sm-8">
-						<div class="ex3 form-control col mx-auto">
-							<input type="text" class="form-control" placeholder="Search room" />
+						<div class="ex3 form-control col mx-auto" id="table-classroom">
+							<input type="text" id="searchNameClassroom" class="form-control" placeholder="Search room name" />
 							<a th:each="classroom : ${clazz.classrooms}" class="btn btn-light m-1" 
 								th:href="@{${'/classrooms/edit/' + classroom.id}}">
 								[[${classroom.name}]]
@@ -57,7 +57,8 @@
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Teacher</label>
 					<div class="col-sm-8">
-						<div class="ex3 form-control col mx-auto">
+						<div class="ex3 form-control col mx-auto" id="table-teacher">
+							<input type="text" id="searchNameTeacher" class="form-control" placeholder="Search teacher name" />
 							<a th:each="user : ${listTeacher}" class="btn btn-light m-1" 
 								th:href="@{${'/users/edit/' + user.id}}">[[${user.id}]] </a>
 						</div>
@@ -68,10 +69,13 @@
 				<div class="form-group row">
 					<label class="col-sm-4 col-form-label">Student</label>
 					<div class="col-sm-8">
-						<div class="ex3 form-control col mx-auto">
-							<a th:each="classroom : ${clazz.classrooms}" class="btn btn-light m-1" href="">[[${classroom.name}]] </a>
+						<div class="ex3 form-control col mx-auto" id="table-student">
+							<input type="text" id="searchNameStudent" class="form-control" placeholder="Search student name" />
+							<a th:each="user : ${listStudent}" class="btn btn-light m-1" 
+								th:href="@{${'/users/edit/' + user.id}}">[[${user.id}]] </a>
 						</div>
-						<a type="button" class="btn btn-primary col" href="">Edit</a>
+						<a type="button" class="btn btn-primary col" 
+							th:href="@{${'/' + link + '/edit/' + clazz.id + '/student'}}">Edit</a>
 					</div>
 				</div>
 				<div class="text-center">
@@ -167,6 +171,40 @@
 	            return ele !== value && ele !== $.trim(value); 
 	        });
 	    }
+		
+		$("#searchNameClassroom").on("input", function() {
+			let keyword = $("#searchNameClassroom").val().toLowerCase();
+			$("#table-classroom a").filter(function() {
+				let a = $(this).text().toLowerCase();
+				if (a.search(keyword) == -1) {
+					$(this).hide();
+				} else {
+					$(this).show();
+				}
+			});
+		});
+		$("#searchNameTeacher").on("input", function() {
+			let keyword = $("#searchNameTeacher").val().toLowerCase();
+			$("#table-teacher a").filter(function() {
+				let a = $(this).text().toLowerCase();
+				if (a.search(keyword) == -1) {
+					$(this).hide();
+				} else {
+					$(this).show();
+				}
+			});
+		});
+		$("#searchNameStudent").on("input", function() {
+			let keyword = $("#searchNameStudent").val().toLowerCase();
+			$("#table-student a").filter(function() {
+				let a = $(this).text().toLowerCase();
+				if (a.search(keyword) == -1) {
+					$(this).hide();
+				} else {
+					$(this).show();
+				}
+			});
+		});
 	</script>
 	<script type="text/javascript" th:src="@{/js/common_form.js}"></script>
 </body>

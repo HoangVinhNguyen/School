@@ -13,6 +13,7 @@ public class SystemConstant {
 	 */
 	public final static String ASC = "asc";
 	public final static String DESC = "desc";
+	public final static String ID = "id";
 	public final static String FIRST_NAME = "firstName";
 	public final static String LAST_NAME = "lastName";
 	public final static String CURRENT_PAGE = "currentPage";
@@ -64,6 +65,7 @@ public class SystemConstant {
 	public final static String TITLE_EDIT_CLAZZ = "Edit Class ID ";
 	public final static String TITLE_EDIT_CLAZZ_CLASSROOM = "Edit Classroom for Class ID ";
 	public final static String TITLE_EDIT_CLAZZ_TEACHER = "Edit Teacher for Class ID ";
+	public final static String TITLE_EDIT_CLAZZ_STUDENT = "Edit Student for Class ID ";
 	
 	public final static String TITLE_CLASSROOM = "Classroom - School Admin";
 	public final static String TITLE_CREATE_NEW_CLASSROOM = "Create New Classroom";

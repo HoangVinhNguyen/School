@@ -37,4 +37,10 @@ public class UserRestController {
 		UserDto user = service.getByIdTeacherRest(id);
 		return user;
 	}
+	
+	@PostMapping("/users/get_user_student")
+	public UserDto getStudentById(@Param("id") Long id) throws EntityNotFoundException {
+		UserDto user = service.getByIdStudentRest(id);
+		return user;
+	}
 }

@@ -19,12 +19,15 @@ public interface ClazzService {
 
 	public Page<Clazz> listByPage(int pageNum, String sortField, String sortDir, String keyword);
 	public Page<User> listByPageTeacher(Long id, int pageNum, String sortField, String sortDir, String keyword);
+	public Page<User> listByPageStudent(Long id, int pageNum, String sortField, String sortDir, String keyword);
 
 	public Clazz save(Clazz clazz);
 	public Clazz saveClassroom(Clazz clazz);
 	
 	public Clazz addTeacher(Long idClazz, Long idTeacher);
 	public Clazz deleteTeacher(Long idClazz, Long idTeacher);
+	public Clazz addStudent(Long idClazz, Long idStudent);
+	public Clazz deleteStudent(Long idClazz, Long idStudent);
 	
 	public UserDto addUserToClass(Long id, String email);
 	public UserDto addTeacherToClass(Long id, String email);

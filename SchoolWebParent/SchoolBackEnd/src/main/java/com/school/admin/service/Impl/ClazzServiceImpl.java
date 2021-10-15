@@ -66,10 +66,10 @@ public class ClazzServiceImpl implements ClazzService {
 
 	@Override
 	public Page<User> listByPageTeacher(Long id, int pageNum, String sortField, String sortDir, String keyword) {
-		Sort sort = Sort.by(sortField);
+		Sort sort = Sort.by((new StringBuilder("u.").append(sortField)).toString());
 		sort = sortDir.equals(SystemConstant.ASC) ? sort.ascending() : sort.descending();
+		//sort = Sort.sort(User.class);
 		Pageable pageable = PageRequest.of(pageNum - 1, ClazzService.CLAZZ_PER_PAGE, sort);
-
 		if (keyword != null) {
 			Optional<Page<User>> list = Optional.ofNullable(repo.findAllTeacher(id, keyword, pageable));
 			if (list.isPresent()) {
@@ -78,6 +78,22 @@ public class ClazzServiceImpl implements ClazzService {
 		}
 
 		return repo.findAllTeacher(id, pageable);
+	}
+	
+	@Override
+	public Page<User> listByPageStudent(Long id, int pageNum, String sortField, String sortDir, String keyword) {
+		Sort sort = Sort.by((new StringBuilder("u.").append(sortField)).toString());
+		sort = sortDir.equals(SystemConstant.ASC) ? sort.ascending() : sort.descending();
+		//sort = Sort.sort(User.class);
+		Pageable pageable = PageRequest.of(pageNum - 1, ClazzService.CLAZZ_PER_PAGE, sort);
+		if (keyword != null) {
+			Optional<Page<User>> list = Optional.ofNullable(repo.findAllStudent(id, keyword, pageable));
+			if (list.isPresent()) {
+				return list.get();
+			}
+		}
+		
+		return repo.findAllStudent(id, pageable);
 	}
 
 	@Override
@@ -91,10 +107,13 @@ public class ClazzServiceImpl implements ClazzService {
 				Optional<Clazz> opExist = repo.findById(clazz.getId());
 				if (opExist.isPresent()) {
 					Clazz exsting = opExist.get();
-					clazz.setCreatedDate(exsting.getCreatedDate());
-					clazz.setCreatedBy(exsting.getCreatedBy());
-					clazz.setModifiedDate(dateNow);
-					clazz.setModifiedBy(adminControl.toString());
+					exsting.setName(clazz.getName());
+					exsting.setCode(clazz.getCode());
+					exsting.setDescription(clazz.getDescription());
+					exsting.setGrade(clazz.getGrade());
+					exsting.setModifiedDate(dateNow);
+					exsting.setModifiedBy(adminControl.toString());
+					return repo.save(exsting);
 				} else
 					return null;
 			} else {
@@ -161,6 +180,52 @@ public class ClazzServiceImpl implements ClazzService {
 			if (isUpdating) {
 				Optional<Clazz> opExist = repo.findById(idClazz);
 				Optional<User> opUser = Optional.ofNullable(userService.getById(idTeacher));
+				if (opExist.isPresent() && opUser.isPresent()) {
+					Clazz exsting = opExist.get();
+					exsting.setModifiedDate(dateNow);
+					exsting.setModifiedBy(adminControl.toString());
+					exsting.getUsers().remove(opUser.get());
+					return repo.save(exsting);
+				} else
+					return null;
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public Clazz addStudent(Long idClazz, Long idStudent) {
+		boolean isUpdating = (idClazz != null && idStudent!= null);
+		LocalDateTime dateNow = LocalDateTime.now();
+		Optional<Authentication> auth = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication());
+		if (auth.isPresent() && idClazz != null) {
+			StringBuilder adminControl = new StringBuilder(auth.get().getName());
+			if (isUpdating) {
+				Optional<Clazz> opExist = repo.findById(idClazz);
+				Optional<User> opUser = Optional.ofNullable(userService.getById(idStudent));
+				if (opExist.isPresent() && opUser.isPresent()) {
+					Clazz exsting = opExist.get();
+					exsting.setModifiedDate(dateNow);
+					exsting.setModifiedBy(adminControl.toString());
+					exsting.addUser(opUser.get());
+					return repo.save(exsting);
+				} else
+					return null;
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public Clazz deleteStudent(Long idClazz, Long idStudent) {
+		boolean isUpdating = (idClazz != null && idStudent!= null);
+		LocalDateTime dateNow = LocalDateTime.now();
+		Optional<Authentication> auth = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication());
+		if (auth.isPresent() && idClazz != null) {
+			StringBuilder adminControl = new StringBuilder(auth.get().getName());
+			if (isUpdating) {
+				Optional<Clazz> opExist = repo.findById(idClazz);
+				Optional<User> opUser = Optional.ofNullable(userService.getById(idStudent));
 				if (opExist.isPresent() && opUser.isPresent()) {
 					Clazz exsting = opExist.get();
 					exsting.setModifiedDate(dateNow);

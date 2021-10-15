@@ -54,9 +54,6 @@
 						<td th:if="${not #lists.isEmpty(clazz.classrooms)}">[[${clazz.classrooms}]]</td>
 						<td th:if="${#lists.isEmpty(clazz.classrooms)}"></td>
 						<td>
-							<a class="fas fa-info-circle fa-2x icon-green" id="goToDetails"
-								th:href="@{'/' + ${link} + '/detail/' + ${clazz.id}}" 
-								title="Info this clazz"></a> &nbsp;
 							<a class="fas fa-edit fa-2x icon-green" th:href="@{'/' + ${link} + '/edit/' + ${clazz.id}}" 
 								title="Edit this clazz"></a> &nbsp;
 							<a class="fas fa-trash fa-2x icon-dark link-delete" th:href="@{'/' + ${link} + '/delete/' + ${clazz.id}}"
@@ -74,9 +71,6 @@
 					<div>[[${clazz.description}]]</div>
 					<div>[[${clazz.grade}]]</div>
 					<div class="mt-2">
-						<a class="fas fa-info-circle fa-2x icon-green" id="goToDetails_less"
-									th:href="@{'/' + ${link} + '/detail/' + ${clazz.id}}" 
-									title="Info this clazz"></a> &nbsp;
 						<a class="fas fa-edit fa-2x icon-green" th:href="@{'/' + ${link} + '/edit/' + ${clazz.id}}" 
 									title="Edit this clazz"></a>
 								&nbsp;

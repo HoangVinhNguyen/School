@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.school.admin.exception.EntityNotFoundException;
 import com.school.admin.repository.RoleRepository;
 import com.school.admin.repository.UserRepository;
+import com.school.admin.service.ClazzService;
 import com.school.admin.service.UserService;
 import com.school.admin.util.FileUploadUtil;
 import com.school.common.common.SystemConstant;
@@ -77,6 +78,22 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		return userRepo.findAll(pageable);
+	}
+	
+	@Override
+	public Page<User> listByPageTeacher(Long id, int pageNum, String sortField, String sortDir, String keyword) {
+		Sort sort = Sort.by(sortField);
+		sort = sortDir.equals(SystemConstant.ASC) ? sort.ascending() : sort.descending();
+		Pageable pageable = PageRequest.of(pageNum - 1, ClazzService.CLAZZ_PER_PAGE, sort);
+
+		if (keyword != null) {
+			Optional<Page<User>> list = Optional.ofNullable(userRepo.findAllTeacher(id, keyword, pageable));
+			if (list.isPresent()) {
+				return list.get();
+			}
+		}
+
+		return userRepo.findAllTeacher(id, pageable);
 	}
 	
 	@Override
@@ -194,6 +211,18 @@ public class UserServiceImpl implements UserService {
 	public UserDto getByIdTeacherRest(Long id) throws EntityNotFoundException {
 		try {
 			Optional<User> op = Optional.ofNullable(userRepo.findByIdTeacherRest(id));
+			return new UserDto(op.orElse(null));
+		} catch (NoSuchElementException e) {
+			StringBuilder msg = new StringBuilder();
+			msg.append(SystemConstant.NOT_FOUND_ID).append(id);
+			throw new EntityNotFoundException(msg.toString());
+		}
+	}
+	
+	@Override
+	public UserDto getByIdStudentRest(Long id) throws EntityNotFoundException {
+		try {
+			Optional<User> op = Optional.ofNullable(userRepo.findByIdStudentRest(id));
 			return new UserDto(op.orElse(null));
 		} catch (NoSuchElementException e) {
 			StringBuilder msg = new StringBuilder();

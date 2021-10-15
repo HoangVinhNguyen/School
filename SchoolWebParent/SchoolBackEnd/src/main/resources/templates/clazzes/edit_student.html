@@ -6,7 +6,7 @@
 	<div class="container-fluid">
 		<div th:replace="navigation :: menu"></div>
 		<div>
-			<h2>Manage Teacher of class [[${classname}]]</h2>
+			<h2>Manage Student of class [[${classname}]]</h2>
 		</div>
 
 		<div>
@@ -30,16 +30,16 @@
 		</div>
 		
 		
-		
 		<div class="full-details">
 			<form class="row border border-secondary rounded p-3 m-3 justify-content-center"
-				th:action="@{'/' + ${link} + '/add-teacher'}" method="post">
+					th:action="@{'/' + ${link} + '/add-student'}" method="post">
+				
 				<div class="col-sm-5">
 					<div class="form-group form-inline row">
-						<label class="col-sm-3 col-form-label">ID Teacher</label>
+						<label class="col-sm-3 col-form-label">ID Student</label>
 						<div class="col-sm-9">
 							<input type="hidden" th:field="${clazz.id}"/>
-							<input type="search" id="id-user" name="idTeacher" class="form-control" />
+							<input type="search" id="id-user" name="idStudent" class="form-control" />
 							<input type="button" id="button-check-user" 
 									class="form-control btn btn-primary" value="Check"/>
 						</div>
@@ -47,13 +47,13 @@
 					<div class="form-group form-inline row">
 						<label class="col-sm-3 col-form-label">Full Name</label>
 						<div class="col-sm-9">
-							<input type="text" id="fullname" class="form-control" disabled/>
+							<input type="search" id="fullname" class="form-control" disabled/>
 						</div>
 					</div>
 					<div class="form-group form-inline row">
 						<label class="col-sm-3 col-form-label">Email</label>
 						<div class="col-sm-9">
-							<input type="text" id="email" class="form-control" disabled/>
+							<input type="search" id="email" class="form-control" disabled/>
 						</div>
 					</div>
 				</div>
@@ -61,19 +61,19 @@
 					<div class="form-group form-inline row">
 						<label class="col-sm-3 col-form-label">DoB</label>
 						<div class="col-sm-9">
-							<input type="text" id="dob" class="form-control" disabled/>
+							<input type="search" id="dob" class="form-control" disabled/>
 						</div>
 					</div>
 					<div class="form-group form-inline row">
 						<label class="col-sm-3 col-form-label">Phone</label>
 						<div class="col-sm-9">
-							<input type="text" id="phone" class="form-control" disabled/>
+							<input type="search" id="phone" class="form-control" disabled/>
 						</div>
 					</div>
 					<div class="form-group form-inline row">
 						<label class="col-sm-3 col-form-label">Address</label>
 						<div class="col-sm-9">
-							<input type="text" id="address" class="form-control" disabled/>
+							<input type="search" id="address" class="form-control" disabled/>
 						</div>
 					</div>
 				</div>
@@ -86,17 +86,17 @@
 				<thead class="thead-dark">
 					<tr>
 						<th th:replace="fragments :: column_link(
-							${link} + '/edit/' + ${clazz.id} + '/teacher', 'id', 'ID', 'none')"></th>
+							${link} + '/edit/' + ${clazz.id} + '/student', 'id', 'ID', 'none')"></th>
 						<th th:replace="fragments :: column_link(
-							${link} + '/edit/' + ${clazz.id} + '/teacher', 'firstName', 'Full Name', 'none')"></th>
+							${link} + '/edit/' + ${clazz.id} + '/student', 'firstName', 'Full Name', 'none')"></th>
 						<th th:replace="fragments :: column_link(
-							${link} + '/edit/' + ${clazz.id} + '/teacher', 'email', 'Email', 'none')"></th>
+							${link} + '/edit/' + ${clazz.id} + '/student', 'email', 'Email', 'none')"></th>
 						<th>Courses</th>
 						<th></th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="user : ${listTeachers}">
+					<tr th:each="user : ${listStudents}">
 						<td>[[${user.id}]]</td>
 						<td>[[${user.fullName}]]</td>
 						<td>[[${user.email}]]</td>
@@ -105,27 +105,26 @@
 							<a class="fas fa-edit fa-2x icon-green" th:href="@{'/users' + '/edit/' + ${user.id}}" 
 								title="Edit this user"></a> &nbsp;
 							<a class="fas fa-trash fa-2x icon-dark link-delete" 
-								th:href="@{'/' + ${link} + '/' + ${clazz.id} + '/delete-teacher/' + ${user.id}}"
+								th:href="@{'/' + ${link} + '/' + ${clazz.id} + '/delete-student/' + ${user.id}}"
 								th:userId="${user.id}" title="Delete this user"></a>
 						</td>
 					</tr>
 				</tbody>
 			</table>
-		</div>
-
+		</div> <!-- full detail  -->
+		
 		<div class="less-details">
 			<div id="data_less_teacher">
-				<div th:each="user, start : ${listTeachers}" class="row m-1 p-3 border border-secondary rounded" >
+				<div th:each="user, start : ${listStudents}" class="row m-1 p-3 border border-secondary rounded" >
 					<div class="col-8">
 						<div>[[@{${user.id}}]]</div>
 						<div>[[@{${user.fullName}}]]</div>
 						<div>[[@{${user.email}}]]</div>
-						<div>[[@{${user.courses}}]]</div>
 						<div class="mt-2">
 							<a class="fas fa-edit fa-2x icon-green" th:href="@{'/users' + '/edit/' + ${user.id}}" 
 								title="Edit this user"></a> &nbsp;
 							<a class="fas fa-trash fa-2x icon-dark link-delete" 
-								th:href="@{'/' + ${link} + '/' + ${clazz.id} + '/delete-teacher/' + ${user.id}}"
+								th:href="@{'/' + ${link} + '/' + ${clazz.id} + '/delete-student/' + ${user.id}}"
 								th:userId="${user.id}" title="Delete this user"></a>
 						</div>
 					</div>
@@ -133,16 +132,16 @@
 			</div>
 			<div>
 				<form class="row m-1 p-3 border border-secondary rounded justify-content-center"
-					th:action="@{'/' + ${link} + '/add-teacher'}" method="post">
-					<div class="input-group">
+					th:action="@{'/' + ${link} + '/add-student'}" method="post">
+					<div class="input-group m-1">
 						<input type="hidden" th:field="${clazz.id}" /> <input
-							type="search" id="id-user-less" name="idTeacher" class="form-control" /> 
+							type="search" id="id-user-less" name="idStudent" class="form-control" /> 
 						<div class="input-group-append">
 							<input type="button" id="button-check-user-less"
 								class="form-control btn btn-primary" value="Check" />
 						</div>
 					</div>
-						<div class="input-group">
+						<div class="input-group m-1">
 							<input type="text" id="fullname-less" class="form-control" disabled />
 							<input type="text" id="email-less" class="form-control" disabled />
 							<input type="submit" id="button-add-user-less"
@@ -152,12 +151,12 @@
 			</div>
 		</div>
 		<!-- less detail -->
-
+		
 		<div th:if="${totalItems > 0}" class="text-center m-1">
-			<span>Showing Teacher # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
+			<span>Showing Student # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
 		</div>
 		<div th:unless="${totalItems > 0}" class="text-center m-1">
-			<span>No Teacher found</span>
+			<span>No Student found</span>
 		</div>
 
 		<div th:if="${totalPages > 1}">
@@ -235,7 +234,7 @@
 				let id = $("#id-user").val();
 				let csrfValue = $("input[name='_csrf']").val();
 				let params = {id: id, _csrf: csrfValue};
-				let url = "[[@{'/users/get_user_teacher'}]]";
+				let url = "[[@{'/users/get_user_student'}]]";
 				
 				$.post(url, params, function(respone) {
 					if (respone !== "") {
@@ -255,7 +254,7 @@
 				let id = $("#id-user-less").val();
 				let csrfValue = $("input[name='_csrf']").val();
 				let params = {id: id, _csrf: csrfValue};
-				let url = "[[@{'/users/get_user_teacher'}]]";
+				let url = "[[@{'/users/get_user_student'}]]";
 				
 				$.post(url, params, function(respone) {
 					if (respone !== "") {
@@ -274,7 +273,7 @@
 				let linkOrg = "[[@{/}]]" + linkb;
 				window.location = linkOrg;
 			});
-			
+
 		});
 		
 	
@@ -296,6 +295,10 @@
 			$("#mdText").text(message);
 			$("#modalDialog").modal();
 		}
+		
+		
+		
+		
 	</script>
 </body>
 </html>

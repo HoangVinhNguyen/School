@@ -20,6 +20,7 @@ public interface UserService {
 	public List<Role> listRoles();
 	
 	public Page<User> listByPage(int pageNum, String sortField, String sortDir, String keyword);
+	public Page<User> listByPageTeacher(Long id, int pageNum, String sortField, String sortDir, String keyword);
 
 	public User save(User user);
 
@@ -32,6 +33,7 @@ public interface UserService {
 	public UserDto getByEmailRest(String email);
 	public UserDto getByIdRest(Long id) throws EntityNotFoundException;
 	public UserDto getByIdTeacherRest(Long id) throws EntityNotFoundException;
+	public UserDto getByIdStudentRest(Long id) throws EntityNotFoundException;
 	
 	public User get(Long id) throws EntityNotFoundException;
 

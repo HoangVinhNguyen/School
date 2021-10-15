@@ -26,6 +26,8 @@ public interface UserRepository extends JpaRepository<User, Long>{
 
 	@Query("SELECT u FROM User u JOIN u.roles r WHERE u.id = :id AND u.isDeleted = FALSE AND r.name LIKE 'Teacher'")
 	public User findByIdTeacherRest(Long id);
+	@Query("SELECT u FROM User u JOIN u.roles r WHERE u.id = :id AND u.isDeleted = FALSE AND r.name LIKE 'Student'")
+	public User findByIdStudentRest(Long id);
 
 	@Query("SELECT u FROM User u WHERE u.isDeleted = FALSE")
 	public List<User> findAllUser();
@@ -61,5 +63,11 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	@Modifying
 	public void deleteById(Long id);
 
+	
+	@Query("SELECT u FROM User u LEFT JOIN u.roles r JOIN u.clazzes c WHERE r.name LIKE 'Teacher' AND c.id=?1 AND c.isDeleted = FALSE AND u.isDeleted = FALSE AND CONCAT(u.firstName, ' ', u.email) LIKE %?2%")
+	public Page<User> findAllTeacher(Long id, String keyword, Pageable pageable);
+	
+	@Query("SELECT u FROM User u LEFT JOIN u.roles r JOIN u.clazzes c WHERE r.name LIKE 'Teacher' AND c.id=?1 AND c.isDeleted = FALSE AND u.isDeleted = FALSE")
+	public Page<User> findAllTeacher(Long id, Pageable pageable);
 
 }
