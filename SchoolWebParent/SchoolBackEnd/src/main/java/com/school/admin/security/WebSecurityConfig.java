@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.school.common.common.SystemConstant;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -42,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		  .antMatchers("/users/**").hasAuthority("Admin").anyRequest().authenticated()
+		  .antMatchers("/users/**").hasAuthority(SystemConstant.ADMIN).anyRequest().authenticated()
 		  .and()
 		  	.formLogin()
 		  	.loginPage("/login")

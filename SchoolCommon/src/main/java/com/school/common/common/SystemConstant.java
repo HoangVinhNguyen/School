@@ -7,6 +7,11 @@ public class SystemConstant {
 	public static final String FORWARD_SLASH_2_START = "/**";
 	public static final String FORWARD_SLASH_FILE = "file:/";
 	public static final String PATH_IMG_DEFAULT = "/images/default-user.png";
+	public static final String EXTENSION_XLSX = "xlsx";
+	public static final String DOMAIN_EMAIL = "@school.com";
+	public static final String DOMAIN_EMAIL_STUDENT = "@student.school.com";
+	public static final String DEFAULT_PASSWORD = "12345678";
+	
 
 	/*
 	 * For paging.
@@ -34,8 +39,12 @@ public class SystemConstant {
 	/*
 	 * For Roles.
 	 */
-	public final static String TEACHER = "teacher";
-	public final static String STUDENT = "student";
+	public final static String ADMIN = "ROLE_ADMIN";
+	public final static String TEACHER = "ROLE_TEACHER";
+	public final static String STUDENT = "ROLE_STUDENT";
+	public final static String TEACHER_SELECT = "TEACHER";
+	public final static String STUDENT_SELECT = "STUDENT";
+	public final static String ALL_SELECT = "All";
 	
 
 	/*
@@ -47,6 +56,8 @@ public class SystemConstant {
 	public final static String TITLE_EDIT_USER = "Edit User ID ";
 	public final static String TITLE_USERS = "User - School Admin";
 	public final static String TITLE_ACCOUNT_DETAILS = "Your Account Details";
+
+	public final static String TITLE_CREATE_NEW_LIST_USER = "Create New List User";
 
 	public final static String TITLE_LOGIN = "Login - School Admin";
 	public final static String TITLE_ERROR = "Error - School Admin";
@@ -78,6 +89,8 @@ public class SystemConstant {
 	public final static String NOT_FOUND_ID = "Could not find any with ID ";
 	public final static String ATTR_MESSAGE = "message";
 	public final static String ATTR_CONTENT_USER_SAVE_SUCCESS = "The User have been saved successfully";
+	public final static String ATTR_CONTENT_TEACHER_GENERATE_SUCCESS = "The list teacher have been generated successfully";
+	public final static String ATTR_CONTENT_TEACHER_GENERATE_ERROR = "The list teacher have been generated error";
 	public final static String ATTR_CONTENT_TEACHER_SAVE_SUCCESS = "The Teacher have been saved successfully";
 	public final static String ATTR_CONTENT_LEVEL_SAVE_SUCCESS = "The Level have been saved successfully";
 	public final static String ATTR_CONTENT_GRADE_SAVE_SUCCESS = "The Grade have been saved successfully";
@@ -146,4 +159,10 @@ public class SystemConstant {
 	public final static String TYPE_PDF = "application/pdf";
 	public final static String SUFFIX_PDF = ".pdf";
 
+	
+	/*
+	 * For Token.
+	 */
+	public final static String TOKEN_PREFIX = "Bearer";
+	
 }

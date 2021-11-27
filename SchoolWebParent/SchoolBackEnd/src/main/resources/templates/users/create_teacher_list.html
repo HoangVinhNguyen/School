@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head(${pageTitle}, ${jsFiles}, ${cssFiles})"></head>
+<body>
+	<div class="container-fluid">
+		<div th:replace="navigation :: menu"></div>
+		<div>
+			<h2>Manage Users | [[${pageTitle}]]</h2>
+		</div>
+		<form th:action="@{'/' + ${link} + '/save'}" method="post" enctype="multipart/form-data"
+			style="max-width: 700px; margin: 0 auto" th:object="${user}" onsubmit="return checkEmailUnique(this);">
+		
+			<div class="border border-secondary rounded p-3">
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">File</label>
+					<div class="col-sm-8">
+						<input type="file" id="fileImage" name="fileListTeacher" 
+							accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+							class="mb-2"/>
+					</div>
+				</div>
+				<button class="btn btn-primary">Generate</button>
+			</div>
+		</form>
+		
+		
+		<div class="full-details">
+			<table class="table table-bordered table-striped table-hover table-responsive-xl">
+				<thead class="thead-dark">
+					<tr>
+						<th class="hideable-column">
+							<th th:replace="fragments :: column_link(${link}, 'id', 'User ID', 'tag')"></th>
+						</th>
+						<th class="hideable-column">
+							<th th:replace="fragments :: column_link(${link}, 'email', 'E-mail', 'tag')"></th>
+						</th>
+						<th th:replace="fragments :: column_link(${link}, 'firstName', 'First Name', 'none')"></th>
+						<th th:replace="fragments :: column_link(${link}, 'lastName', 'Last Name', 'none')"></th>
+						<th>Phone Number</th>
+						<th>Roles</th>
+						<th th:replace="fragments :: column_link(${link}, 'enabled', 'Enabled', 'none')"></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="user : ${listUsers}">
+						<td class="hideable-column">[[${user.id}]]</td>
+						<td>
+							<span th:if="${user.photos == null}" class="fas fa-portrait fa-3x icon-silver"></span>
+							<img th:if="${user.photos != null}" th:src="@{${user.getPhotosImagePath}}" 
+								style="width: 100px"/>
+						</td>
+						<td class="hideable-column">[[${user.email}]]</td>
+						<td>[[${user.firstName}]]</td>
+						<td>[[${user.lastName}]]</td>
+						<td>[[${user.phone}]]</td>
+						<td>[[${user.roles}]]</td>
+						<td>
+							<a th:if="${user.enabled == true}" class="fas fa-check-circle fa-2x icon-green" 
+								th:href="@{'/' + ${link} + '/' + ${user.id} + '/enabled/false'}" title="Disable the user"></a>
+							<a th:if="${user.enabled == false}" class="fas fa-circle fa-2x icon-dark" 
+								th:href="@{'/' + ${link} + '/' + ${user.id} + '/enabled/true'}" title="Enable the user"></a>
+						</td>
+						<td>
+							<a class="fas fa-edit fa-2x icon-green" th:href="@{'/' + ${link} + '/edit/' + ${user.id}}" 
+								title="Edit this user"></a> &nbsp;
+							<a class="fas fa-trash fa-2x icon-dark link-delete" th:href="@{'/' + ${link} + '/delete/' + ${user.id}}"
+								th:userId="${user.id}" title="Delete this user"></a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		
+	</div>
+</body>
+</html>

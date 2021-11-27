@@ -79,7 +79,7 @@ public class GradeServiceImpl implements GradeService {
 
 	@Override
 	public boolean isNameUnique(Long id, String name) {
-		Optional<Grade> op = Optional.ofNullable(repo.getGradeByName(name));
+		Optional<Grade> op = Optional.ofNullable(repo.findGradeByName(name));
 		Grade grade = op.orElse(null);
 		if (grade == null) return true;
 		boolean isCreatingNew = (id == null);
@@ -94,7 +94,7 @@ public class GradeServiceImpl implements GradeService {
 
 	@Override
 	public boolean isCodeUnique(Long id, Integer code) {
-		Optional<Grade> op = Optional.ofNullable(repo.getGradeByCode(code));
+		Optional<Grade> op = Optional.ofNullable(repo.findGradeByCode(code));
 		Grade grade = op.orElse(null);
 		if (grade == null) return true;
 		boolean isCreatingNew = (id == null);
@@ -138,6 +138,18 @@ public class GradeServiceImpl implements GradeService {
 				exsting.setModifiedBy(adminControl.toString());
 				repo.deleteById(id);
 			}
+		}
+	}
+
+	@Override
+	public Grade getByCode(int code) throws EntityNotFoundException {
+		try {
+			Optional<Grade> op = Optional.ofNullable(repo.findGradeByCode(Integer.valueOf(code)));
+			return op.orElse(null);
+		} catch (NoSuchElementException e) {
+			StringBuilder msg = new StringBuilder();
+			msg.append(SystemConstant.NOT_FOUND_ID).append(code);
+			throw new EntityNotFoundException(msg.toString());
 		}
 	}
 	

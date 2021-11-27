@@ -15,14 +15,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.school.admin.exception.EntityNotFoundException;
 import com.school.admin.repository.ClazzRepository;
 import com.school.admin.service.ClazzService;
+import com.school.admin.service.GradeService;
 import com.school.admin.service.UserService;
 import com.school.common.common.SystemConstant;
 import com.school.common.dto.UserDto;
 import com.school.common.entity.Clazz;
+import com.school.common.entity.Grade;
 import com.school.common.entity.Role;
 import com.school.common.entity.User;
 
@@ -35,6 +38,9 @@ public class ClazzServiceImpl implements ClazzService {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private GradeService gradeService;
 
 	@Override
 	public List<Clazz> listAll() {
@@ -394,6 +400,38 @@ public class ClazzServiceImpl implements ClazzService {
 				repo.deleteById(id);
 			}
 		}
+	}
+
+	@Override
+	public boolean saveListClassFile(MultipartFile multipartFile, int numberOfClass, int grade) {
+		List<User> listStudent = userService.saveListStudentFile(multipartFile);
+		int sizeListStudent = listStudent.size();
+		int pointBreak = sizeListStudent / numberOfClass;
+		int studentMod = sizeListStudent - pointBreak * numberOfClass;
+		for (int i = 0; i < numberOfClass; i++) {
+			int addStudentMod = 0;
+			if (i == numberOfClass - 1) {
+				addStudentMod += studentMod;
+			}
+			Grade grd = new Grade();
+			try {
+				grd = gradeService.getByCode(grade);
+			} catch (EntityNotFoundException e) {
+				e.printStackTrace();
+			}
+			StringBuilder className = new StringBuilder();
+			className.append(grade).append("A").append(i+1);
+			Clazz clazz = new Clazz();
+			clazz.setName(className.toString());
+			clazz.setCode(className.toString().toLowerCase());
+			clazz.setGrade(grd);
+			clazz.setDescription("For class " + className);
+			for (int j = 0 + pointBreak * i; j < pointBreak * i + pointBreak + addStudentMod; j++) {
+				clazz.addUser(listStudent.get(j));
+			}
+			save(clazz);
+		}
+		return false;
 	}
 
 }

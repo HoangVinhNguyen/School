@@ -1,16 +1,10 @@
 package com.school.common.dto;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.persistence.Transient;
 
 import com.school.common.common.ResourceGet;
 import com.school.common.common.SystemConstant;
-import com.school.common.entity.Role;
 import com.school.common.entity.User;
 
 public class UserDto extends BaseDto {
@@ -19,15 +13,13 @@ public class UserDto extends BaseDto {
 
 	private String firstName;
 	private String lastName;
+	private String fullName;
 	private String email;
 	private String phone;
-	private String password;
 	private LocalDate dob;
 	private String address;
 	private String photos;
-	private boolean enabled;
-	private Set<RoleDto> roles = new HashSet<>();
-	private Set<Role> roless = new HashSet<>();
+	private float point;
 
 	public UserDto() {
 
@@ -38,7 +30,7 @@ public class UserDto extends BaseDto {
 		this.lastName = lastName;
 		this.email = email;
 	}
-	
+
 	public UserDto(User entity) {
 		Optional<User> op = Optional.ofNullable(entity);
 		if (op.isPresent()) {
@@ -48,7 +40,6 @@ public class UserDto extends BaseDto {
 			this.email = entity.getEmail();
 			this.dob = entity.getDob();
 			this.address = entity.getAddress();
-			this.enabled = entity.isEnabled();
 			this.phone = entity.getPhone();
 			this.photos = entity.getPhotos();
 //			this.roles = entity.getRoles().stream().map(RoleDto::new).collect(Collectors.toSet());
@@ -59,7 +50,6 @@ public class UserDto extends BaseDto {
 //			this.setModifiedDate(entity.getModifiedDate());
 		}
 	}
-	
 
 	public String getFirstName() {
 		return firstName;
@@ -93,14 +83,6 @@ public class UserDto extends BaseDto {
 		this.email = email;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public LocalDate getDob() {
 		return dob;
 	}
@@ -125,38 +107,22 @@ public class UserDto extends BaseDto {
 		this.photos = photos;
 	}
 
-	public boolean isEnabled() {
-		return enabled;
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
+	public String getFullName() {
+		StringBuilder fullname = new StringBuilder(getFirstName());
+		fullname.append(" ").append(getLastName());
+		return fullname.toString();
 	}
 
-	public Set<RoleDto> getRoles() {
-		return roles;
+	public float getPoint() {
+		return point;
 	}
 
-	public void setRoles(Set<RoleDto> roles) {
-		this.roles = roles;
-	}
-
-	public void addRole(RoleDto roleDto) {
-		Optional<RoleDto> roleOp = Optional.ofNullable(roleDto);
-		if (roleOp.isPresent()) {
-			RoleDto r = roleOp.get().clone();
-			this.roles.add(r);
-		}
-	}
-	
-	
-
-	public Set<Role> getRoless() {
-		return roless;
-	}
-
-	public void setRoless(Set<Role> roless) {
-		this.roless = roless;
+	public void setPoint(float point) {
+		this.point = point;
 	}
 
 	@Override
@@ -191,38 +157,17 @@ public class UserDto extends BaseDto {
 		return getImagePath.getUserImagePathWithId(this.getId(), this.getPhotos());
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder printUser = new StringBuilder();
-		printUser.append("[").append(getId()).append(", ").append(getEmail()).append(", ").append(getFirstName())
-				.append(", ").append(getLastName()).append(", ").append(isEnabled()).append("]");
-
-		return printUser.toString();
-	}
-
-	public String getFullName() {
-		StringBuilder fullname = new StringBuilder(getFirstName());
-		fullname.append(" ").append(getLastName());
-		return fullname.toString();
-	}
-
 	public UserDto clone() {
 		UserDto userDto = new UserDto();
 		userDto.setId(getId());
 		userDto.setDob(getDob());
 		userDto.setEmail(getEmail());
-		userDto.setEnabled(isEnabled());
 		userDto.setFirstName(getFirstName());
 		userDto.setLastName(getLastName());
 		userDto.setPhotos(getPhotos());
 		userDto.setAddress(getAddress());
 		userDto.setPhone(getPhone());
-		userDto.setRoles(getRoles());
-		userDto.setDeleted(this.isDeleted());
-		userDto.setCreatedBy(this.getCreatedBy());
-		userDto.setCreatedDate(this.getCreatedDate());
-		userDto.setModifiedBy(this.getModifiedBy());
-		userDto.setModifiedDate(this.getModifiedDate());
 		return userDto;
 	}
+
 }

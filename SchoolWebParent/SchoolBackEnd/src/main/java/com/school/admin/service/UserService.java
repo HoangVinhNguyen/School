@@ -3,6 +3,7 @@ package com.school.admin.service;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.school.admin.exception.EntityNotFoundException;
 import com.school.common.dto.UserDto;
@@ -19,8 +20,10 @@ public interface UserService {
 
 	public List<Role> listRoles();
 	
-	public Page<User> listByPage(int pageNum, String sortField, String sortDir, String keyword);
-	public Page<User> listByPageTeacher(Long id, int pageNum, String sortField, String sortDir, String keyword);
+	public Page<User> listByPage(int pageNum, String sortField, String sortDir, String keyword, String typeFilter);
+	public Page<User> listByPageAll(int pageNum, String sortField, String sortDir, String keyword);
+	public Page<User> listByPageTeacher(int pageNum, String sortField, String sortDir, String keyword);
+	public Page<User> listByPageStudent(int pageNum, String sortField, String sortDir, String keyword);
 
 	public User save(User user);
 
@@ -40,4 +43,14 @@ public interface UserService {
 	public void deleteUser(Long id) throws EntityNotFoundException;
 
 	public void updateUserEnableStatus(Long id, boolean enabled);
+	
+	public boolean saveListTeacherFile(MultipartFile file);
+	public List<User> saveListStudentFile(MultipartFile file);
+	
+	public List<User> getListTeacherByClass(Long classId);
+	public List<User> getListStudentByClass(Long classId);
+	public boolean saveCourseToStudentsByClass(Long classId);
+	public boolean saveCourseToStudentByClass(Long classId, Long studentId);
+	
+	public String getNamePrinciple();
 }

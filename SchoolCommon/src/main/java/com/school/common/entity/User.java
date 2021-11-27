@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,7 +25,7 @@ import com.school.common.dto.UserDto;
 public class User extends BaseEntity {
 
 	private static final long serialVersionUID = 6655451999701501635L;
-
+	
 	@Column(name = "first_name", length = 45, nullable = false)
 	private String firstName;
 
@@ -284,13 +283,10 @@ public class User extends BaseEntity {
 			user.firstName = u.getFirstName();
 			user.lastName = u.getLastName();
 			user.email = u.getEmail();
-			user.password = u.getPassword();
 			user.dob = u.getDob();
 			user.address = u.getAddress();
-			user.enabled = u.isEnabled();
 			user.phone = u.getPhone();
 			user.photos = u.getPhotos();
-			user.roles = u.getRoles().stream().map(Role::convertToRole).collect(Collectors.toSet());
 			return user;
 		}
 		return null;

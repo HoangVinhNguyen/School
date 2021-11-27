@@ -24,20 +24,20 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	@Query("SELECT u FROM User u WHERE u.id = :id AND u.isDeleted = FALSE")
 	public User findUserById(@Param("id") Long id);
 
-	@Query("SELECT u FROM User u JOIN u.roles r WHERE u.id = :id AND u.isDeleted = FALSE AND r.name LIKE 'Teacher'")
+	@Query("SELECT u FROM User u JOIN u.roles r WHERE u.id = :id AND u.isDeleted = FALSE AND r.name LIKE 'ROLE_TEACHER'")
 	public User findByIdTeacherRest(Long id);
-	@Query("SELECT u FROM User u JOIN u.roles r WHERE u.id = :id AND u.isDeleted = FALSE AND r.name LIKE 'Student'")
+	@Query("SELECT u FROM User u JOIN u.roles r WHERE u.id = :id AND u.isDeleted = FALSE AND r.name LIKE 'ROLE_STUDENT'")
 	public User findByIdStudentRest(Long id);
 
 	@Query("SELECT u FROM User u WHERE u.isDeleted = FALSE")
 	public List<User> findAllUser();
-	@Query("SELECT u FROM User u JOIN u.roles usr WHERE u.isDeleted = FALSE AND usr.name LIKE 'Teacher'")
+	@Query("SELECT u FROM User u JOIN u.roles usr WHERE u.isDeleted = FALSE AND usr.name LIKE 'ROLE_TEACHER'")
 	public List<User> findAllTeacher();
-	@Query("SELECT u FROM User u JOIN u.roles usr WHERE u.isDeleted = FALSE AND usr.name LIKE 'Teacher'")
+	@Query("SELECT u FROM User u JOIN u.roles usr WHERE u.isDeleted = FALSE AND usr.name LIKE 'ROLE_TEACHER'")
 	public List<User> findAllTeacher(Sort sort);
-	@Query("SELECT u FROM User u JOIN u.roles usr WHERE u.isDeleted = FALSE AND usr.name LIKE 'Student'")
+	@Query("SELECT u FROM User u JOIN u.roles usr WHERE u.isDeleted = FALSE AND usr.name LIKE 'ROLE_STUDENT'")
 	public List<User> findAllStudent();
-	@Query("SELECT u FROM User u JOIN u.roles usr WHERE u.isDeleted = FALSE AND usr.name LIKE 'Student'")
+	@Query("SELECT u FROM User u JOIN u.roles usr WHERE u.isDeleted = FALSE AND usr.name LIKE 'ROLE_STUDENT'")
 	public List<User> findAllStudent(Sort sort);
 	
 	@Query("SELECT u FROM User u WHERE u.isDeleted = FALSE")
@@ -64,10 +64,23 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	public void deleteById(Long id);
 
 	
-	@Query("SELECT u FROM User u LEFT JOIN u.roles r JOIN u.clazzes c WHERE r.name LIKE 'Teacher' AND c.id=?1 AND c.isDeleted = FALSE AND u.isDeleted = FALSE AND CONCAT(u.firstName, ' ', u.email) LIKE %?2%")
-	public Page<User> findAllTeacher(Long id, String keyword, Pageable pageable);
+	@Query("SELECT u FROM User u LEFT JOIN u.roles r WHERE r.name LIKE 'ROLE_TEACHER' AND u.isDeleted = FALSE AND CONCAT(u.id, ' ', u.email, ' ', u.firstName, ' ', u.lastName) LIKE %?1%")
+	public Page<User> findAllTeacher(String keyword, Pageable pageable);
+	@Query("SELECT u FROM User u LEFT JOIN u.roles r WHERE r.name LIKE 'ROLE_TEACHER' AND u.isDeleted = FALSE")
+	public Page<User> findAllTeacher(Pageable pageable);
 	
-	@Query("SELECT u FROM User u LEFT JOIN u.roles r JOIN u.clazzes c WHERE r.name LIKE 'Teacher' AND c.id=?1 AND c.isDeleted = FALSE AND u.isDeleted = FALSE")
-	public Page<User> findAllTeacher(Long id, Pageable pageable);
+	@Query("SELECT u FROM User u LEFT JOIN u.roles r WHERE r.name LIKE 'ROLE_STUDENT' AND u.isDeleted = FALSE AND CONCAT(u.id, ' ', u.email, ' ', u.firstName, ' ', u.lastName) LIKE %?1%")
+	public Page<User> findAllStudent(String keyword, Pageable pageable);
+	@Query("SELECT u FROM User u LEFT JOIN u.roles r WHERE r.name LIKE 'ROLE_STUDENT' AND u.isDeleted = FALSE")
+	public Page<User> findAllStudent(Pageable pageable);
+	
+	@Query("SELECT u FROM User u JOIN u.roles usr JOIN u.clazzes cl "
+			+ "WHERE u.isDeleted = FALSE AND usr.name LIKE 'ROLE_TEACHER' "
+			+ "AND cl.id = :idClass")
+	public List<User> findAllTeacherByClassId(@Param("idClass") Long idClass);
+	@Query("SELECT u FROM User u JOIN u.roles usr JOIN u.clazzes cl "
+			+ "WHERE u.isDeleted = FALSE AND usr.name LIKE 'ROLE_STUDENT' "
+			+ "AND cl.id = :idClass")
+	public List<User> findAllStudentByClassId(@Param("idClass") Long idClass);
 
 }

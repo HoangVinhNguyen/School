@@ -12,8 +12,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.school.common.dto.ClazzDto;
 
 @Entity
 @Table(name="class")
@@ -160,6 +162,19 @@ public class Clazz extends BaseEntity {
 	@Override
 	public String toString() {
 		return this.name;
+	}
+	
+	@Transient
+	public static Clazz convertToClazz(ClazzDto courseDto) {
+		Optional<ClazzDto> op = Optional.ofNullable(courseDto);
+		if (op.isPresent()) {
+			ClazzDto c = op.get();
+			Clazz clazz = new Clazz();
+			clazz.setId(c.getId());
+			clazz.name = c.getName();
+			return clazz;
+		}
+		return null;
 	}
 	
 }

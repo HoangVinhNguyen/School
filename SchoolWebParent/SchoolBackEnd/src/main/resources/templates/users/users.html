@@ -8,6 +8,8 @@
 		<div>
 			<h2>Manage Users</h2>
 			<a th:href="@{'/' + ${link} + '/new'}" class="fas fa-user-plus fa-2x icon-dark mr-2"></a>
+			<a data-target="#create-list-teacher-modal" data-toggle="modal" href="#create-list-teacher-modal" 
+				class="fas fa-file-medical fa-2x icon-dark mr-2"></a>
 			<a th:href="@{'/' + ${link} + '/export/csv'}" class="fas fa-file-csv fa-2x icon-dark mr-2"></a>
 			<a th:href="@{'/' + ${link} + '/export/excel'}" class="fas fa-file-excel fa-2x icon-dark mr-2"></a>
 			<a th:href="@{'/' + ${link} + '/export/pdf'}" class="fas fa-file-pdf fa-2x icon-dark mr-2"></a>
@@ -17,12 +19,18 @@
 			[[${message}]]
 		</div>
 		
-		<div>
-			<form th:action="@{'/' + ${link} + '/page/1'}" class="form-inline m-3">
+		<div class="row">
+			<form th:action="@{'/' + ${link} + '/page/1'}" class="col form-inline m-3">
 				<input type="hidden" name="sortField" th:value="${sortField}" />
 				<input type="hidden" name="sortDir" th:value="${sortDir}" />
 				Filter:&nbsp;
-				<input type="search" name="keyword" th:value="${keyword}" class="form-control" required />
+				&nbsp;&nbsp;
+				<input type="search" name="keyword" th:value="${keyword}" class="form-control" />
+				&nbsp;&nbsp;
+				<select class="form-control" id="type-filter" name="typeFilter">
+					<option th:each="typeFilter : ${listTypes}" th:text="${typeFilter}" 
+						th:selected="${listType == typeFilter}"></option>
+				</select>
 				&nbsp;&nbsp;
 				<button type="submit" value="Search" class="btn btn-primary">
 					<i class="fas fa-search"></i>
@@ -158,6 +166,45 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="modal fade text-center" id="create-list-teacher-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Create List Teacher From File</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+					
+						<form th:action="@{'/' + ${link} + '/generate-list-teacher'}" 
+							method="post" enctype="multipart/form-data"
+							style="max-width: 700px; margin: 0 auto" id="form-generate-lis-teacher">
+							<div class="border border-secondary rounded p-3">
+								<div class="form-group row">
+									<div class="col-sm-4">
+										<input type="file" id="file-list-teacher" name="fileListTeacher" 
+											accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+											class="mb-2" onchange="updateFileName()" style="display: none;"/>
+										<input type="button" value="Browse..." onclick="$('#file-list-teacher').click();" />
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-sm-4 col-form-label">File Name</label>
+									<div class="col-sm-8">
+										<input class="formControl" id="update-file-name" disabled>
+									</div>
+								</div>
+							</div>
+						</form>
+						
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-success" id="yes-create-list-teacher">Generate</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		
 		<div th:replace="fragments :: footer"></div>
 	</div>
@@ -171,11 +218,26 @@
 				$("#confirmText").text("Are you sure you want to delete this user ID " + userId + " ?");
 				$("#confirmModal").modal();
 			});
+			
+			$("#yes-create-list-teacher").on("click", function(e) {
+				$("#form-generate-lis-teacher").submit();
+			});
 		});
 	
 		function clearFilter() {
-			window.location = "[[@{'/' + ${link}}]]";
+			let typeFilter = $("#type-filter").val();
+			console.log("typeFilter" + typeFilter);
+			let link = "[[@{'/' + ${link} + '/page/1?sortField=' + ${sortField} }]]" 
+						+ "&[[@{'sortDir=' + ${sortDir}}]]"
+						+ "&[[@{'keyWord='}]]"
+						+ "&typeFilter=" + typeFilter;
+			window.location = link;
 		}
+		
+		function updateFileName() {
+			$("#update-file-name").val($("#file-list-teacher").val().split("\\")[2]);
+		}
+		
 	</script>
 </body>
 </html>

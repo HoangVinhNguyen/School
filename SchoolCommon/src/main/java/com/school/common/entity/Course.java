@@ -9,6 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.school.common.dto.CourseDto;
 
 @Entity
 @Table(name="course")
@@ -111,4 +114,16 @@ public class Course extends BaseEntity {
 		return this.name;
 	}
 	
+	@Transient
+	public static Course convertToCourse(CourseDto courseDto) {
+		Optional<CourseDto> op = Optional.ofNullable(courseDto);
+		if (op.isPresent()) {
+			CourseDto c = op.get();
+			Course course = new Course();
+			course.setId(c.getId());
+			course.name = c.getName();
+			return course;
+		}
+		return null;
+	}
 }

@@ -16,10 +16,10 @@ import com.school.common.entity.Grade;
 public interface GradeRepository extends JpaRepository<Grade, Long>{
 
 	@Query("SELECT g FROM Grade g WHERE g.code = :code AND g.isDeleted = FALSE")
-	public Grade getGradeByCode(@Param("code") Integer code);
+	public Grade findGradeByCode(@Param("code") Integer code);
 	
 	@Query("SELECT g FROM Grade g WHERE g.name = :name AND g.isDeleted = FALSE")
-	public Grade getGradeByName(@Param("name") String name);
+	public Grade findGradeByName(@Param("name") String name);
 	
 	@Query("SELECT g FROM Grade g WHERE g.id = ?1 AND g.isDeleted = FALSE")
 	public Optional<Grade> findById(Long id);

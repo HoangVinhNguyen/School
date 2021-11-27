@@ -1,6 +1,7 @@
 package com.school.admin.controller.user;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -42,15 +43,18 @@ public class UserController {
 
 	@GetMapping("/users")
 	public String listFirstPage(Model model) {
-		return listByPage(1, model, SystemConstant.FIRST_NAME, SystemConstant.ASC, null);
+		return listByPage(1, model, SystemConstant.FIRST_NAME, SystemConstant.ASC, null, null);
 	}
 	
 	@GetMapping("/users/page/{pageNum}")
 	public String listByPage(@PathVariable(name="pageNum") int pageNum, Model model,
 			@Param("sortField") String sortField, @Param("sortDir") String sortDir, 
-			@Param("keyword") String keyword) {
-		
-		Page<User> page = service.listByPage(pageNum, sortField, sortDir, keyword);
+			@Param("keyword") String keyword, @Param("typeFilter") String typeFilter) {
+		List<String> listTypes = new ArrayList<String>();
+		listTypes.add(SystemConstant.ALL_SELECT);
+		listTypes.add(SystemConstant.TEACHER_SELECT);
+		listTypes.add(SystemConstant.STUDENT_SELECT);
+		Page<User> page = service.listByPage(pageNum, sortField, sortDir, keyword, typeFilter);
 		List<User> listUsers = page.getContent();
 		
 		long startCount = (pageNum - 1) * UserService.USER_PER_PAGE + 1;
@@ -68,6 +72,8 @@ public class UserController {
 		model.addAttribute(SystemConstant.END_COUNT, endCount);
 		model.addAttribute(SystemConstant.TOTAL_ITEM, page.getTotalElements());
 		model.addAttribute("listUsers", listUsers);
+		model.addAttribute("listTypes", listTypes);
+		model.addAttribute("listType", typeFilter != null ? typeFilter : SystemConstant.ALL_SELECT);
 		model.addAttribute(SystemConstant.SORT_FILED, sortField);
 		model.addAttribute(SystemConstant.SORT_DIR, sortDir);
 		model.addAttribute(SystemConstant.REVERSE_SORT_DIR, reverseSortDir);
@@ -80,13 +86,21 @@ public class UserController {
 	@GetMapping("/users/new")
 	public String newUser(Model model) {
 		List<Course> listCourse =  courseService.listAll();
+		List<Role> listRoleDtos = service.listRoles();
 		User user = new User();
 		user.setEnabled(true);
 		model.addAttribute("user", user);
+		model.addAttribute("listRoles", listRoleDtos);
 		model.addAttribute("listCourse", listCourse);
 		model.addAttribute(SystemConstant.LINK, "users");
 		StaticUtil.setTitleAndStatic(model, SystemConstant.TITLE_CREATE_NEW_USER, null, List.of("user_form.css"));
 		return "users/user_form";
+	}
+	
+	@GetMapping("/users/new-list")
+	public String newListUser(Model model) {
+		StaticUtil.setTitleAndStatic(model, SystemConstant.TITLE_CREATE_NEW_LIST_USER, null, List.of("user_form.css"));
+		return "users/create_teacher_list";
 	}
 
 	@PostMapping("/users/save")
@@ -157,6 +171,22 @@ public class UserController {
 		redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, 
 				SystemConstant.ATTR_CONTENT_USER_STATUS_SUCCESS(id, status));
 		
+		return "redirect:/users";
+	}
+	
+	@PostMapping("users/generate-list-teacher")
+	public String generateListTeacher(RedirectAttributes redirectAttributes, 
+			@RequestParam("fileListTeacher") MultipartFile multipartFile) {
+		
+		if (!multipartFile.isEmpty()) {
+			boolean result = service.saveListTeacherFile(multipartFile);
+			if (result)
+				redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, SystemConstant.ATTR_CONTENT_TEACHER_GENERATE_SUCCESS);
+			else
+				redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, SystemConstant.ATTR_CONTENT_TEACHER_GENERATE_ERROR);
+		} else {
+			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, SystemConstant.ATTR_CONTENT_TEACHER_GENERATE_ERROR);
+		}
 		return "redirect:/users";
 	}
 	

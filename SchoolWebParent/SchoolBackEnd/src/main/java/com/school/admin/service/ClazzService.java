@@ -3,6 +3,7 @@ package com.school.admin.service;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.school.admin.exception.EntityNotFoundException;
 import com.school.common.dto.UserDto;
@@ -44,6 +45,8 @@ public interface ClazzService {
 	public Clazz get(Long id) throws EntityNotFoundException;
 
 	public void deleteClazz(Long id) throws EntityNotFoundException;
+
+	public boolean saveListClassFile(MultipartFile multipartFile, int numberOfClass, int grade);
 
 
 }

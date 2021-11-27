@@ -48,19 +48,19 @@ public interface ClazzRepository extends JpaRepository<Clazz, Long>{
 	public Page<Clazz> findAll(Pageable pageable);
 
 	@Query("SELECT u FROM Clazz c JOIN c.users u JOIN u.roles r WHERE c.isDeleted = FALSE AND c.id=?1 "
-			+ "AND r.name LIKE 'Teacher' AND u.isDeleted = FALSE AND CONCAT(u.firstName, ' ', u.email) LIKE %?2%")
+			+ "AND r.name LIKE 'ROLE_TEACHER' AND u.isDeleted = FALSE AND CONCAT(u.firstName, ' ', u.email) LIKE %?2%")
 	public Page<User> findAllTeacher(Long id, String keyword, Pageable pageable);
 
 	@Query("SELECT u FROM Clazz c JOIN c.users u JOIN u.roles r WHERE c.isDeleted = FALSE AND c.id=?1 "
-			+ "AND r.name LIKE 'Teacher' AND u.isDeleted = FALSE")
+			+ "AND r.name LIKE 'ROLE_TEACHER' AND u.isDeleted = FALSE")
 	public Page<User> findAllTeacher(Long id, Pageable pageable);
 	
 	@Query("SELECT u FROM Clazz c JOIN c.users u JOIN u.roles r WHERE c.isDeleted = FALSE AND c.id=?1 "
-			+ "AND r.name LIKE 'Student' AND u.isDeleted = FALSE AND CONCAT(u.firstName, ' ', u.email) LIKE %?2%")
+			+ "AND r.name LIKE 'ROLE_STUDENT' AND u.isDeleted = FALSE AND CONCAT(u.firstName, ' ', u.email) LIKE %?2%")
 	public Page<User> findAllStudent(Long id, String keyword, Pageable pageable);
 	
 	@Query("SELECT u FROM Clazz c JOIN c.users u JOIN u.roles r WHERE c.isDeleted = FALSE AND c.id=?1 "
-			+ "AND r.name LIKE 'Student' AND u.isDeleted = FALSE")
+			+ "AND r.name LIKE 'ROLE_STUDENT' AND u.isDeleted = FALSE")
 	public Page<User> findAllStudent(Long id, Pageable pageable);
 
 }

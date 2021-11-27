@@ -32,12 +32,13 @@ public class UserRepositoryTests {
 		LocalDateTime createdDate = LocalDateTime.now();
 		Role role = new Role(1L);
 
-		User user = new User("Vinh", "Nguyen", "vinhx@gmail.com", "12345678");
+		User user = new User("Vinh", "Nguyen", "admin@gmail.com", "$2a$12$lBqU0yNuKrJindFuRJRfAesjMmwNYki/.Dr6MiCTDqoBb.4wn4f8u");
 		user.setCreatedDate(createdDate);
 		user.setCreatedBy("admin-test");
 		user.addRole(role);
 		LocalDate dob = LocalDate.now();
 		user.setDob(dob);
+		user.setEnabled(true);
 		User savedUser = repo.save(user);
 
 		assertThat(savedUser.getId()).isGreaterThan(0);

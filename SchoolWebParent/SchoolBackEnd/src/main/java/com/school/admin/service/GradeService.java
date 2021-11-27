@@ -22,6 +22,7 @@ public interface GradeService {
 	public boolean isCodeUnique(Long id, Integer code);
 	
 	public Grade get(Long id) throws EntityNotFoundException;
+	public Grade getByCode(int code) throws EntityNotFoundException;
 
 	public void deleteGrade(Long id) throws EntityNotFoundException;
 }

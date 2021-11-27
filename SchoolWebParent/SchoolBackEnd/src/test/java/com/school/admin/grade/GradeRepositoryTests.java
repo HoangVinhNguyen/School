@@ -78,7 +78,7 @@ public class GradeRepositoryTests {
 	
 	@Test
 	public void updateGrade() {
-		Optional<Grade> op = Optional.ofNullable(repo.getGradeByCode(1));
+		Optional<Grade> op = Optional.ofNullable(repo.findGradeByCode(1));
 		if (op.isPresent()) {
 			Grade g = op.get();
 			LocalDateTime modified = LocalDateTime.now();
@@ -102,7 +102,7 @@ public class GradeRepositoryTests {
 	
 	@Test
 	public void deleteGrade() {
-		Optional<Grade> op = Optional.ofNullable(repo.getGradeByCode(1));
+		Optional<Grade> op = Optional.ofNullable(repo.findGradeByCode(1));
 		if (op.isPresent()) {
 			Grade lvns = op.get();
 			repo.deleteById(lvns.getId());

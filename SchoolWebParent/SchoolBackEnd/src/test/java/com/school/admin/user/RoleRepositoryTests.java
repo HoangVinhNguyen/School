@@ -37,13 +37,13 @@ public class RoleRepositoryTests {
 	@Test
 	public void testCreateRoles() {
 		LocalDateTime createDate = LocalDateTime.now();
-		Role roleAdmin = new Role("Admin", "manage everything");
+		Role roleAdmin = new Role("ROLE_ADMIN", "manage everything");
 		roleAdmin.setCreatedBy("amdin-test");
 		roleAdmin.setCreatedDate(createDate);
-		Role roleTeacher = new Role("Teacher", "manage student, activity teach");
+		Role roleTeacher = new Role("ROLE_TEACHER", "manage student, activity teach");
 		roleTeacher.setCreatedBy("amdin-test");
 		roleTeacher.setCreatedDate(createDate);
-		Role roleStudent = new Role("Student", "take result study");
+		Role roleStudent = new Role("ROLE_STUDENT", "take result study");
 		roleStudent.setCreatedBy("amdin-test");
 		roleStudent.setCreatedDate(createDate);
 		repo.saveAll(List.of(roleAdmin, roleTeacher, roleStudent));

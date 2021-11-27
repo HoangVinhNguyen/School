@@ -13,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.school.admin.exception.EntityNotFoundException;
@@ -55,6 +57,7 @@ public class ClazzController {
 		
 		Page<Clazz> page = service.listByPage(pageNum, sortField, sortDir, keyword);
 		List<Clazz> listClazzes = page.getContent();
+		Optional<List<Grade>> opGrade = Optional.ofNullable(gradeService.listAll());
 		
 		long startCount = (pageNum - 1) * ClazzService.CLAZZ_PER_PAGE + 1;
 		long endCount = startCount + ClazzService.CLAZZ_PER_PAGE - 1;
@@ -71,6 +74,7 @@ public class ClazzController {
 		model.addAttribute(SystemConstant.END_COUNT, endCount);
 		model.addAttribute(SystemConstant.TOTAL_ITEM, page.getTotalElements());
 		model.addAttribute("listClazzes", listClazzes);
+		model.addAttribute("listGrades", opGrade.get());
 		model.addAttribute(SystemConstant.SORT_FILED, sortField);
 		model.addAttribute(SystemConstant.SORT_DIR, sortDir);
 		model.addAttribute(SystemConstant.REVERSE_SORT_DIR, reverseSortDir);
@@ -115,10 +119,10 @@ public class ClazzController {
 			Optional<List<Classroom>> opClassroom = Optional.ofNullable(classroomService.listAll());
 			if (opGrade.isPresent() && opClassroom.isPresent() && opClazz.isPresent()) {
 				List<User> listTeacher = opClazz.get().getUsers().stream()
-						.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.toLowerCase().equals(SystemConstant.TEACHER)))
+						.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.equals(SystemConstant.TEACHER)))
 						.collect(Collectors.toList());
 				List<User> listStudent = opClazz.get().getUsers().stream()
-						.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.toLowerCase().equals(SystemConstant.STUDENT)))
+						.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.equals(SystemConstant.STUDENT)))
 						.collect(Collectors.toList());
 				StringBuilder title = new StringBuilder();
 				title.append(SystemConstant.TITLE_EDIT_CLAZZ).append(id);
@@ -168,10 +172,10 @@ public class ClazzController {
 				StringBuilder title = new StringBuilder();
 				title.append(SystemConstant.TITLE_EDIT_CLAZZ).append(id);
 				List<User> listTeacher = opClazz.get().getUsers().stream()
-						.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.toLowerCase().equals(SystemConstant.TEACHER)))
+						.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.equals(SystemConstant.TEACHER)))
 						.collect(Collectors.toList());
 				List<User> listStudent = opClazz.get().getUsers().stream()
-						.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.toLowerCase().equals(SystemConstant.STUDENT)))
+						.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.equals(SystemConstant.STUDENT)))
 						.collect(Collectors.toList());
 				model.addAttribute("clazz", opClazz.get());
 				model.addAttribute("listTeacher", listTeacher);
@@ -207,10 +211,10 @@ public class ClazzController {
 			StringBuilder title = new StringBuilder();
 			title.append(SystemConstant.TITLE_EDIT_CLAZZ_CLASSROOM).append(id);
 			List<User> listTeacher = clazz.getUsers().stream()
-					.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.toLowerCase().equals(SystemConstant.TEACHER)))
+					.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.equals(SystemConstant.TEACHER)))
 					.collect(Collectors.toList());
 			List<User> listStudent = clazz.getUsers().stream()
-					.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.toLowerCase().equals(SystemConstant.STUDENT)))
+					.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.equals(SystemConstant.STUDENT)))
 					.collect(Collectors.toList());
 			model.addAttribute("clazz", clazz);
 			model.addAttribute("listClassroom", classrooms);
@@ -271,10 +275,10 @@ public class ClazzController {
 			StringBuilder title = new StringBuilder();
 			title.append(SystemConstant.TITLE_EDIT_CLAZZ_TEACHER).append(id);
 			List<User> listTeacher = clazz.getUsers().stream()
-					.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.toLowerCase().equals(SystemConstant.TEACHER)))
+					.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.equals(SystemConstant.TEACHER)))
 					.collect(Collectors.toList());
 			List<User> listStudent = clazz.getUsers().stream()
-					.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.toLowerCase().equals(SystemConstant.STUDENT)))
+					.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.equals(SystemConstant.STUDENT)))
 					.collect(Collectors.toList());
 			model.addAttribute("clazz", clazz);
 			model.addAttribute("classname", clazz.getName());
@@ -293,6 +297,7 @@ public class ClazzController {
 	public String addTeacher(Long id, Long idTeacher, RedirectAttributes redirectAttributes, 
 			Model model) throws IOException {
 		service.addTeacher(id, idTeacher);
+		userService.saveCourseToStudentsByClass(id);
 		StringBuilder link = new StringBuilder();
 		link.append("redirect:/clazzes/edit/").append(id).append("/teacher");
 		return link.toString();
@@ -301,6 +306,7 @@ public class ClazzController {
 	public String deleteTeacher(@PathVariable("id") Long id, @PathVariable("idTeacher") Long idTeacher, RedirectAttributes redirectAttributes, 
 			Model model) throws IOException {
 		service.deleteTeacher(id, idTeacher);
+		userService.saveCourseToStudentsByClass(id);
 		StringBuilder link = new StringBuilder();
 		link.append("redirect:/clazzes/edit/").append(id).append("/teacher");
 		return link.toString();
@@ -343,10 +349,10 @@ public class ClazzController {
 			StringBuilder title = new StringBuilder();
 			title.append(SystemConstant.TITLE_EDIT_CLAZZ_STUDENT).append(id);
 			List<User> listTeacher = clazz.getUsers().stream()
-					.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.toLowerCase().equals(SystemConstant.TEACHER)))
+					.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.equals(SystemConstant.TEACHER)))
 					.collect(Collectors.toList());
 			List<User> listStudent = clazz.getUsers().stream()
-					.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.toLowerCase().equals(SystemConstant.STUDENT)))
+					.filter(u -> u.getRoles().stream().map(Role::getName).anyMatch(name -> name.equals(SystemConstant.STUDENT)))
 					.collect(Collectors.toList());
 			model.addAttribute("clazz", clazz);
 			model.addAttribute("classname", clazz.getName());
@@ -365,6 +371,7 @@ public class ClazzController {
 	public String addStudent(Long id, Long idStudent, RedirectAttributes redirectAttributes, 
 			Model model) throws IOException {
 		service.addStudent(id, idStudent);
+		userService.saveCourseToStudentByClass(id, idStudent);
 		StringBuilder link = new StringBuilder();
 		link.append("redirect:/clazzes/edit/").append(id).append("/student");
 		return link.toString();
@@ -377,4 +384,22 @@ public class ClazzController {
 		link.append("redirect:/clazzes/edit/").append(id).append("/student");
 		return link.toString();
 	}
+	
+	@PostMapping("/clazzes/generate-list-class")
+	public String generateListClass(RedirectAttributes redirectAttributes, 
+			@RequestParam("fileListClass") MultipartFile multipartFile,
+			@Param("numberOfClass") int numberOfClass, @Param("gradeOfClass") int gradeOfClass) throws IOException {
+		
+		if (!multipartFile.isEmpty()) {
+			boolean result = service.saveListClassFile(multipartFile, numberOfClass, gradeOfClass);
+			if (result)
+				redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, SystemConstant.ATTR_CONTENT_TEACHER_GENERATE_SUCCESS);
+			else
+				redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, SystemConstant.ATTR_CONTENT_TEACHER_GENERATE_ERROR);
+		} else {
+			redirectAttributes.addFlashAttribute(SystemConstant.ATTR_MESSAGE, SystemConstant.ATTR_CONTENT_TEACHER_GENERATE_ERROR);
+		}
+		return "redirect:/clazzes";
+	}
+	
 }
