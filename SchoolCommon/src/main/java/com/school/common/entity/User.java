@@ -19,6 +19,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.school.common.common.ResourceGet;
 import com.school.common.common.SystemConstant;
 import com.school.common.dto.UserDto;
+import com.school.common.dto.UserSavePointDto;
 
 @Entity
 @Table(name = "users")
@@ -278,6 +279,25 @@ public class User extends BaseEntity {
 		Optional<UserDto> op = Optional.ofNullable(userDto);
 		if (op.isPresent()) {
 			UserDto u = op.get();
+			User user = new User();
+			user.setId(u.getId());
+			user.firstName = u.getFirstName();
+			user.lastName = u.getLastName();
+			user.email = u.getEmail();
+			user.dob = u.getDob();
+			user.address = u.getAddress();
+			user.phone = u.getPhone();
+			user.photos = u.getPhotos();
+			return user;
+		}
+		return null;
+	}
+
+	@Transient
+	public static User convertToUser(UserSavePointDto userDto) {
+		Optional<UserSavePointDto> op = Optional.ofNullable(userDto);
+		if (op.isPresent()) {
+			UserSavePointDto u = op.get();
 			User user = new User();
 			user.setId(u.getId());
 			user.firstName = u.getFirstName();

@@ -2,19 +2,23 @@ package com.school.common.dto;
 
 import com.school.common.entity.AcademicTranscript;
 
-public class AcademicTranscriptDto extends BaseDto {
+public class AcademicTranscriptStudentPointDto extends BaseDto {
 
 	private static final long serialVersionUID = 1L;
 
-	private UserSavePointDto student;
+	private UserDto student;
 	private UserDto teacher;
 	private ClazzDto clazz;
 	private CourseDto course;
 	private float point;
 	private TopicDto topic;
 	private int coefficient;
+	
+	public AcademicTranscriptStudentPointDto() {
+		
+	}
 
-	public AcademicTranscriptDto(UserDto teacher, UserDto student, ClazzDto clazz, CourseDto course, float point) {
+	public AcademicTranscriptStudentPointDto(UserDto teacher, UserDto student, ClazzDto clazz, CourseDto course, float point) {
 		//this.student = student;
 		this.teacher = teacher;
 		this.clazz = clazz;
@@ -22,27 +26,24 @@ public class AcademicTranscriptDto extends BaseDto {
 		this.point = point;
 	}
 
-	public AcademicTranscriptDto(UserDto teacher, UserDto student, ClazzDto clazz, CourseDto course, float point, TopicDto topic, int coefficient) {
-		//this.student = student;
+	public AcademicTranscriptStudentPointDto(UserDto student, UserDto teacher, CourseDto course, ClazzDto clazz, TopicDto topic, int coefficient, float point, Long id ) {
+		this.student = student;
 		this.teacher = teacher;
 		this.clazz = clazz;
 		this.course = course;
 		this.point = point;
 		this.topic = topic;
 		this.coefficient = coefficient;
+		this.setId(id);
 	}
 	
-	public AcademicTranscriptDto() {
-	}
-	
-	public AcademicTranscriptDto(Long id, float point) {
+	public AcademicTranscriptStudentPointDto(Long id, float point) {
 		this.setId(id);
 		this.point = point;
 	}
 
-	public AcademicTranscriptDto(AcademicTranscript entity) {
-		this.setId(entity.getId());
-		this.student = new UserSavePointDto(entity.getStudent());
+	public AcademicTranscriptStudentPointDto(AcademicTranscript entity) {
+		this.student = new UserDto(entity.getStudent());
 		this.teacher = new UserDto(entity.getTeacher());
 		this.clazz = new ClazzDto(entity.getClazz());
 		this.course = new CourseDto(entity.getCourse());
@@ -51,11 +52,11 @@ public class AcademicTranscriptDto extends BaseDto {
 		this.coefficient = entity.getCoefficient();
 	}
 
-	public UserSavePointDto getStudent() {
+	public UserDto getStudent() {
 		return student;
 	}
 
-	public void setStudent(UserSavePointDto student) {
+	public void setStudent(UserDto student) {
 		this.student = student;
 	}
 
@@ -123,7 +124,7 @@ public class AcademicTranscriptDto extends BaseDto {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AcademicTranscriptDto other = (AcademicTranscriptDto) obj;
+		AcademicTranscriptStudentPointDto other = (AcademicTranscriptStudentPointDto) obj;
 		if (this.getId() == null) {
 			if (other.getId() != null)
 				return false;

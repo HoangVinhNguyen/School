@@ -365,7 +365,7 @@ public class UserServiceImpl implements UserService {
 								teacher.setEmail(email);
 								break;
 							default:
-									break;
+								break;
 							}
 						}
 						// save user.

@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.school.common.dto.AcademicTranscriptDto;
+import com.school.common.dto.AcademicTranscriptStudentPointDto;
 
 @Entity
 @Table(name="academic_transcript")
@@ -31,8 +32,14 @@ public class AcademicTranscript extends BaseEntity {
 	@OneToOne
 	@JoinColumn(name = "course_id")
 	private Course course;
+
+	@OneToOne
+	@JoinColumn(name = "topic_id")
+	private Topic topic;
 	
 	private float point;
+	
+	private int coefficient;
 
 	public User getStudent() {
 		return student;
@@ -75,6 +82,22 @@ public class AcademicTranscript extends BaseEntity {
 	}
 	
 	
+	public int getCoefficient() {
+		return coefficient;
+	}
+
+	public void setCoefficient(int coefficient) {
+		this.coefficient = coefficient;
+	}
+
+	public Topic getTopic() {
+		return topic;
+	}
+
+	public void setTopic(Topic topic) {
+		this.topic = topic;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -112,6 +135,27 @@ public class AcademicTranscript extends BaseEntity {
 			academic.setTeacher(User.convertToUser(academicDto.getTeacher()));
 			academic.setStudent(User.convertToUser(academicDto.getStudent()));
 			academic.setPoint(academicDto.getPoint());
+			academic.setTopic(new Topic(academicDto.getTopic()));
+			academic.setPoint(academicDto.getPoint());
+			academic.setCoefficient(academicDto.getCoefficient());
+			return academic;
+		}
+		return null;
+	}
+	@Transient
+	public static AcademicTranscript convertToAcademicTranscript(AcademicTranscriptStudentPointDto userDto) {
+		Optional<AcademicTranscriptStudentPointDto> op = Optional.ofNullable(userDto);
+		if (op.isPresent()) {
+			AcademicTranscriptStudentPointDto academicDto = op.get();
+			AcademicTranscript academic = new AcademicTranscript();
+			academic.setId(academicDto.getId());
+			academic.setClazz(Clazz.convertToClazz(academicDto.getClazz()));
+			academic.setCourse(Course.convertToCourse(academicDto.getCourse()));
+			academic.setTeacher(User.convertToUser(academicDto.getTeacher()));
+			academic.setStudent(User.convertToUser(academicDto.getStudent()));
+			academic.setTopic(new Topic(academicDto.getTopic()));
+			academic.setPoint(academicDto.getPoint());
+			academic.setCoefficient(academicDto.getCoefficient());
 			return academic;
 		}
 		return null;

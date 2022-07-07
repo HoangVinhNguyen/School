@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import com.school.common.entity.AcademicTranscript;
 import com.school.common.entity.Clazz;
 import com.school.common.entity.Course;
+import com.school.common.entity.Topic;
 import com.school.common.entity.User;
 
 public interface AcademicTranscriptRepository extends JpaRepository<AcademicTranscript, Long>{
@@ -24,17 +25,20 @@ public interface AcademicTranscriptRepository extends JpaRepository<AcademicTran
 			@Param("course") Course idCourse,
 			@Param("class") Clazz idClass);
 	
+	@Query("SELECT at "
+			+ "FROM AcademicTranscript at "
+			+ "WHERE at.isDeleted = FALSE "
+			+ "AND at.id = :id")
+	public AcademicTranscript findAcademicTranscript(
+			@Param("id") Long id);
+
 	@Query("SELECT at FROM AcademicTranscript at "
 			+ "WHERE at.isDeleted = FALSE "
-			+ "AND at.teacher = :teacher "
 			+ "AND at.student = :student "
-			+ "AND at.course = :course "
-			+ "AND at.clazz = :class")
-	public AcademicTranscript findAcademicTranscript(
-			@Param("teacher") User idTeacher,
+			+ "AND at.topic = :topic")
+	public List<AcademicTranscript> findAcademicTranscriptByStudentAndTopic(
 			@Param("student") User idStudent,
-			@Param("course") Course idCourse,
-			@Param("class") Clazz idClass);
+			@Param("topic") Topic idTopic);
 	
 	@Modifying
 	@Query("UPDATE AcademicTranscript at SET at.point = :point "
@@ -48,5 +52,13 @@ public interface AcademicTranscriptRepository extends JpaRepository<AcademicTran
 			@Param("student") User idStudent,
 			@Param("course") Course idCourse,
 			@Param("class") Clazz idClass,
+			@Param("point") Float point);
+
+	@Modifying
+	@Query("UPDATE AcademicTranscript at SET at.point = :point "
+			+ "WHERE at.isDeleted = FALSE "
+			+ "AND at.id = :id")
+	public void saveStudentAcademicTranscriptById(
+			@Param("id") Long id,
 			@Param("point") Float point);
 }

@@ -1,13 +1,15 @@
 package com.school.common.dto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.school.common.common.ResourceGet;
 import com.school.common.common.SystemConstant;
 import com.school.common.entity.User;
 
-public class UserDto extends BaseDto {
+public class UserSavePointDto extends BaseDto {
 
 	private static final long serialVersionUID = -7833564745684143904L;
 
@@ -19,19 +21,20 @@ public class UserDto extends BaseDto {
 	private LocalDate dob;
 	private String address;
 	private String photos;
-	private float point;
+	private List<Point> listPoint = new ArrayList<>();
 
-	public UserDto() {
+
+	public UserSavePointDto() {
 
 	}
 
-	public UserDto(String firstName, String lastName, String email, String password) {
+	public UserSavePointDto(String firstName, String lastName, String email, String password) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 	}
 
-	public UserDto(User entity) {
+	public UserSavePointDto(User entity) {
 		Optional<User> op = Optional.ofNullable(entity);
 		if (op.isPresent()) {
 			this.setId(entity.getId());
@@ -42,7 +45,6 @@ public class UserDto extends BaseDto {
 			this.address = entity.getAddress();
 			this.phone = entity.getPhone();
 			this.photos = entity.getPhotos();
-			this.setFullName(resultFullName(this.firstName, this.lastName));
 //			this.roles = entity.getRoles().stream().map(RoleDto::new).collect(Collectors.toSet());
 //			this.setDeleted(entity.isDeleted());
 //			this.setCreatedBy(entity.getCreatedBy());
@@ -50,6 +52,34 @@ public class UserDto extends BaseDto {
 //			this.setModifiedBy(entity.getModifiedBy());
 //			this.setModifiedDate(entity.getModifiedDate());
 		}
+	}
+
+	public UserSavePointDto(UserDto dto) {
+		Optional<UserDto> op = Optional.ofNullable(dto);
+		if (op.isPresent()) {
+			this.setId(dto.getId());
+			this.firstName = dto.getFirstName();
+			this.lastName = dto.getLastName();
+			this.email = dto.getEmail();
+			this.dob = dto.getDob();
+			this.address = dto.getAddress();
+			this.phone = dto.getPhone();
+			this.photos = dto.getPhotos();
+//			this.roles = entity.getRoles().stream().map(RoleDto::new).collect(Collectors.toSet());
+//			this.setDeleted(entity.isDeleted());
+//			this.setCreatedBy(entity.getCreatedBy());
+//			this.setCreatedDate(entity.getCreatedDate());
+//			this.setModifiedBy(entity.getModifiedBy());
+//			this.setModifiedDate(entity.getModifiedDate());
+		}
+	}
+
+	public List<Point> getListPoint() {
+		return listPoint;
+	}
+	
+	public void setListPoint(List<Point> listPoint) {
+		this.listPoint = listPoint;
 	}
 
 	public String getFirstName() {
@@ -113,24 +143,9 @@ public class UserDto extends BaseDto {
 	}
 
 	public String getFullName() {
-		return this.fullName;
-	}
-	
-	public String resultFullName(String firstName, String lastName) {
-		if (firstName!= null && lastName != null) {
-			StringBuilder fullnameTemp = new StringBuilder(firstName);
-			fullnameTemp.append(" ").append(lastName);
-			return fullnameTemp.toString();
-		}
-		return null;
-	}
-
-	public float getPoint() {
-		return point;
-	}
-
-	public void setPoint(float point) {
-		this.point = point;
+		StringBuilder fullname = new StringBuilder(getFirstName());
+		fullname.append(" ").append(getLastName());
+		return fullname.toString();
 	}
 
 	@Override
@@ -149,7 +164,7 @@ public class UserDto extends BaseDto {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		UserDto other = (UserDto) obj;
+		UserSavePointDto other = (UserSavePointDto) obj;
 		if (this.getId() == null) {
 			if (other.getId() != null)
 				return false;
@@ -165,8 +180,8 @@ public class UserDto extends BaseDto {
 		return getImagePath.getUserImagePathWithId(this.getId(), this.getPhotos());
 	}
 
-	public UserDto clone() {
-		UserDto userDto = new UserDto();
+	public UserSavePointDto clone() {
+		UserSavePointDto userDto = new UserSavePointDto();
 		userDto.setId(getId());
 		userDto.setDob(getDob());
 		userDto.setEmail(getEmail());

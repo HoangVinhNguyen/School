@@ -5,50 +5,20 @@ import java.util.List;
 
 public class SavePointBodyReq {
 
-	private UserDto teacher;
-	private List<UserDto> listStudents = new ArrayList<>();
-	private ClazzDto clazz;
-	private CourseDto course;
+	private List<UserSavePointDto> listStudents = new ArrayList<>();
 
 	public SavePointBodyReq() {
 	}
 
-	public SavePointBodyReq(UserDto teacher, List<UserDto> listStudents, ClazzDto clazz, CourseDto course) {
-		this.teacher = teacher;
+	public SavePointBodyReq(List<UserSavePointDto> listStudents) {
 		this.setListStudents(listStudents);
-		this.clazz = clazz;
-		this.course = course;
 	}
 
-	public UserDto getTeacher() {
-		return teacher;
-	}
-
-	public void setTeacher(UserDto teacher) {
-		this.teacher = teacher;
-	}
-
-	public ClazzDto getClazz() {
-		return clazz;
-	}
-
-	public void setClazz(ClazzDto clazz) {
-		this.clazz = clazz;
-	}
-
-	public CourseDto getCourse() {
-		return course;
-	}
-
-	public void setCourse(CourseDto course) {
-		this.course = course;
-	}
-
-	public List<UserDto> getListStudents() {
+	public List<UserSavePointDto> getListStudents() {
 		return listStudents;
 	}
 
-	public void setListStudents(List<UserDto> listStudents) {
+	public void setListStudents(List<UserSavePointDto> listStudents) {
 		this.listStudents = listStudents;
 	}
 
